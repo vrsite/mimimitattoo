@@ -350,7 +350,7 @@ const reviewsData = [
     name: "Глеб З.",
     text: {
       ru: "Делал небольшую татуировку на запястье. Крис очень аккуратная, работа сделана ювелирно. Результатом полностью доволен, выглядит очень стильно. Процесс был очень комфортным.",
-      en: "Great experience with my mini-tattoo. The work was done very precisely and with passion. Kris is very friendly and attentive. The result is exactly as I imagined."
+      en: "Got a small tattoo on my wrist. Kris is very precise, the work is done like fine jewelry. Completely satisfied with the result, it looks very stylish. The process was very comfortable."
     }
   },
   {
@@ -505,11 +505,8 @@ serviceCards.forEach(card => {
         if (modal) {
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            // Не скрываем бургер-меню здесь, так как оно может быть открыто через основное меню
-            // Если лайтбокс портфолио был закрыт, бургер-меню должно быть видимо
-            // Если вы хотите, чтобы бургер-меню скрывалось при любых модальных окнах,
-            // добавьте burgerButton.classList.add('hidden'); здесь и убедитесь,
-            // что он появляется при закрытии ЛЮБОГО модального окна.
+            burgerButton.classList.add('hidden'); // ДОБАВЛЕНО: Скрываем бургер-меню при открытии модального окна услуги
+            
             const modalTitleElement = modal.querySelector('.service-modal-title');
             const modalDescElement = modal.querySelector('.service-modal-description');
             if (modalTitleElement && modalDescElement) {
@@ -527,15 +524,13 @@ serviceModalsContainer.addEventListener('click', (event) => {
         if (modalToClose) {
             modalToClose.classList.remove('active');
             document.body.style.overflow = '';
-            // Возвращаем видимость бургер-меню при закрытии модального окна услуг
-            // Если вы хотите, чтобы бургер-меню скрывалось при любых модальных окнах,
-            // и чтобы оно возвращалось только если других модальных окон нет.
-            // Сейчас он скрывается только при лайтбоксе портфолио, поэтому не влияем здесь.
+            burgerButton.classList.remove('hidden'); // ДОБАВЛЕНО: Показываем бургер-меню при закрытии модального окна услуги
         }
     }
     else if (event.target.classList.contains('service-modal-backdrop')) {
         event.target.classList.remove('active');
         document.body.style.overflow = '';
+        burgerButton.classList.remove('hidden'); // ДОБАВЛЕНО: Показываем бургер-меню при закрытии модального окна услуги по клику на бэкдроп
     }
 });
 
@@ -547,8 +542,9 @@ document.addEventListener('keydown', (event) => {
     if (activeServiceModal) {
       activeServiceModal.classList.remove('active');
       document.body.style.overflow = '';
+      burgerButton.classList.remove('hidden'); // ДОБАВЛЕНО: Показываем бургер-меню при закрытии модального окна услуги по Esc
     } else if (activeLightbox) {
-      closeLightbox(); // Это уже скрывает бургер-меню
+      closeLightbox(); // Это уже скрывает/показывает бургер-меню
     }
   }
 });

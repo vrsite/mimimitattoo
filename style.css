@@ -1699,12 +1699,14 @@ html, body {
 
   /* Адаптация контактов на очень маленьких экранах */
   .contact-phone-link, .contact-email-link {
-    font-size: 0.8rem; /* Ещё уменьшим шрифт для лучшей вместимости */
-    padding: 6px 8px; /* Чуть меньше padding */
+    font-size: 0.75rem; /* ЕЩЁ уменьшим шрифт для лучшей вместимости */
+    padding: 5px 8px; /* Чуть меньше padding */
     white-space: nowrap; /* Гарантируем одну строку */
     overflow: hidden; /* Скрываем выходящий текст */
     text-overflow: ellipsis; /* Добавляем многоточие */
     max-width: 100%; /* Убедимся, что не вылезает за родителя */
+    flex-grow: 1; /* Позволим кнопкам расти/сжиматься */
+    justify-content: center; /* Центрируем содержимое */
   }
   .phone-numbers-horizontal {
       flex-direction: column; /* Размещаем номера вертикально, если не помещаются */
