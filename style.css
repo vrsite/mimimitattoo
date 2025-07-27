@@ -1,0 +1,2052 @@
+:root {
+  --main-bg: #fff;
+  --accent: #111;
+  --text: #111;
+  --glass-bg: rgba(255,255,255,0.2);
+  --glass-border: rgba(0,0,0,0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0,0,0,0.08);
+  --glass-blur: 18px;
+  --font-main: 'Montserrat', Arial, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background: var(--main-bg);
+  color: var(--text);
+  height: 100%;
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
+}
+
+/* Fixed background for the rest of the site */
+#fixedSiteBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('images/fonsite.JPG');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+/* Обертка для контента, чтобы она прокручивалась над фиксированным фоном */
+#wrapper {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+/* ГЛАВНАЯ СЕКЦИЯ: ВОССТАНОВЛЕНИЕ ИСХОДНЫХ СТИЛЕЙ И МАСШТАБА */
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  z-index: 1;
+}
+
+.hero__video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: #fff;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 0;
+  display: inline-block;
+  width: 100vw;
+  max-width: 100vw;
+}
+/* Заголовки и подзаголовки Hero */
+.hero__content h1 {
+  font-size: 5.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 1.1rem;
+  margin-top: 0;
+  line-height: 1.08;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.22);
+  color: #fff;
+}
+.hero__content p {
+  font-size: 2rem;
+  margin-bottom: 2.2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  color: #fff;
+}
+
+
+/* МЕНЮ: УВЕЛИЧЕННЫЙ Z-INDEX (МАКСИМАЛЬНО) */
+.burger {
+  position: fixed;
+  top: 1.1rem;
+  right: 1.1rem;
+  z-index: 9999999999 !important; /* Ультра-высокий z-index */
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.burger span {
+  display: block;
+  width: 32px;
+  height: 4px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.burger.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: -340px;
+  width: 320px;
+  height: 100vh;
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2.5rem 1.2rem 2rem 1.2rem;
+  transition: right 0.35s cubic-bezier(.77,0,.18,1), opacity 0.2s;
+  opacity: 0;
+  pointer-events: none;
+  border-left: 1.5px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.side-menu.open {
+  right: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+.close-menu {
+  position: absolute;
+  top: 0.7rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  font-size: 2.2rem;
+  color: var(--accent);
+  cursor: pointer;
+  z-index: 2147483647; /* Гарантированно поверх меню */
+  transition: color 0.2s;
+}
+.menu-backdrop {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.10);
+  z-index: 2147483646;
+}
+.menu-backdrop.open {
+  display: block;
+}
+
+
+/* Стилизация ссылок меню - glass-link */
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  width: 100%;
+}
+.side-menu ul li {
+  margin-bottom: 0.7rem;
+  width: 100%;
+}
+.glass-link {
+  display: block;
+  width: 100%;
+  padding: 0.45em 1em;
+  background: var(--glass-bg);
+  color: var(--accent);
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1.1px solid var(--glass-border);
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  margin-bottom: 0.2em;
+  position: relative;
+  overflow: hidden;
+  min-height: 32px;
+  letter-spacing: 0.2px;
+  text-align: left;
+  box-sizing: border-box;
+}
+.glass-link:hover {
+  background: var(--accent);
+  color: #fff;
+  border: 1.1px solid var(--accent);
+}
+.lang-switch {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+.lang-switch button {
+  background: none;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  border-radius: 20px;
+  padding: 0.3em 1.2em;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-switch button.active,
+.lang-switch button:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+
+/* Секции Услуги и Портфолио - теперь полностью прозрачные */
+.services-section,
+.portfolio-section {
+  background: transparent;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 0 40px 0;
+}
+/* Секция Отзывы сохраняет свой полупрозрачный фон */
+.reviews-section,
+.contacts-section,
+.faq-section { /* Добавлено для FAQ */
+    background: rgba(255,255,255,0.08);
+    padding: 60px 0 40px 0;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* НОВЫЕ СТИЛИ ДЛЯ СЕКЦИИ "ОБО МНЕ" С ВИДЕО/ИЗОБРАЖЕНИЕМ И ТЕКСТОМ */
+.about-section.custom-layout-about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 50px 20px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-section-title-mobile {
+    display: block;
+}
+.about-section-title-desktop {
+    display: none;
+}
+
+.about-video-container {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 600px;
+  height: 250px;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  margin-bottom: 30px;
+}
+
+.about-video-custom {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.about-text-content {
+  background: rgba(255,255,255,0.2);
+  border-radius: 0;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  text-align: left;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  min-height: auto;
+  position: relative;
+  overflow: auto;
+}
+
+.about-text-content::before {
+    content: none;
+}
+
+.about-text-content .section-title-small {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.about-text-content p {
+    margin-bottom: 1.2em;
+}
+
+
+/* НОВЫЕ СТИЛИ ДЛЯ СЕКЦИИ "ПРОЦЕСС" (аналогично "Обо мне") */
+.process-section.custom-layout-process {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 50px 20px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.process-section-title-mobile {
+    display: block;
+}
+.process-section-title-desktop {
+    display: none;
+}
+
+.process-video-container {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 600px;
+  height: 250px;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  margin-top: 30px;
+}
+
+.process-video-custom {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.process-text-content {
+  flex-grow: 1;
+  background: rgba(255,255,255,0.2);
+  border-radius: 0;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 40px;
+  color: #fff;
+  text-align: left;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  min-height: auto;
+  position: relative;
+  overflow: auto;
+}
+
+.process-text-content h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.1);
+}
+
+.process-text-content h3:first-of-type {
+    margin-top: 0;
+}
+
+.process-text-content p {
+    margin-bottom: 1.2em;
+}
+
+
+/* Section Title - теперь белый на десктопе, по умолчанию по центру */
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  margin-bottom: 2.2rem;
+  letter-spacing: 1.5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.about-text-content .section-title-small,
+.process-text-content .section-title-small {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  margin-bottom: 1.5rem;
+  text-align: left;
+  letter-spacing: 1px;
+}
+
+
+/* Services List (базовые стили) */
+.services-list {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2rem;
+  max-width: 600px;
+}
+.service-card {
+  background: var(--glass-bg);
+  border-radius: 20px;
+  box-shadow: var(--glass-shadow);
+  border: 1.2px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  padding: 1.2rem 1.5rem;
+  width: calc(50% - 0.6rem);
+  max-width: 280px;
+  min-width: 150px;
+  box-sizing: border-box;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px 0 rgba(0,0,0,0.12);
+}
+
+.service-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  color: var(--accent);
+  word-break: break-word;
+}
+.service-desc {
+  font-size: 1rem;
+  color: var(--accent);
+  opacity: 0.85;
+  display: none;
+}
+
+.glass-btn {
+  display: inline-block;
+  padding: 0.5em 1.5em;
+  background: var(--glass-bg);
+  color: #fff;
+  border-radius: 22px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border: 1.2px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+}
+.glass-btn:hover {
+  background: #fff;
+  color: var(--accent);
+  border: 1.2px solid #fff;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+}
+
+.view-all-btn {
+    display: inline-block;
+    padding: 0.8em 2em;
+    font-size: 1.1rem;
+    border-radius: 0;
+    margin-top: 1rem;
+    transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+    background: var(--glass-bg);
+    color: var(--accent);
+    border: 1.2px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    text-decoration: none;
+    width: 100%;
+    max-width: 300px;
+    text-transform: uppercase;
+}
+.view-all-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border: 1.2px solid var(--accent);
+    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.15);
+}
+
+.hide-all-btn {
+    display: inline-block;
+    padding: 0.8em 2em;
+    font-size: 1.1rem;
+    border-radius: 0;
+    margin-top: 1rem;
+    transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+    background: var(--glass-bg);
+    color: var(--accent);
+    border: 1.2px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    text-decoration: none;
+    width: 100%;
+    max-width: 300px;
+    text-transform: uppercase;
+}
+.hide-all-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border: 1.2px solid var(--accent);
+    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.15);
+}
+
+
+.reviews-list {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.review-placeholder {
+  color: #888;
+  font-size: 1.1rem;
+  text-align: center;
+  opacity: 0.7;
+  padding: 2rem 0;
+}
+
+/* Портфолио — Masonry */
+.portfolio-section {
+  padding: 70px 0 40px 0;
+  position: relative;
+  z-index: 2;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.masonry-gallery {
+  column-count: 4;
+  column-gap: 1.5rem;
+  width: 90vw;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.masonry-gallery img {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  display: block;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+  background: #fff;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+  border-radius: 0;
+  border: none;
+  opacity: 0;
+  animation: fadeInMasonry 0.7s forwards;
+}
+@keyframes fadeInMasonry {
+  to { opacity: 1; }
+}
+.masonry-gallery img:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
+  filter: brightness(1.08) saturate(1.1);
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.lightbox.active {
+  display: flex;
+}
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 80vh;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.10);
+  background: #fff;
+  border-radius: 0;
+  border: none;
+  margin-bottom: 0.5em;
+  z-index: 1002;
+}
+.lightbox-close {
+  position: absolute;
+  top: 2.5rem;
+  right: 3rem;
+  font-size: 2.5rem;
+  color: var(--accent);
+  cursor: pointer;
+  z-index: 1003;
+  transition: color 0.2s;
+}
+.lightbox-close:hover {
+  color: #fff;
+}
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  font-size: 2.5rem;
+  color: var(--accent);
+  cursor: pointer;
+  user-select: none;
+  z-index: 1003;
+  transition: color 0.2s;
+  padding: 0.2em 0.5em;
+  background: var(--glass-bg);
+  border-radius: 8px;
+}
+.lightbox-arrow.left { left: 2vw; transform: translateY(-50%); }
+.lightbox-arrow.right { right: 2vw; transform: translateY(-50%); }
+.lightbox-arrow:hover { color: #fff; background: var(--accent); }
+
+.lightbox-nav-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 70%;
+    background-position: center;
+    background-repeat: repeat;
+    filter: blur(5px) brightness(0.6);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    border-radius: 0;
+    pointer-events: none;
+    z-index: 998;
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .lightbox-nav-preview {
+        display: none !important;
+    }
+}
+
+.service-modal-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 900;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.service-modal-backdrop.active {
+  display: flex;
+  opacity: 1;
+}
+
+.service-modal-content {
+  background: var(--glass-bg);
+  border-radius: 25px;
+  box-shadow: var(--glass-shadow);
+  border: 1.2px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  padding: 1.8rem;
+  max-width: 400px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  position: relative;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  color: var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.service-modal-backdrop.active .service-modal-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-modal-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.service-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: var(--accent);
+}
+
+.service-modal-description {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.service-modal-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--accent);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.service-modal-close:hover {
+  color: #c00;
+}
+
+.contacts-section {
+  padding: 60px 20px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.contacts-content-wrapper {
+  max-width: 800px;
+  width: 90%;
+  padding: 40px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.contacts-content-wrapper p,
+.contacts-content-wrapper a,
+.contacts-content-wrapper li {
+  color: #fff;
+  line-height: 1.6;
+  margin-bottom: 0.5em;
+  font-size: 1.1rem;
+}
+
+.contacts-content-wrapper a {
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+.contacts-content-wrapper a:hover {
+  color: var(--accent);
+}
+
+.contact-info .contact-icon-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #fff;
+    font-size: 24px;
+    transition: transform 0.2s ease-out, color 0.2s ease-out;
+    border: none;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.contact-info .contact-icon-link:hover {
+    transform: scale(1.15);
+    color: var(--accent);
+}
+
+.contacts-content-wrapper .contact-info p[data-i18n="contact_email_label"],
+.contacts-content-wrapper .contact-info a[data-i18n="contact_email_address"],
+.contacts-content-wrapper .contact-info p[data-i18n="contact_address_label"],
+.contacts-content-wrapper .contact-info p[data-i18n="contact_address_text"],
+.contacts-content-wrapper .working-hours {
+    display: none;
+}
+
+/* АДАПТАЦИЯ: Контакты - номера телефонов и почта */
+.social-links-inline {
+  margin-bottom: 30px;
+  width: 100%; /* Добавим, чтобы занимал всю ширину для центрирования */
+}
+.social-links-inline ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* На мобильных обычно лучше вертикально */
+  justify-content: center;
+  align-items: center; /* Центрируем элементы списка */
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.social-links-inline li {
+    text-align: center; /* Центрируем текст в элементах списка */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Центрируем содержимое LI */
+    width: 100%; /* Чтобы LI занимали всю ширину контейнера */
+}
+
+.social-links-inline a {
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  font-weight: 400;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
+}
+
+.social-links-inline a .fab {
+  font-size: 1.4em;
+  margin-right: 10px;
+  color: #fff;
+  transition: color 0.2s;
+}
+
+.social-links-inline a:hover {
+  color: var(--accent);
+}
+
+.social-links-inline a:hover .fab {
+  color: var(--accent);
+}
+
+.contact-phone-numbers {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%; /* Добавим, чтобы занимал всю ширину для центрирования */
+}
+
+.contact-phone-numbers p {
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-align: center; /* Центрируем заголовок */
+}
+
+.phone-numbers-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Центрируем номера телефонов */
+    gap: 15px;
+}
+
+.contact-phone-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 25px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: background 0.2s, border 0.2s;
+    white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
+    max-width: 100%; /* чтобы не вылазил за пределы на очень маленьких экранах */
+    box-sizing: border-box; /* Учитываем padding в ширине */
+    overflow: hidden; /* Обрезать текст, если не помещается */
+    text-overflow: ellipsis; /* Добавить многоточие */
+}
+
+.contact-phone-link .fas {
+    margin-right: 8px;
+    font-size: 1.1em;
+    color: #fff;
+    flex-shrink: 0; /* Иконка не сжимается */
+}
+
+.contact-phone-link:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.4);
+}
+
+.contact-phone-link:hover .fas {
+    color: #fff;
+}
+
+.contact-email-info {
+    margin-top: 20px;
+    width: 100%; /* Добавим, чтобы занимал всю ширину для центрирования */
+}
+
+.contact-email-info p {
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-align: center; /* Центрируем заголовок */
+}
+
+.contact-email-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 25px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: background 0.2s, border 0.2s;
+    white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
+    max-width: 100%; /* чтобы не вылазил за пределы на очень маленьких экранах */
+    box-sizing: border-box;
+    overflow: hidden; /* Обрезать текст, если не помещается */
+    text-overflow: ellipsis; /* Добавить многоточие */
+}
+
+.contact-email-link .fas {
+    margin-right: 8px;
+    font-size: 1.1em;
+    color: #fff;
+    flex-shrink: 0; /* Иконка не сжимается */
+}
+
+.contact-email-link:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.4);
+}
+
+.contact-email-link:hover .fas {
+  color: #fff;
+}
+
+/* АДАПТАЦИЯ: Социальные иконки фиксированные слева на десктопе */
+.social-fixed-left {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.social-fixed-left ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.social-fixed-left li {
+  margin: 0;
+  padding: 0;
+}
+
+.social-fixed-left a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #fff;
+  font-size: 22px;
+  transition: transform 0.2s ease-out, color 0.2s ease-out;
+  border: none;
+  text-decoration: none;
+}
+
+.social-fixed-left a:hover {
+  transform: scale(1.15);
+  color: var(--accent);
+}
+
+.signup-section {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 60px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.signup-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex; /* Используем flexbox для центрирования кнопки */
+    flex-direction: column; /* Элементы внутри будут располагаться вертикально */
+    align-items: center; /* Центрируем по горизонтали */
+    justify-content: center; /* Центрируем по вертикали */
+}
+
+.signup-text-wrapper {
+    max-width: 600px;
+    margin: 0 auto 20px auto; /* Добавим нижний отступ */
+    text-align: center;
+}
+
+.signup-text {
+    color: #fff;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.signup-text a {
+    color: var(--accent);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.signup-text a:hover {
+    color: #fff;
+}
+
+/* Стили для раздела "Отзывы" */
+.reviews-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* Ограничьте ширину карусели */
+    margin: 0 auto 30px auto;
+    overflow: hidden; /* Важно, чтобы содержимое не выходило за пределы карусели */
+    padding-top: 20px; /* Отступ для стрелок */
+    box-sizing: border-box;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: visible; /* Сделать видимым, чтобы стрелки могли выходить за пределы */
+    padding: 0 60px; /* Добавить отступ внутри контейнера для стрелок */
+    box-sizing: border-box;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    padding-bottom: 20px; /* Отступ для тени карточек */
+    width: 100%; /* Должен быть 100% ширины, чтобы карточки внутри могли быть flex-item */
+    box-sizing: border-box;
+}
+
+.review-card {
+    flex: 0 0 100%; /* Одна карточка на весь слайд */
+    max-width: 100%;
+    background: rgba(255,255,255,0.2);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
+    border: 1.2px solid rgba(0,0,0,0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 30px;
+    margin: 0; /* Убираем горизонтальные марджины у карточек, так как их компенсирует padding контейнера */
+    box-sizing: border-box;
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.review-card.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.review-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--accent);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.review-card p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    color: #fff;
+}
+
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.3);
+    border: none;
+    font-size: 1.8rem; /* Ещё немного уменьшим */
+    color: var(--accent);
+    cursor: pointer;
+    padding: 6px 10px; /* Уменьшен padding */
+    border-radius: 50%;
+    transition: background 0.3s ease, color 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.carousel-nav-btn.prev {
+    left: 0px; /* Отступ от края контейнера карусели */
+}
+.carousel-nav-btn.next {
+    right: 0px; /* Отступ от края контейнера карусели */
+}
+.carousel-nav-btn:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dot.active {
+    background: var(--accent);
+}
+
+/* Удалены стили для .full-reviews-grid, так как этой секции больше нет */
+
+/* Стили для секции FAQ */
+.faq-section {
+    background: rgba(255,255,255,0.08); /* Такой же фон, как у отзывов/контактов */
+    padding: 60px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.faq-container {
+    max-width: 800px;
+    width: 90%;
+    margin: 20px auto 0 auto;
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+    text-align: left;
+}
+
+.faq-category-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.15);
+    margin-bottom: 25px;
+    margin-top: 30px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.faq-category-title:first-of-type {
+    margin-top: 0; /* Убрать верхний отступ для первого заголовка */
+}
+
+.faq-item {
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.2); /* Разделитель между вопросами */
+    padding-bottom: 15px;
+}
+
+.faq-item:last-child {
+    border-bottom: none; /* Убрать границу у последнего элемента */
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.faq-question {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent); /* Цвет вопроса */
+    cursor: pointer;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.faq-question:hover {
+    color: #fff; /* Цвет вопроса при наведении */
+}
+
+.faq-question .icon {
+    font-size: 1.2em; /* Размер иконки */
+    width: 1.2em; /* Задаем фиксированную ширину, чтобы она не "прыгала" */
+    height: 1.2em; /* Задаем фиксированную высоту */
+    display: flex; /* Делаем flex для центрирования содержимого */
+    justify-content: center; /* Центрируем содержимое */
+    align-items: center; /* Центрируем содержимое */
+    margin-left: 10px;
+    transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+    color: #fff; /* Цвет стрелки */
+    border: 1px solid rgba(255,255,255,0.3); /* Тонкая рамка */
+    border-radius: 50%; /* Круглая форма */
+    background-color: rgba(0,0,0,0.2); /* Слегка темный фон */
+}
+
+.faq-question:hover .icon {
+    background-color: var(--accent); /* Фон стрелки при наведении */
+    color: #fff; /* Цвет стрелки при наведении */
+}
+
+.faq-question.active .icon {
+    transform: rotate(180deg); /* Иконка поворачивается при открытии */
+    background-color: var(--accent); /* Фон стрелки при активном состоянии */
+    color: #fff; /* Цвет стрелки при активном состоянии */
+}
+
+.faq-answer {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #fff;
+    padding: 0; /* Убираем padding-bottom здесь, чтобы контролировать его через open */
+    max-height: 0; /* Скрываем ответ по умолчанию */
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+}
+
+.faq-answer.open {
+    max-height: 500px; /* Увеличено для длинных ответов (может быть еще больше при необходимости) */
+    padding: 10px 0 15px 0; /* Показать padding, когда открыт */
+}
+
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1200px) {
+  .masonry-gallery { column-count: 3; }
+  .hero__content h1 { font-size: 3.2rem; }
+  .hero__content p { font-size: 1.5rem; }
+}
+@media (min-width: 901px) {
+    .about-section-title-mobile {
+        display: none;
+    }
+    .about-section-title-desktop {
+        display: block;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .about-section.custom-layout-about {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: center;
+        gap: 50px;
+        padding: 40px;
+        min-height: 100vh;
+        height: auto;
+        overflow: hidden;
+        margin-bottom: 0;
+    }
+    .about-video-container {
+        max-width: 35%;
+        width: 35%;
+        height: 100%;
+        margin-bottom: 0;
+        overflow: hidden;
+    }
+    .about-video-custom {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+    .about-text-content {
+        background: rgba(255,255,255,0.2);
+        border-radius: 0;
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: #fff;
+        text-align: left;
+        line-height: 1.7;
+        font-size: 1.1rem;
+        box-sizing: border-box;
+        padding: 40px;
+        position: relative;
+        overflow: auto;
+        max-height: unset;
+        min-height: auto;
+        margin-bottom: 0;
+    }
+    .about-text-content .section-title-small {
+        text-align: left;
+    }
+
+    .process-section-title-mobile {
+        display: none;
+    }
+    .process-section-title-desktop {
+        display: block;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .process-section.custom-layout-process {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: center;
+        gap: 50px;
+        padding: 40px;
+        min-height: 100vh;
+        height: auto;
+        overflow: hidden;
+        margin-bottom: 0;
+    }
+    .process-text-content {
+        background: rgba(255,255,255,0.2);
+        border-radius: 0;
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 40px;
+        color: #fff;
+        text-align: left;
+        line-height: 1.7;
+        font-size: 1.1rem;
+        box-sizing: border-box;
+        min-height: auto;
+        overflow: auto;
+        max-height: unset;
+        min-height: auto;
+        margin-bottom: 0;
+    }
+    .process-video-container {
+        max-width: 35%;
+        width: 35%;
+        height: 100%;
+        margin-top: 0;
+        overflow: hidden;
+    }
+    .process-video-custom {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    #servicesPortfolioDesktopLayout {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 3rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .portfolio-section {
+        flex-grow: 1;
+        flex-shrink: 1;
+        max-width: calc(100% - 320px - 3rem);
+        padding: 0;
+    }
+
+    .services-section {
+        flex-basis: 320px;
+        flex-shrink: 0;
+        padding: 0;
+    }
+
+    .section-title {
+        color: #fff;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        margin-bottom: 2.2rem;
+        letter-spacing: 1.5px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+    .portfolio-section .section-title {
+        text-align: left;
+    }
+    .services-section .section-title {
+        text-align: right;
+    }
+
+    .services-list {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        gap: 1.2rem;
+    }
+    .services-section .service-card {
+        width: 100%;
+        max-width: none;
+        padding: 1rem 1.2rem;
+        margin-bottom: 0;
+    }
+    .services-section .service-title {
+        font-size: 1.1rem;
+        line-height: 1.1;
+        margin-bottom: 0.3rem;
+    }
+
+    .masonry-gallery {
+        column-count: 3;
+        column-gap: 1.5rem;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+}
+
+@media (max-width: 900px) {
+  .side-menu {
+    width: 90vw;
+    right: -90vw;
+    padding: 2rem 1rem;
+  }
+  .side-menu.open {
+    right: 0;
+  }
+  .masonry-gallery { column-count: 2; }
+  .hero__content h1 { font-size: 2.2rem; }
+  .hero__content p { font-size: 1.1rem; }
+
+  .about-section-title-mobile {
+      display: block;
+  }
+  .about-section-title-desktop {
+      display: none;
+  }
+
+  .about-section.custom-layout-about {
+    padding: 30px 15px;
+  }
+  .about-video-container {
+    max-width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
+  }
+  .about-text-content {
+    padding: 25px;
+    font-size: 0.95rem;
+    height: auto;
+    max-height: unset;
+    overflow: auto;
+  }
+  .about-text-content .section-title-small {
+      text-align: center;
+  }
+
+  .process-section-title-mobile {
+      display: block;
+  }
+  .process-section-title-desktop {
+      display: none;
+  }
+
+  .process-section.custom-layout-process {
+    padding: 30px 15px;
+  }
+  .process-video-container {
+    max-width: 100%;
+    height: 200px;
+    margin-top: 20px;
+  }
+  .process-text-content {
+    padding: 25px;
+    font-size: 0.95rem;
+    height: auto;
+    max-height: unset;
+    overflow: auto;
+  }
+  .process-text-content h3 {
+    font-size: 1.1rem;
+  }
+
+  #servicesPortfolioDesktopLayout {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 40px 10px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .services-section, .portfolio-section {
+    flex-basis: auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 60px 0 40px 0;
+  }
+
+  .services-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    max-width: 580px; /* Чтобы не сжимались сильно на планшетах */
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .service-card {
+    width: calc(50% - 0.4rem); /* 2 карточки в ряд с отступом */
+    max-width: 280px; /* Предел для карточки */
+    min-width: unset;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.8rem;
+  }
+  .service-title {
+    font-size: 0.9rem;
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+
+  /* Адаптация отзывов на мобильных */
+  .reviews-carousel {
+      padding-left: 15px;
+      padding-right: 15px;
+  }
+  .carousel-container {
+      padding: 0 40px; /* Меньше отступ для кнопок на мобильных */
+  }
+  .reviews-carousel .carousel-inner {
+      margin-left: -15px;
+      margin-right: -15px;
+      width: calc(100% + 30px);
+  }
+  .reviews-carousel .review-card {
+      margin: 0 10px;
+      padding: 20px;
+  }
+  .carousel-nav-btn {
+      font-size: 1.6rem;
+      padding: 4px 8px;
+  }
+  .carousel-nav-btn.prev {
+      left: 0px; 
+  }
+  .carousel-nav-btn.next {
+      right: 0px;
+  }
+
+  /* Адаптация FAQ на мобильных */
+  .faq-container {
+    padding: 15px;
+  }
+  .faq-question {
+      font-size: 1rem;
+  }
+  .faq-answer {
+      font-size: 0.9rem;
+  }
+  .faq-category-title {
+    font-size: 1.4rem; /* Меньше на очень маленьких экранах */
+    margin-bottom: 20px;
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Адаптация социальных иконок слева/снизу на самых маленьких экранах */
+  .social-fixed-left {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.2); /* Немного темнее фон */
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); /* Тень сверху */
+      flex-direction: row; /* Иконки в ряд */
+      justify-content: space-around; /* Равномерно распределены */
+      padding: 10px 0;
+  }
+  .social-fixed-left ul {
+    gap: 10px; /* Немного уменьшим отступ */
+    padding: 5px 0; /* Уменьшим padding */
+    width: 100%; /* Занимаем всю ширину */
+    flex-direction: row; /* Иконки в ряд */
+    justify-content: space-around; /* Равномерно распределены */
+  }
+  .social-fixed-left li {
+    margin: 0;
+  }
+  .social-fixed-left a {
+    width: 40px; /* Чуть меньше размер */
+    height: 40px;
+    font-size: 20px; /* Чуть меньше иконка */
+  }
+
+  /* Адаптация контактов на очень маленьких экранах */
+  .contact-phone-link, .contact-email-link {
+    font-size: 0.8rem; /* Ещё уменьшим шрифт для лучшей вместимости */
+    padding: 6px 8px; /* Чуть меньше padding */
+    white-space: nowrap; /* Гарантируем одну строку */
+    overflow: hidden; /* Скрываем выходящий текст */
+    text-overflow: ellipsis; /* Добавляем многоточие */
+    max-width: 100%; /* Убедимся, что не вылезает за родителя */
+  }
+  .phone-numbers-horizontal {
+      flex-direction: column; /* Размещаем номера вертикально, если не помещаются */
+      align-items: center;
+      gap: 8px; /* Уменьшим отступ */
+  }
+
+  /* Адаптация виджета чата на самых маленьких экранах */
+  #telegramChatWidget {
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  .open-chat-btn {
+    width: 50px;
+    height: 50px;
+  }
+  .open-chat-btn .fab {
+    font-size: 24px;
+  }
+  .chat-header {
+    padding: 12px 15px;
+    font-size: 1rem;
+  }
+  .close-chat-btn {
+    font-size: 1.5rem;
+  }
+  .chat-messages {
+    padding: 10px;
+  }
+  .chat-message {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  #chatInput {
+    font-size: 0.85rem;
+  }
+  .send-message-btn {
+    padding: 8px 12px;
+  }
+  .chat-button {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    width: calc(100% - 16px); /* Учитываем padding */
+    text-align: center;
+  }
+}
+
+
+/* Стили для скроллбаров (без изменений) */
+.about-text-content::-webkit-scrollbar,
+.process-text-content::-webkit-scrollbar,
+.service-modal-content::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.about-text-content::-webkit-scrollbar-track,
+.process-text-content::-webkit-scrollbar-track,
+.service-modal-content::-webkit-scrollbar-track,
+.chat-messages::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.about-text-content::-webkit-scrollbar-thumb,
+.process-text-content::-webkit-scrollbar-thumb,
+.service-modal-content::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-text-content::-webkit-scrollbar-thumb:hover,
+.process-text-content::-webkit-scrollbar-thumb:hover,
+.service-modal-content::-webkit-scrollbar-thumb:hover,
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.about-text-content,
+.process-text-content,
+.service-modal-content,
+.chat-messages {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.4) rgba(255, 255, 255, 0.05);
+}
+
+/* Стили для кнопки открытия чата (теперь она в потоке документа) */
+#openChatBtn {
+  position: static; /* Важно: кнопка теперь не фиксирована */
+  margin-top: 20px; /* Отступ от текста выше */
+  display: flex !important; /* Гарантируем, что кнопка отображается как flex */
+  justify-content: center;
+  align-items: center;
+  width: 60px; /* Ширина */
+  height: 60px; /* Высота */
+  border-radius: 50%; /* Круглая форма */
+  background: var(--glass-bg);
+  border: 1.5px solid var(--glass-border);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  /* Убраны z-index, bottom, right, visibility, pointer-events по умолчанию */
+}
+#openChatBtn.hidden { /* Сохраняем класс для скрытия, если это нужно JS */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#openChatBtn .fab {
+  font-size: 28px;
+  color: #fff;
+  transition: color 0.2s ease;
+}
+
+#openChatBtn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+#openChatBtn:hover .fab {
+  color: #fff;
+}
+
+/* Стили для виджета чата (остается фиксированным) */
+#telegramChatWidget {
+  position: fixed;
+  bottom: 20px; /* Переместил на 20px от низа, как социальные иконки */
+  right: 20px;
+  z-index: 2147483647; /* Высокий z-index, чтобы быть поверх всего */
+  width: 360px;
+  height: 500px;
+  background: rgba(255,255,255,0.95);
+  border: 1.5px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.22);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  pointer-events: none; /* Скрыто по умолчанию */
+}
+
+#telegramChatWidget.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.chat-header {
+  background: rgba(255,255,255,0.2);
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.close-chat-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--accent);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.close-chat-btn:hover {
+  color: #c00;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-message {
+  max-width: 85%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  color: var(--accent);
+}
+
+.chat-message.bot-message {
+  background: rgba(255,255,255,0.95);
+  align-self: flex-start;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.chat-message.user-message {
+  background: var(--accent);
+  color: #fff;
+  align-self: flex-end;
+  border: 1px solid var(--accent);
+}
+
+.chat-input-area {
+  flex-shrink: 0;
+  padding: 15px;
+  border-top: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#chatInput {
+  width: calc(100% - 30px);
+  padding: 10px 15px;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.95);
+  color: var(--accent);
+  font-size: 0.95rem;
+  outline: none;
+  box-sizing: border-box;
+}
+#chatInput::placeholder {
+  color: rgba(0,0,0,0.6);
+}
+#chatInput:focus {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.send-message-btn {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  border-radius: 20px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  align-self: flex-end;
+  min-width: 40px;
+}
+.send-message-btn:hover {
+  background: #fff;
+  color: var(--accent);
+}
+.send-message-btn .fas {
+  font-size: 1em;
+  margin: 0;
+}
+
+.chat-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+  width: 100%;
+  flex-direction: column;
+}
+
+.chat-button {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: normal;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+.chat-button:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--accent);
+}
+
+.chat-button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 8px;
+}
+.chat-button-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Стиль для кликабельных ссылок контактов в чат-виджете */
+.chat-message .chat-contact-link {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 5px;
+  background: rgba(0,0,0,0.1);
+  color: var(--accent);
+  text-decoration: none;
+  border-radius: 15px;
+  transition: background 0.2s, color 0.2s;
+  font-size: 0.95rem;
+}
+
+.chat-message .chat-contact-link:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.chat-message .chat-contact-link .fab,
+.chat-message .chat-contact-link .fas {
+  margin-right: 8px;
+  font-size: 1.1em;
+  color: var(--accent);
+  transition: color 0.2s;
+}
+
+.chat-message .chat-contact-link:hover .fab,
+.chat-message .chat-contact-link:hover .fas {
+  color: #fff;
+}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mimimitattoo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <button class="burger" id="burger" aria-label="Открыть меню">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <div id="wrapper">
+    <section class="hero" id="hero">
+      <video class="hero__video" id="heroVideo" src="video/FONHERO.MOV" autoplay loop muted playsinline></video>
+      <div class="hero__content">
+        <h1 data-i18n="main_title">MIMIMI TATTOO</h1>
+        <p data-i18n="main_subtitle">искусство на коже, созданное с любовью</p>
+        <a href="#signup" class="hero__cta glass-btn" data-i18n="main_cta">Записаться</a>
+      </div>
+      </section>
+
+    <nav class="side-menu glass-menu" id="sideMenu">
+      <button class="close-menu" id="closeMenu" aria-label="Закрыть меню">&times;</button>
+      <ul id="menu">
+        <li><a href="#portfolio" class="glass-link" data-i18n="menu_portfolio">Портфолио</a></li>
+        <li><a href="#services" class="glass-link" data-i18n="menu_services">Услуги</a></li>
+        <li><a href="#about" class="glass-link" data-i18n="menu_about">Обо мне</a></li>
+        <li><a href="#process" class="glass-link" data-i18n="menu_process">Процесс</a></li>
+        <li><a href="#signup" class="glass-link" data-i18n="menu_signup">Запись</a></li>
+        <li><a href="#contacts" class="glass-link" data-i18n="menu_contacts">Контакты</a></li>
+        <li><a href="#faq" class="glass-link" data-i18n="menu_faq">FAQ</a></li>
+        <li><a href="#reviews" class="glass-link" data-i18n="menu_reviews">Отзывы</a></li>
+      </ul>
+      <div class="lang-switch">
+        <button id="ruBtn" class="active">RU</button>
+        <button id="enBtn">EN</button>
+      </div>
+    </nav>
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+    <div id="fixedSiteBackground"></div>
+
+    <div class="social-fixed-left">
+      <ul>
+        <li><a href="https://t.me/mimimitattoo" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a></li>
+        <li><a href="https://wa.me/380965157890" target="_blank" aria-label="WhatsApp UA"><i class="fab fa-whatsapp"></i></a></li>
+        <li><a href="https://wa.me/353877167933" target="_blank" aria-label="WhatsApp IRL"><i class="fab fa-whatsapp"></i></a></li>
+        <li><a href="https://www.instagram.com/mimimitattoo?utm_source=ig_web_button_share_sheet&igsh=czl6dzdlbWN5aGhj" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://www.facebook.com/share/16r3PEdLeh/?mibextid=wwXIfr" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a></li>
+      </ul>
+    </div>
+
+    <section class="about-section custom-layout-about" id="about">
+      <div class="section-title about-section-title-mobile" data-i18n="menu_about">Обо мне</div>
+
+      <div class="about-video-container">
+        <video class="about-video-custom" autoplay loop muted playsinline src="video/obomne.MOV"></video>
+      </div>
+      <div class="about-text-content glass-content-block">
+        <div class="section-title-small about-section-title-desktop" data-i18n="menu_about">Обо мне</div>
+        <p data-i18n="about_p1">Привет, меня зовут Kris.</p>
+        <p data-i18n="about_p2">Я профессиональный тату-мастер, специалист по пирсингу и перманентному макияжу с семилетним опытом. Для меня это не просто дело жизни — это искусство, в котором я раскрываю характер, стиль и внутренний мир каждого клиента.</p>
+        <p data-i18n="about_p3">Вдохновляюсь путешествиями, современным искусством и уникальностью каждого, кто доверяет мне свою идею. Каждый проект — это индивидуальный подход, внимание к деталям и стремление создать нечто по-настоящему особенное.</p>
+        <p data-i18n="about_p4">Высокие стандарты гигиены, стерильность и забота о вашем спокойствии — мой неизменный приоритет.</p>
+        <p data-i18n="about_p5"></p>
+      </div>
+    </section>
+
+    <section class="process-section custom-layout-process" id="process">
+      <div class="section-title process-section-title-mobile" data-i18n="process_main_title">Процесс создания вашей уникальной истории</div>
+
+      <div class="process-text-content glass-content-block">
+        <div class="section-title-small process-section-title-desktop" data-i18n="process_main_title">Процесс создания вашей уникальной истории</div>
+        <p data-i18n="process_intro_p1">Мой подход — это чёткая структура, внимание к деталям и уважение к вашим ожиданиям. Каждый этап выстроен так, чтобы результат был максимально качественным и отражал именно ваш запрос.</p>
+
+        <div class="process-steps">
+          <h3><span data-i18n="process_step1_title">1. Обсуждение и разработка эскиза</span></h3>
+          <p><span data-i18n="process_step1_desc">Мы определяем ваши пожелания, стиль и основные идеи. Я уточняю детали, предлагаю профессиональные решения и разрабатываю индивидуальный эскиз, который согласовывается с вами до полного утверждения.</span></p>
+
+          <h3><span data-i18n="process_step2_title">2. Подготовка</span></h3>
+          <p><span data-i18n="process_step2_desc">Перед началом процедуры тщательно подготавливаю рабочее пространство, использую только одноразовые и стерильные материалы. Все этапы подготовки прозрачны и соответствуют высоким стандартам безопасности.</span></p>
+
+          <h3><span data-i18n="process_step3_title">3. Реализация</span></h3>
+          <p><span data-i18n="process_step3_desc">После согласования эскиза начинается основной этап — нанесение татуировки, пирсинга или перманентного макияжа. Работаю аккуратно, с вниманием к каждой детали, чтобы результат был точным и эстетичным.</span></p>
+
+          <h3><span data-i18n="process_step4_title">4. Рекомендации по уходу</span></h3>
+          <p><span data-i18n="process_step4_desc">По завершении процедуры вы получаете подробные инструкции по уходу, а также специальную заживляющую плёнку — она уже включена в стоимость. Это делает процесс восстановления лёгким и спокойным. Я всегда на связи, чтобы ответить на ваши вопросы и поддержать на этапе заживления.</span></p>
+        </div>
+        <p data-i18n="process_outro_p1">Моя задача — чтобы каждый этап был понятным, а результат радовал вас каждый день.</p>
+      </div>
+
+      <div class="process-video-container">
+        <video class="process-video-custom" autoplay loop muted playsinline src="video/proces.MOV"></video>
+      </div>
+    </section>
+
+    <section id="servicesPortfolioDesktopLayout">
+      <div class="portfolio-section" id="portfolio">
+        <div class="section-title" data-i18n="portfolio_title">Портфолио</div>
+
+        <div class="masonry-gallery featured-gallery" id="featuredPortfolioGallery">
+          <img src="images/portfolio/r0.jpg" alt="">
+          <img src="images/portfolio/r1.jpg" alt="">
+          <img src="images/portfolio/r2.jpg" alt="">
+          <img src="images/portfolio/r3.jpg" alt="">
+          <img src="images/portfolio/r4.jpg" alt="">
+          <img src="images/portfolio/r5.jpg" alt="">
+        </div>
+
+        <button class="glass-btn view-all-btn" id="viewMorePortfolioBtn" data-i18n="view_all_portfolio">Показать все работы</button>
+
+        <div class="masonry-gallery full-gallery" id="fullPortfolioGallery" style="display: none;">
+          <img src="images/portfolio/r6.jpg" alt="">
+          <img src="images/portfolio/r7.jpg" alt="">
+          <img src="images/portfolio/r8.jpg" alt="">
+          <img src="images/portfolio/r9.jpg" alt="">
+          <img src="images/portfolio/r10.jpg" alt="">
+          <img src="images/portfolio/r11.jpg" alt="">
+          <img src="images/portfolio/r12.jpg" alt="">
+          <img src="images/portfolio/r13.jpg" alt="">
+          <img src="images/portfolio/r14.PNG" alt="">
+          <img src="images/portfolio/r15.jpg" alt="">
+          <img src="images/portfolio/r16.PNG" alt="">
+          <img src="images/portfolio/r17.jpg" alt="">
+          <img src="images/portfolio/r18.PNG" alt="">
+          <img src="images/portfolio/r19.jpg" alt="">
+          <img src="images/portfolio/r20.jpg" alt="">
+          <img src="images/portfolio/r21.jpg" alt="">
+          <img src="images/portfolio/r22.jpg" alt="">
+          <img src="images/portfolio/r23.png" alt="">
+          <img src="images/portfolio/r24.png" alt="">
+          <img src="images/portfolio/r25.jpg" alt="">
+          <img src="images/portfolio/r26.jpg" alt="">
+          <img src="images/portfolio/r27.PNG" alt="">
+          <img src="images/portfolio/r28.PNG" alt="">
+          <img src="images/portfolio/r29.jpg" alt="">
+          <img src="images/portfolio/r30.jpg" alt="">
+          <img src="images/portfolio/r31.jpg" alt="">
+          <img src="images/portfolio/r32.jpg" alt="">
+          <img src="images/portfolio/r33.jpg" alt="">
+          <img src="images/portfolio/r34.jpg" alt="">
+          <img src="images/portfolio/r35.jpg" alt="">
+          <img src="images/portfolio/r36.png" alt="">
+          <img src="images/portfolio/r37.jpg" alt="">
+          <img src="images/portfolio/r38.jpg" alt="">
+          <img src="images/portfolio/r39.jpg" alt="">
+          <img src="images/portfolio/r40.jpg" alt="">
+          <img src="images/portfolio/r41.JPG" alt="">
+          <img src="images/portfolio/r42.jpg" alt="">
+          <img src="images/portfolio/r43.JPG" alt="">
+          <img src="images/portfolio/r44.PNG" alt="">
+          <img src="images/portfolio/r45.PNG" alt="">
+          <img src="images/portfolio/r46.JPG" alt="">
+          <img src="images/portfolio/r47.jpg" alt="">
+          <img src="images/portfolio/r48.JPG" alt="">
+          <img src="images/portfolio/r49.jpg" alt="">
+          <img src="images/portfolio/r50.png" alt="">
+        </div>
+        <button class="glass-btn hide-all-btn" id="hideAllPortfolioBtn" style="display: none;">Скрыть все работы</button>
+      </div>
+
+      <div class="services-section" id="services">
+        <div class="section-title" data-i18n="services_title">Услуги</div>
+        <div class="services-list">
+          <div class="service-card" data-service-key="aqua">
+            <div class="service-title" data-i18n="service_aqua_title">AQUA</div>
+            <div class="service-desc" data-i18n="service_aqua_desc"></div>
+          </div>
+          <div class="service-card" data-service-key="coverup">
+            <div class="service-title" data-i18n="service_coverup_title">COVER UP</div>
+            <div class="service-desc" data-i18n="service_coverup_desc"></div>
+          </div>
+          <div class="service-card" data-service-key="line">
+            <div class="service-title" data-i18n="service_line_title">LINE</div>
+            <div class="service-desc" data-i18n="service_line_desc"></div>
+          </div>
+          <div class="service-card" data-service-key="mini">
+            <div class="service-title" data-i18n="service_mini_title">MINI</div>
+            <div class="service-desc" data-i18n="service_mini_desc"></div>
+          </div>
+          <div class="service-card" data-service-key="permanent">
+            <div class="service-title" data-i18n="service_permanent_title">PERMANENT</div>
+            <div class="service-desc" data-i18n="service_permanent_desc"></div>
+          </div>
+          <div class="service-card" data-service-key="piercing">
+            <div class="service-title" data-i18n="service_piercing_title">PIERCING</div>
+            <div class="service-desc" data-i18n="service_piercing_desc"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reviews-section" id="reviews">
+      <div class="section-title" data-i18n="reviews_title">Отзывы</div>
+
+      <div class="reviews-carousel" id="reviewsCarousel">
+        <div class="carousel-container">
+          <div class="carousel-inner" id="carouselInner">
+            </div>
+          <button class="carousel-nav-btn prev" id="carouselPrev">&#10094;</button>
+          <button class="carousel-nav-btn next" id="carouselNext">&#10095;</button>
+        </div>
+        <div class="carousel-dots" id="carouselDots">
+          </div>
+      </div>
+      </section>
+
+    <section id="faq" class="faq-section">
+        <div class="section-title" data-i18n="menu_faq">FAQ</div>
+        <div class="faq-container glass-content-block">
+            <h2 class="faq-category-title" data-i18n="faq_general_title">Общие вопросы о татуировках</h2>
+            <div id="faqGeneral" class="faq-list">
+                </div>
+
+            <h2 class="faq-category-title" data-i18n="faq_piercing_title">Вопросы о пирсинге</h2>
+            <div id="faqPiercing" class="faq-list">
+                </div>
+
+            <h2 class="faq-category-title" data-i18n="faq_permanent_title">Вопросы о перманентном макияже</h2>
+            <div id="faqPermanent" class="faq-list">
+                </div>
+        </div>
+    </section>
+
+    <section id="contacts" class="contacts-section">
+      <div class="section-title" data-i18n="menu_contacts">Контакты</div>
+      <div class="contacts-content-wrapper glass-content-block">
+        <div class="social-links-inline">
+          <p data-i18n="contact_social_label">Мы в соцетях:</p>
+          <ul>
+            <li><a href="https://t.me/mimimitattoo" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i> Telegram</a></li>
+            <li><a href="https://wa.me/380965157890" target="_blank" aria-label="WhatsApp UA"><i class="fab fa-whatsapp"></i> WhatsApp UA</a></li>
+            <li><a href="https://wa.me/353877167933" target="_blank" aria-label="WhatsApp IRL"><i class="fab fa-whatsapp"></i> WhatsApp IRL</a></li>
+            <li><a href="https://www.instagram.com/mimimitattoo?utm_source=ig_web_button_share_sheet&igsh=czl6dzdlbWN5aGhj" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="https://www.facebook.com/share/16r3PEdLeh/?mibextid=wwXIfr" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a></li>
+          </ul>
+            <div class="contact-phone-numbers">
+                <p data-i18n="contact_phone_label">Телефоны:</p>
+                <div class="phone-numbers-horizontal">
+                    <a href="tel:+380965157890" class="contact-phone-link" aria-label="Позвонить на Украинский номер"><i class="fas fa-phone"></i> +380 96 515 78 90 (UA)</a>
+                    <a href="tel:+353877167933" class="contact-phone-link" aria-label="Позвонить на Ирландский номер"><i class="fas fa-phone"></i> +353 87 716 79 33 (IRL)</a>
+                </div>
+            </div>
+            <div class="contact-email-info">
+                <p data-i18n="contact_email_label">Почта:</p>
+                <a href="mailto:nika889list.ru@gmail.com" class="contact-email-link" aria-label="Написать на почту"><i class="fas fa-envelope"></i> nika889list.ru@gmail.com</a>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="signup" class="signup-section">
+      <div class="section-title" data-i18n="menu_signup">Запись</div>
+      <div class="signup-content glass-content-block">
+        <div class="signup-text-wrapper">
+          <p class="signup-text" data-i18n="signup_description_bot_info">
+            Для удобной записи на сеанс, получения ответов на часто задаваемые вопросы и просмотра контактов, воспользуйтесь нашим Telegram-ботом. Вы можете начать диалог прямо здесь:
+          </p>
+        </div>
+        <button id="openChatBtn" class="open-chat-btn">
+          <i class="fab fa-telegram-plane"></i>
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="telegramChatWidget" class="telegram-chat-widget">
+    <div class="chat-header">
+      <span data-i18n="chat_widget_title">Чат с Mimimi Tattoo Bot</span>
+      <button id="closeChatBtn" class="close-chat-btn">&times;</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      </div>
+    <div class="chat-input-area">
+      <div class="chat-buttons" id="chatButtons">
+        </div>
+      <input type="text" id="chatInput" placeholder="Напишите сообщение..." data-i18n-placeholder="chat_input_placeholder">
+      <button id="sendMessageBtn" class="send-message-btn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <div id="serviceModalsContainer"></div>
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <div class="lightbox-nav-preview prev" id="lightboxPrevPreview"></div>
+    <div class="lightbox-nav-preview next" id="lightboxNextPreview"></div>
+    <span class="lightbox-arrow left" id="lightboxPrev">&#10094;</span>
+    <span class="lightbox-arrow right" id="lightboxNext">&#10095;</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
