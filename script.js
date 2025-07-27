@@ -123,71 +123,6 @@ const translations = {
     chat_widget_title: "Чат с Mimimi Tattoo Bot",
     chat_input_placeholder: "Напишите сообщение...",
     chat_connection_error: "Ошибка подключения к боту. Пожалуйста, попробуйте позже.",
-    chat_bot_unavailable: "Ошибка: Бот недоступен. Пожалуйста, попробуйте позже.",
-    show_all_reviews: "Показать все отзывы", 
-    hide_all_reviews: "Скрыть отзывы",
-    faq_general_title: "Общие вопросы о татуировках",
-    faq_piercing_title: "Вопросы о пирсинге",
-    faq_permanent_title: "Вопросы о перманентном макияже"
-  },
-  en: {
-    main_title: "MIMIMI TATTOO",
-    main_subtitle: "art on skin, created with love",
-    main_cta: "Book now",
-    menu_portfolio: "Portfolio",
-    menu_services: "Services",
-    menu_about: "About me",
-    menu_process: "Process",
-    menu_signup: "Booking",
-    menu_contacts: "Contacts",
-    menu_faq: "FAQ",
-    menu_reviews: "Reviews",
-    services_title: "Services",
-    service_aqua_title: "AQUA",
-    service_aqua_desc: "AQUA is a sophisticated tattoo style inspired by watercolor painting. Light, translucent shades, smooth color transitions, and airy compositions make these tattoos truly unique. AQUA is perfect for those who appreciate delicacy, artistry, and individuality in tattoo art.",
-    service_coverup_title: "COVER UP",
-    service_coverup_desc: "COVER UP is a professional service for covering up old or unsuccessful tattoos. I will help you completely conceal the previous design by creating a new sketch tailored to your wishes and the specifics of the old tattoo. COVER UP is your chance to start fresh and get a tattoo you can truly be proud of.",
-    service_line_title: "LINE",
-    service_line_desc: "LINE is a minimalist tattoo style created with thin, precise lines. This approach is ideal for elegant, modern, and concise designs: geometry, abstraction, and outline drawings. LINE is the choice for those who value simplicity and style.",
-    service_mini_title: "MINI",
-    service_mini_desc: "MINI are small tattoos with special meaning. Compact, neat, and subtle, they are perfect for a first tattoo experience or for those who prefer delicate accents. MINI is a way to express yourself with a small but meaningful design.",
-    service_permanent_title: "PERMANENT",
-    service_permanent_desc: "PERMANENT is a permanent makeup service: long-lasting enhancement of eyebrows, lips, or eyelids. Permanent makeup allows you to always look well-groomed and confident, saving time on daily makeup routines.",
-    service_piercing_title: "PIERCING",
-    service_piercing_desc: "PIERCING is a professional body piercing service with jewelry installation. I guarantee sterility, safety, and a personalized approach for every client. Adorn yourself stylishly and safely!",
-    portfolio_title: "Portfolio",
-    reviews_title: "Reviews",
-    reviews_placeholder: "Reviews will appear soon!", 
-    view_all_portfolio: "VIEW ALL WORKS",
-    hide_all_portfolio: "HIDE ALL WORKS",
-    about_p1: "Hello, my name is Kris.",
-    about_p2: "I am a professional tattoo artist, piercing specialist, and permanent makeup expert with seven years of experience. For me, this is not just a career — it is an art form where I reveal the character, style, and inner world of each client.",
-    about_p3: "I draw inspiration from travel, contemporary art, and the uniqueness of everyone who entrusts me with their ideas. Every project — it is an individual approach, attention to detail, and a desire to create something truly special.",
-    about_p4: "High standards of hygiene, sterility, and care for your peace of mind are my unwavering priorities.",
-    about_p5: "If you value aesthetics, individuality, and professionalism, I will be happy to bring your idea to life.",
-    process_main_title: "The Process of Creating Your Unique Story",
-    process_intro_p1: "My approach is clear structure, attention to detail, and respect for your expectations. Each stage is designed to ensure the highest quality result that truly reflects your vision.",
-    process_step1_title: "1. Consultation and Design Development",
-    process_step1_desc: "We define your wishes, style, and main ideas. I clarify the details, offer professional solutions, and create a custom design, which is finalized together with you.",
-    process_step2_title: "2. Preparation",
-    process_step2_desc: "Before the procedure, I carefully prepare the workspace, using only single-use and sterile materials. All stages of preparation are transparent and meet the highest safety standards.",
-    process_step3_title: "3. Creation",
-    process_step3_desc: "Once the design is approved, the main stage begins — the application of your tattoo, piercing, or permanent makeup. I work with precision and attention to every detail to ensure the result is both accurate and aesthetically pleasing.",
-    process_step4_title: "4. Aftercare Recommendations",
-    process_step4_desc: "At the end of your session, you receive detailed aftercare instructions, as well as a special healing film — already included in the price. This makes the healing process easy and stress-free. I am always available to answer your questions and support you during recovery.",
-    process_outro_p1: "My goal is to make every step clear and the result something that brings you joy every day.",
-    contact_phone_label: "Phone:",
-    contact_phone_number_ua: "+380 96 515 78 90 (UA)",
-    contact_phone_number_irl: "+353 87 716 79 33 (IRL)",
-    contact_email_label: "Email:",
-    contact_email_address: "nika889list.ru@gmail.com",
-    contact_social_label: "Social Media:",
-    contact_hours_label: "Working Hours:",
-    contact_hours_text: "Mon-Fri: 10:00 - 19:00<br>Sat: 11:00 - 17:00<br>Вс: Выходной",
-    signup_description_bot_info: "Для удобной записи на сеанс, получения ответов на часто задаваемые вопросы и просмотра контактов, воспользуйтесь нашим Telegram-ботом. Вы можете начать диалог прямо здесь:",
-    chat_widget_title: "Чат с Mimimi Tattoo Bot",
-    chat_input_placeholder: "Напишите сообщение...",
-    chat_connection_error: "Ошибка подключения к боту. Пожалуйста, попробуйте позже.",
     chat_bot_unavailable: "Ошибка: Бот недоступен. Пожалуйста, попробуйте позже."
   }
 };
@@ -764,6 +699,7 @@ chatButtons.addEventListener('click', (e) => {
 // ====================================================================
 
 const reviewsCarousel = document.getElementById('reviewsCarousel');
+const carouselContainer = document.getElementById('carouselContainer'); // ОБЪЯВЛЕНА ПЕРЕМЕННАЯ
 const carouselInner = document.getElementById('carouselInner');
 const carouselPrev = document.getElementById('carouselPrev');
 const carouselNext = document.getElementById('carouselNext');
@@ -819,10 +755,11 @@ function showCurrentReview() {
     // Вычисляем смещение для центрирования активной карточки
     // Это ключевая часть для строгого центрирования
     const cardWidth = cards[currentReviewIndex].offsetWidth;
-    const containerWidth = carouselContainer.offsetWidth - 120; // Учитываем padding: 0 60px;
+    const containerWidth = carouselContainer.offsetWidth; // Используем ширину контейнера
     const offset = (containerWidth - cardWidth) / 2;
     
     // Применяем transform с учетом центрирования
+    // Убедимся, что общая ширина carouselInner может быть больше видимой области
     carouselInner.style.transform = `translateX(-${currentReviewIndex * cardWidth - offset}px)`;
 
 
@@ -1073,7 +1010,7 @@ const permanentMakeupFaqData = [
         },
         answer: {
             ru: "Да, как и у любой косметической процедуры, существуют некоторые противопоказания. Важно заранее обсудить ваше состояние здоровья со мной на консультации, чтобы убедиться, что процедура будет безопасной и принесет наилучший результат.",
-            en: "Yes, as with any cosmetic procedure, there are some contraindications. It's important to discuss your health conditions with me during a consultation beforehand to ensure the procedure will be safe and provide the best results."
+            en: "Yes, as with any cosmetic procedure, there are some contraindications. It's important to discuss your health conditions with me during a consultation beforehand to ensure the procedure will be safe and safe to ensure the procedure will be safe and provide the best results."
         }
     }
 ];

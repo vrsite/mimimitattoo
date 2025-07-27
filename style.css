@@ -1628,17 +1628,20 @@ html, body {
   .reviews-carousel {
       padding-left: 15px;
       padding-right: 15px;
+      margin: 0 auto 30px auto; /* Центрируем карусель на мобильных */
   }
   .carousel-container {
       padding: 0 40px; /* Меньше отступ для кнопок на мобильных */
+      overflow: hidden; /* Скрываем части карточек, которые не активны */
   }
   .reviews-carousel .carousel-inner {
-      margin-left: -15px;
-      margin-right: -15px;
-      width: calc(100% + 30px);
+      margin-left: 0; /* Убираем любые лишние маржины */
+      margin-right: 0;
+      width: 100%; /* Должен быть 100% ширины */
+      justify-content: flex-start; /* Оставляем flex-start для корректной работы transform */
   }
   .reviews-carousel .review-card {
-      margin: 0 auto; /* Центрируем каждую карточку в ее flex-контейнере */
+      margin: 0; /* Убираем маржины, центрирование будет через transform и offset */
       padding: 20px;
   }
   .carousel-nav-btn {
@@ -1701,13 +1704,12 @@ html, body {
 
   /* Адаптация контактов на очень маленьких экранах */
   .contact-phone-link, .contact-email-link {
-    font-size: 0.75rem; /* ЕЩЁ уменьшим шрифт для лучшей вместимости */
-    padding: 5px 8px; /* Чуть меньше padding */
+    font-size: 0.7rem; /* ЕЩЁ уменьшим шрифт для лучшей вместимости на 261px */
+    padding: 4px 6px; /* Чуть меньше padding */
     white-space: nowrap; /* Гарантируем одну строку */
     overflow: hidden; /* Скрываем выходящий текст */
     text-overflow: ellipsis; /* Добавляем многоточие */
-    max-width: calc(100% - 16px); /* Убедимся, что не вылезает за родителя, учитывая padding родителя */
-    /* Убрал flex-grow: 1, чтобы кнопки не растягивались на всю ширину и могли быть центрированы */
+    max-width: calc(100% - 12px); /* Адаптируем max-width с учетом нового padding */
     width: fit-content; /* Ширина по содержимому */
     margin: 0 auto; /* Центрируем каждую кнопку */
   }
@@ -1724,9 +1726,9 @@ html, body {
     bottom: 0;
     right: 0;
     border-radius: 0;
-    left: 0; /* Добавил для центрирования по горизонтали */
-    top: 0; /* Добавил для центрирования по вертикали */
-    margin: 0; /* Убираем все автоматические маржины */
+    left: 0; /* Для центрирования по горизонтали */
+    top: 0; /* Для центрирования по вертикали */
+    margin: auto; /* Убираем все автоматические маржины, чтобы top/left/bottom/right работали */
   }
   .open-chat-btn {
     width: 50px;
