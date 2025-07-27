@@ -183,12 +183,12 @@ const translations = {
     contact_email_address: "nika889list.ru@gmail.com",
     contact_social_label: "Social Media:",
     contact_hours_label: "Working Hours:",
-    contact_hours_text: "Mon-Fri: 10:00 - 19:00<br>Sat: 11:00 - 17:00<br>Sun: Closed",
-    signup_description_bot_info: "For convenient booking, FAQ, and contacts, use our Telegram bot. You can start chatting right here:",
-    chat_widget_title: "Chat with Mimimi Tattoo Bot",
-    chat_input_placeholder: "Type a message...",
-    chat_connection_error: "Error connecting to the bot. Please try again later.",
-    chat_bot_unavailable: "Error: Bot is unavailable. Please try again later."
+    contact_hours_text: "Mon-Fri: 10:00 - 19:00<br>Sat: 11:00 - 17:00<br>Вс: Выходной",
+    signup_description_bot_info: "Для удобной записи на сеанс, получения ответов на часто задаваемые вопросы и просмотра контактов, воспользуйтесь нашим Telegram-ботом. Вы можете начать диалог прямо здесь:",
+    chat_widget_title: "Чат с Mimimi Tattoo Bot",
+    chat_input_placeholder: "Напишите сообщение...",
+    chat_connection_error: "Ошибка подключения к боту. Пожалуйста, попробуйте позже.",
+    chat_bot_unavailable: "Ошибка: Бот недоступен. Пожалуйста, попробуйте позже."
   }
 };
 
@@ -816,6 +816,16 @@ function showCurrentReview() {
         currentReviewIndex = cards.length - 1;
     }
 
+    // Вычисляем смещение для центрирования активной карточки
+    // Это ключевая часть для строгого центрирования
+    const cardWidth = cards[currentReviewIndex].offsetWidth;
+    const containerWidth = carouselContainer.offsetWidth - 120; // Учитываем padding: 0 60px;
+    const offset = (containerWidth - cardWidth) / 2;
+    
+    // Применяем transform с учетом центрирования
+    carouselInner.style.transform = `translateX(-${currentReviewIndex * cardWidth - offset}px)`;
+
+
     cards.forEach((card, index) => {
         card.classList.remove('active');
     });
@@ -825,11 +835,6 @@ function showCurrentReview() {
 
     cards[currentReviewIndex].classList.add('active');
     dots[currentReviewIndex].classList.add('active');
-
-    if (cards[currentReviewIndex]) {
-        const cardWidth = cards[currentReviewIndex].offsetWidth; 
-        carouselInner.style.transform = `translateX(-${currentReviewIndex * cardWidth}px)`;
-    }
 }
 
 function nextReview() {

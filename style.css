@@ -1116,7 +1116,7 @@ html, body {
     position: relative;
     width: 100%;
     max-width: 800px; /* Ограничьте ширину карусели */
-    margin: 0 auto 30px auto;
+    margin: 0 auto 30px auto; /* Центрируем карусель */
     overflow: hidden; /* Важно, чтобы содержимое не выходило за пределы карусели */
     padding-top: 20px; /* Отступ для стрелок */
     box-sizing: border-box;
@@ -1125,7 +1125,7 @@ html, body {
 .carousel-container {
     position: relative;
     width: 100%;
-    overflow: visible; /* Сделать видимым, чтобы стрелки могли выходить за пределы */
+    overflow: hidden; /* Скрываем части карточек, которые не активны */
     padding: 0 60px; /* Добавить отступ внутри контейнера для стрелок */
     box-sizing: border-box;
 }
@@ -1136,6 +1136,8 @@ html, body {
     padding-bottom: 20px; /* Отступ для тени карточек */
     width: 100%; /* Должен быть 100% ширины, чтобы карточки внутри могли быть flex-item */
     box-sizing: border-box;
+    align-items: flex-start; /* Выравнивание по верху */
+    margin: 0 auto; /* Помогает центрированию всего .carousel-inner */
 }
 
 .review-card {
@@ -1148,7 +1150,7 @@ html, body {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 30px;
-    margin: 0; /* Убираем горизонтальные марджины у карточек, так как их компенсирует padding контейнера */
+    margin: 0 auto; /* Центрируем каждую карточку относительно доступного flex-пространства */
     box-sizing: border-box;
     text-align: center;
     color: #fff;
@@ -1636,7 +1638,7 @@ html, body {
       width: calc(100% + 30px);
   }
   .reviews-carousel .review-card {
-      margin: 0 10px;
+      margin: 0 auto; /* Центрируем каждую карточку в ее flex-контейнере */
       padding: 20px;
   }
   .carousel-nav-btn {
@@ -1704,9 +1706,10 @@ html, body {
     white-space: nowrap; /* Гарантируем одну строку */
     overflow: hidden; /* Скрываем выходящий текст */
     text-overflow: ellipsis; /* Добавляем многоточие */
-    max-width: 100%; /* Убедимся, что не вылезает за родителя */
-    flex-grow: 1; /* Позволим кнопкам расти/сжиматься */
-    justify-content: center; /* Центрируем содержимое */
+    max-width: calc(100% - 16px); /* Убедимся, что не вылезает за родителя, учитывая padding родителя */
+    /* Убрал flex-grow: 1, чтобы кнопки не растягивались на всю ширину и могли быть центрированы */
+    width: fit-content; /* Ширина по содержимому */
+    margin: 0 auto; /* Центрируем каждую кнопку */
   }
   .phone-numbers-horizontal {
       flex-direction: column; /* Размещаем номера вертикально, если не помещаются */
@@ -1721,6 +1724,9 @@ html, body {
     bottom: 0;
     right: 0;
     border-radius: 0;
+    left: 0; /* Добавил для центрирования по горизонтали */
+    top: 0; /* Добавил для центрирования по вертикали */
+    margin: 0; /* Убираем все автоматические маржины */
   }
   .open-chat-btn {
     width: 50px;
