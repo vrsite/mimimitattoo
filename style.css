@@ -165,8 +165,8 @@ html, body {
 }
 .close-menu {
   position: absolute;
-  top: 0.7rem;
-  right: 1.2rem;
+  top: 0.7rem; /* Отступ сверху */
+  right: 1.2rem; /* Отступ справа */
   background: none;
   border: none;
   font-size: 2.2rem;
@@ -473,6 +473,11 @@ html, body {
   margin-bottom: 1.2rem;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: auto; /* Позволяет содержимому определять высоту */
+  display: flex; /* Для выравнивания содержимого */
+  flex-direction: column; /* Элементы внутри карточки располагаются вертикально */
+  justify-content: flex-start; /* Выравнивание содержимого к верху */
+  align-items: center; /* Центрирование по горизонтали */
 }
 .service-card:hover {
   transform: translateY(-5px);
@@ -884,31 +889,34 @@ html, body {
     width: 100%; /* Чтобы LI занимали всю ширину контейнера */
 }
 
+/* Стиль для текстовых ссылок соцсетей */
 .social-links-inline a {
   display: inline-flex;
   align-items: center;
-  color: #fff;
+  color: #fff; /* Белый цвет текста */
   font-weight: 400;
   font-size: 1.1rem;
   text-decoration: none;
   transition: color 0.2s;
-  white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
+  white-space: nowrap; /* Важно, чтобы текст не переносился */
+  padding: 5px 0; /* Отступы для текста, не для кнопки */
 }
 
 .social-links-inline a .fab {
   font-size: 1.4em;
   margin-right: 10px;
-  color: #fff;
+  color: #fff; /* Белый цвет иконки */
   transition: color 0.2s;
 }
 
 .social-links-inline a:hover {
-  color: var(--accent);
+  color: var(--accent); /* Цвет при наведении */
 }
 
 .social-links-inline a:hover .fab {
-  color: var(--accent);
+  color: var(--accent); /* Цвет иконки при наведении */
 }
+
 
 .contact-phone-numbers {
     margin-top: 20px;
@@ -929,41 +937,40 @@ html, body {
     gap: 15px;
 }
 
-.contact-phone-link {
+/* Стиль для текстовых ссылок телефонов и почты */
+.contact-phone-link, .contact-email-link {
     display: inline-flex;
     align-items: center;
-    padding: 10px 15px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 25px;
-    color: #fff;
+    padding: 0px 5px; /* Минимальный padding для текста */
+    background: transparent; /* Убираем фон кнопки */
+    border: none; /* Убираем рамку кнопки */
+    color: #fff; /* Цвет текста */
     text-decoration: none;
     font-size: 1.1rem;
     font-weight: 500;
-    transition: background 0.2s, border 0.2s;
-    white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
-    max-width: 100%; /* чтобы не вылазил за пределы на очень маленьких экранах */
-    box-sizing: border-box; /* Учитываем padding в ширине */
+    transition: color 0.2s;
+    white-space: nowrap; /* Важно, чтобы текст не переносился */
+    max-width: 100%; /* чтобы не вылазил за пределы */
+    box-sizing: border-box; /* Учитываем padding */
     overflow: hidden; /* Обрезать текст, если не помещается */
     text-overflow: ellipsis; /* Добавить многоточие */
 }
 
-.contact-phone-link .fas {
+.contact-phone-link .fas, .contact-email-link .fas {
     margin-right: 8px;
     font-size: 1.1em;
-    color: #fff;
+    color: #fff; /* Цвет иконки */
     flex-shrink: 0; /* Иконка не сжимается */
 }
 
-.contact-phone-link:hover {
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-    border: 1.5px solid rgba(255,255,255,0.4);
+.contact-phone-link:hover, .contact-email-link:hover {
+    color: var(--accent); /* Цвет при наведении */
 }
 
-.contact-phone-link:hover .fas {
-    color: #fff;
+.contact-phone-link:hover .fas, .contact-email-link:hover .fas {
+    color: var(--accent); /* Цвет иконки при наведении */
 }
+
 
 .contact-email-info {
     margin-top: 20px;
@@ -976,41 +983,6 @@ html, body {
     text-align: center; /* Центрируем заголовок */
 }
 
-.contact-email-link {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 15px;
-    background: rgba(255,255,255,0.1);
-    border: 1.5px solid rgba(255,255,255,0.2);
-    border-radius: 25px;
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: 500;
-    transition: background 0.2s, border 0.2s;
-    white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
-    max-width: 100%; /* чтобы не вылазил за пределы на очень маленьких экранах */
-    box-sizing: border-box;
-    overflow: hidden; /* Обрезать текст, если не помещается */
-    text-overflow: ellipsis; /* Добавить многоточие */
-}
-
-.contact-email-link .fas {
-    margin-right: 8px;
-    font-size: 1.1em;
-    color: #fff;
-    flex-shrink: 0; /* Иконка не сжимается */
-}
-
-.contact-email-link:hover {
-  background: rgba(255,255,255,0.15);
-  color: #fff;
-  border: 1.5px solid rgba(255,255,255,0.4);
-}
-
-.contact-email-link:hover .fas {
-  color: #fff;
-}
 
 /* АДАПТАЦИЯ: Социальные иконки фиксированные слева на десктопе */
 .social-fixed-left {
@@ -1128,16 +1100,18 @@ html, body {
     overflow: hidden; /* Скрываем части карточек, которые не активны */
     padding: 0 60px; /* Добавить отступ внутри контейнера для стрелок */
     box-sizing: border-box;
+    /* Убрал overflow: visible, так как он может влиять на центрирование */
 }
 
 .carousel-inner {
     display: flex;
     transition: transform 0.5s ease-in-out;
     padding-bottom: 20px; /* Отступ для тени карточек */
-    width: 100%; /* Должен быть 100% ширины, чтобы карточки внутри могли быть flex-item */
+    /* width: auto; */ /* Установим auto, чтобы flex-элементы определяли общую ширину */
     box-sizing: border-box;
     align-items: flex-start; /* Выравнивание по верху */
-    margin: 0 auto; /* Помогает центрированию всего .carousel-inner */
+    /* margin: 0; */ /* Убираем auto здесь, так как трансформация будет управлять позицией */
+    width: fit-content; /* Ширина по контенту */
 }
 
 .review-card {
@@ -1150,7 +1124,7 @@ html, body {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 30px;
-    margin: 0 auto; /* Центрируем каждую карточку относительно доступного flex-пространства */
+    /* margin: 0 auto; */ /* Убрал margin auto, так как это будет мешать transform translateX */
     box-sizing: border-box;
     text-align: center;
     color: #fff;
@@ -1611,6 +1585,7 @@ html, body {
     margin-top: 2rem;
     margin-left: auto;
     margin-right: auto;
+    align-items: stretch; /* Карточки одинаковой высоты */
   }
   .service-card {
     width: calc(50% - 0.4rem); /* 2 карточки в ряд с отступом */
@@ -1618,6 +1593,7 @@ html, body {
     min-width: unset;
     padding: 0.8rem 1rem;
     margin-bottom: 0.8rem;
+    height: auto; /* Высота по содержимому */
   }
   .service-title {
     font-size: 0.9rem;
@@ -1638,7 +1614,7 @@ html, body {
   .reviews-carousel .carousel-inner {
       margin-left: 0; /* Убираем любые лишние маржины */
       margin-right: 0;
-      width: 100%; /* Должен быть 100% ширины */
+      width: auto; /* Ширина по содержимому для гибкости */
       justify-content: flex-start; /* Оставляем flex-start для корректной работы transform */
   }
   .reviews-carousel .review-card {

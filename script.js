@@ -827,6 +827,7 @@ function showCurrentReview() {
     const offset = (containerWidth - cardWidth) / 2; // Расчет смещения для центрирования
 
     // Применяем transform с учетом центрирования
+    // Убедимся, что общая ширина carouselInner может быть больше видимой области
     carouselInner.style.transform = `translateX(-${currentReviewIndex * cardWidth - offset}px)`;
 
 
@@ -1014,7 +1015,7 @@ const piercingFaqData = [
         },
         answer: {
             ru: "Нет, очень важно не менять первоначальное украшение до полного заживления пирсинга. Преждевременная замена может привести к инфекции, раздражению или смещению канала. Я сообщу, когда можно будет безопапасно сменить украшение.",
-            en: "No, it is crucial not to change the initial jewelry until the piercing is fully healed. Pre-mature changing can leave an open wound leading to infection, irritation, or migration of the piercing channel. I will let you know when it's safe to change the jewelry."
+            en: "No, it is crucial not to change the initial jewelry until the piercing is fully healed. Pre-mature changing can can lead to infection, irritation, or migration of the piercing channel. I will let you know when it's safe to change the jewelry."
         }
     },
     {
