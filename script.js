@@ -183,11 +183,12 @@ const translations = {
     contact_email_address: "nika889list.ru@gmail.com",
     contact_social_label: "Social Media:",
     contact_hours_label: "Working Hours:",
-    contact_hours_text: "Mon-Fri: 10:00 - 19:00<br>Sat: 11:00 - 17:00<br>Sun: Closed",
+    contact_hours_text: "Mon-Fri: 10:00 - 19:00<br>Sat: 11:00 - 17:00<br>Вс: Выходной",
     signup_description_bot_info: "Для удобной записи на сеанс, получения ответов на часто задаваемые вопросы и просмотра контактов, воспользуйтесь нашим Telegram-ботом. Вы можете начать диалог прямо здесь:",
-    chat_widget_title: "Chat with Mimimi Tattoo Bot",
+    chat_widget_title: "Чат с Mimimi Tattoo Bot",
     chat_input_placeholder: "Напишите сообщение...",
-    chat_connection_error: "Error connecting to the bot. Please try again later."
+    chat_connection_error: "Ошибка подключения к боту. Пожалуйста, попробуйте позже.",
+    chat_bot_unavailable: "Ошибка: Бот недоступен. Пожалуйста, попробуйте позже."
   }
 };
 
@@ -349,7 +350,7 @@ const reviewsData = [
     name: "Глеб З.",
     text: {
       ru: "Делал небольшую татуировку на запястье. Крис очень аккуратная, работа сделана ювелирно. Результатом полностью доволен, выглядит очень стильно. Процесс был очень комфортным.",
-      en: "Got a small tattoo on my wrist. Kris is very precise, the work is done like fine jewelry. Completely satisfied with the result, it looks very stylish. The process was very comfortable."
+      en: "Great experience with my mini-tattoo. The work was done very precisely and with passion. Kris is very friendly and attentive. The result is exactly as I imagined."
     }
   },
   {
@@ -763,7 +764,7 @@ chatButtons.addEventListener('click', (e) => {
 // ====================================================================
 
 const reviewsCarousel = document.getElementById('reviewsCarousel');
-const carouselContainer = document.getElementById('carouselContainer'); // ОБЪЯВЛЕНА ПЕРЕМЕННАЯ
+const carouselContainer = document.getElementById('carouselContainer'); // ОБЪЯВЛЕНА ПЕРЕМЕННАЯ И ТЕПЕРЬ ОНА ЕСТЬ В HTML
 const carouselInner = document.getElementById('carouselInner');
 const carouselPrev = document.getElementById('carouselPrev');
 const carouselNext = document.getElementById('carouselNext');
@@ -809,7 +810,10 @@ function showCurrentReview() {
     const cards = carouselInner.querySelectorAll('.review-card');
     const dots = carouselDots.querySelectorAll('.dot');
 
-    if (cards.length === 0) return; 
+    if (cards.length === 0) { // Если нет карточек, ничего не делаем.
+        console.warn("Нет карточек отзывов для отображения.");
+        return; 
+    }
 
     currentReviewIndex = currentReviewIndex % cards.length;
     if (currentReviewIndex < 0) { 
@@ -817,13 +821,12 @@ function showCurrentReview() {
     }
 
     // Вычисляем смещение для центрирования активной карточки
-    // Это ключевая часть для строгого центрирования
+    // Получаем ширину контейнера, где слайды должны быть центрированы
+    const containerWidth = carouselContainer.offsetWidth; 
     const cardWidth = cards[currentReviewIndex].offsetWidth;
-    const containerWidth = carouselContainer.offsetWidth; // Используем ширину контейнера
-    const offset = (containerWidth - cardWidth) / 2;
-    
+    const offset = (containerWidth - cardWidth) / 2; // Расчет смещения для центрирования
+
     // Применяем transform с учетом центрирования
-    // Убедимся, что общая ширина carouselInner может быть больше видимой области
     carouselInner.style.transform = `translateX(-${currentReviewIndex * cardWidth - offset}px)`;
 
 

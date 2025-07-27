@@ -1433,6 +1433,7 @@ html, body {
         font-size: 1.1rem;
         box-sizing: border-box;
         min-height: auto;
+        position: relative;
         overflow: auto;
         max-height: unset;
         min-height: auto;
@@ -1721,14 +1722,15 @@ html, body {
 
   /* Адаптация виджета чата на самых маленьких экранах */
   #telegramChatWidget {
+    position: fixed; /* Остается fixed */
     width: 100vw;
     height: 100vh;
     bottom: 0;
     right: 0;
     border-radius: 0;
-    left: 0; /* Для центрирования по горизонтали */
-    top: 0; /* Для центрирования по вертикали */
-    margin: auto; /* Убираем все автоматические маржины, чтобы top/left/bottom/right работали */
+    left: 0; /* Чтобы занять всю ширину */
+    top: 0; /* Чтобы занять всю высоту */
+    margin: 0; /* Убираем все автоматические маржины, которые могут мешать full-screen */
   }
   .open-chat-btn {
     width: 50px;
