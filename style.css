@@ -19,10 +19,9 @@ html, body {
   min-height: 100vh;
   position: relative;
   z-index: 0;
-  overflow-x: hidden; /* Предотвращаем горизонтальный скролл */
+  overflow-x: hidden;
 }
 
-/* Fixed background for the rest of the site */
 #fixedSiteBackground {
   position: fixed;
   top: 0;
@@ -36,17 +35,14 @@ html, body {
   z-index: -1;
 }
 
-/* Обертка для контента, чтобы она прокручивалась над фиксированным фоном */
 #wrapper {
     position: relative;
     z-index: 0;
     width: 100%;
     min-height: 100vh;
-    box-sizing: border-box; /* Важно для адаптивности */
+    box-sizing: border-box;
 }
 
-
-/* ГЛАВНАЯ СЕКЦИЯ: ВОССТАНОВЛЕНИЕ ИСХОДНЫХ СТИЛЕЙ И МАСШТАБА */
 .hero {
   position: relative;
   width: 100vw;
@@ -82,13 +78,12 @@ html, body {
   -webkit-backdrop-filter: none;
   padding: 0;
   display: inline-block;
-  width: 100%; /* Убедимся, что занимает всю ширину контейнера */
-  max-width: 100%; /* Убедимся, что занимает всю ширину контейнера */
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
 }
-/* Заголовки и подзаголовки Hero */
 .hero__content h1 {
-  font-size: 5.5rem; /* rem для лучшей адаптации */
+  font-size: 5.5rem;
   font-weight: 700;
   letter-spacing: 2px;
   margin-bottom: 1.1rem;
@@ -98,7 +93,7 @@ html, body {
   color: #fff;
 }
 .hero__content p {
-  font-size: 2rem; /* rem для лучшей адаптации */
+  font-size: 2rem;
   margin-bottom: 2.2rem;
   font-weight: 400;
   line-height: 1.2;
@@ -106,13 +101,11 @@ html, body {
   color: #fff;
 }
 
-
-/* МЕНЮ: УВЕЛИЧЕННЫЙ Z-INDEX (МАКСИМАЛЬНО) */
 .burger {
   position: fixed;
   top: 1.1rem;
   right: 1.1rem;
-  z-index: 9999999999 !important; /* Ультра-высокий z-index */
+  z-index: 9999999999 !important;
   width: 44px;
   height: 44px;
   background: none;
@@ -141,7 +134,6 @@ html, body {
   pointer-events: none !important;
 }
 
-
 .side-menu {
   position: fixed;
   top: 0;
@@ -161,7 +153,7 @@ html, body {
   border-left: 1.5px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  box-sizing: border-box; /* Важно для адаптивности */
+  box-sizing: border-box;
 }
 .side-menu.open {
   right: 0;
@@ -170,14 +162,14 @@ html, body {
 }
 .close-menu {
   position: absolute;
-  top: 0.8rem; /* Поднято выше */
-  right: 1.1rem; /* Сдвинуто правее */
+  top: 0.5rem;
+  right: 1.1rem;
   background: none;
   border: none;
   font-size: 2.2rem;
   color: var(--accent);
   cursor: pointer;
-  z-index: 2147483647; /* Гарантированно поверх меню */
+  z-index: 2147483647;
   transition: color 0.2s;
 }
 .menu-backdrop {
@@ -193,8 +185,6 @@ html, body {
   display: block;
 }
 
-
-/* Стилизация ссылок меню - glass-link */
 .side-menu ul {
   list-style: none;
   padding: 0;
@@ -256,8 +246,6 @@ html, body {
   color: #fff;
 }
 
-
-/* Секции Услуги и Портфолио - теперь полностью прозрачные */
 .services-section,
 .portfolio-section {
   background: transparent;
@@ -269,7 +257,6 @@ html, body {
   padding: 60px 0 40px 0;
   box-sizing: border-box;
 }
-/* Секция Контакты сохраняет свой полупрозрачный фон */
 .contacts-section {
     background: rgba(255,255,255,0.08);
     padding: 60px 0 40px 0;
@@ -281,8 +268,6 @@ html, body {
     box-sizing: border-box;
 }
 
-
-/* НОВЫЕ СТИЛИ ДЛЯ СЕКЦИИ "ОБО МНЕ" С ВИДЕО/ИЗОБРАЖЕНИЕМ И ТЕКСТОМ */
 .about-section.custom-layout-about {
   display: flex;
   flex-direction: column;
@@ -294,7 +279,7 @@ html, body {
   position: relative;
   z-index: 1;
   background: transparent;
-  max-width: 1200px; /* Центрирование контента */
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -308,7 +293,7 @@ html, body {
 .about-video-container {
   flex-shrink: 0;
   width: 100%;
-  max-width: 600px; /* Ограничение ширины */
+  max-width: 600px;
   height: 250px;
   border-radius: 0;
   overflow: hidden;
@@ -337,7 +322,7 @@ html, body {
   min-height: auto;
   position: relative;
   overflow: auto;
-  padding: 40px; /* Увеличил padding для лучшего внешнего вида */
+  padding: 40px;
 }
 
 .about-text-content::before {
@@ -353,8 +338,6 @@ html, body {
     margin-bottom: 1.2em;
 }
 
-
-/* НОВЫЕ СТИЛИ ДЛЯ СЕКЦИИ "ПРОЦЕСС" (аналогично "Обо мне") */
 .process-section.custom-layout-process {
   display: flex;
   flex-direction: column;
@@ -366,7 +349,7 @@ html, body {
   position: relative;
   z-index: 1;
   background: transparent;
-  max-width: 1200px; /* Центрирование контента */
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -380,7 +363,7 @@ html, body {
 .process-video-container {
   flex-shrink: 0;
   width: 100%;
-  max-width: 600px; /* Ограничение ширины */
+  max-width: 600px;
   height: 250px;
   border-radius: 0;
   overflow: hidden;
@@ -430,8 +413,6 @@ html, body {
     margin-bottom: 1.2em;
 }
 
-
-/* Section Title - теперь белый на десктопе, по умолчанию по центру */
 .section-title {
   font-size: 2.2rem;
   font-weight: 700;
@@ -453,8 +434,6 @@ html, body {
   letter-spacing: 1px;
 }
 
-
-/* Services List (базовые стили) */
 .services-list {
   display: flex;
   gap: 1.2rem;
@@ -591,7 +570,6 @@ html, body {
   padding: 2rem 0;
 }
 
-/* Портфолио — Masonry */
 .portfolio-section {
   padding: 70px 0 40px 0;
   position: relative;
@@ -607,7 +585,7 @@ html, body {
   column-count: 4;
   column-gap: 1.5rem;
   width: 90vw;
-  max-width: 1200px; /* Центрирование контента */
+  max-width: 1200px;
   margin: 0 auto;
 }
 .masonry-gallery img {
@@ -632,7 +610,6 @@ html, body {
   filter: brightness(1.08) saturate(1.1);
 }
 
-/* Lightbox */
 .lightbox {
   display: none;
   position: fixed;
@@ -744,9 +721,9 @@ html, body {
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   padding: 1.8rem;
-  max-width: 400px;
-  width: 90%;
+  max-width: 450px;
   max-height: 90vh;
+  width: 90%;
   overflow-y: auto;
   text-align: center;
   position: relative;
@@ -765,7 +742,7 @@ html, body {
 }
 
 .service-modal-image {
-  max-width: 100%;
+  max-width: 80%;
   height: auto;
   border-radius: 15px;
   margin-bottom: 1.2rem;
@@ -788,15 +765,15 @@ html, body {
 
 .service-modal-close {
   position: absolute;
-  top: 0.8rem; /* Поднято выше */
-  right: 1.1rem; /* Сдвинуто правее */
+  top: 0.8rem;
+  right: 1.1rem;
   background: none;
   border: none;
   font-size: 2rem;
   color: var(--accent);
   cursor: pointer;
   transition: color 0.2s;
-  z-index: 901; /* Убедимся, что поверх контента модалки */
+  z-index: 901;
 }
 .service-modal-close:hover {
   color: #c00;
@@ -804,7 +781,7 @@ html, body {
 
 .contacts-section {
   padding: 60px 20px;
-  background: rgba(255,255,255,0.08); /* Такой же фон, как у FAQ и Отзывов */
+  background: rgba(255,255,255,0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -868,29 +845,28 @@ html, body {
     display: none;
 }
 
-/* АДАПТАЦИЯ: Контакты - номера телефонов и почта */
 .social-links-inline {
   margin-bottom: 30px;
-  width: 100%; /* Добавим, чтобы занимал всю ширину для центрирования */
+  width: 100%;
 }
 .social-links-inline ul {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column; /* На мобильных обычно лучше вертикально */
+  flex-direction: column;
   justify-content: center;
-  align-items: center; /* Центрируем элементы списка */
+  align-items: center;
   gap: 10px;
   margin-top: 15px;
 }
 
 .social-links-inline li {
-    text-align: center; /* Центрируем текст в элементах списка */
+    text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center; /* Центрируем содержимое LI */
-    width: 100%; /* Чтобы LI занимали всю ширину контейнера */
+    justify-content: center;
+    width: 100%;
 }
 
 .social-links-inline a {
@@ -901,7 +877,7 @@ html, body {
   font-size: 1.1rem;
   text-decoration: none;
   transition: color 0.2s;
-  white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
+  white-space: nowrap;
 }
 
 .social-links-inline a .fab {
@@ -922,7 +898,7 @@ html, body {
 .contact-phone-numbers,
 .contact-email-info {
     margin-top: 20px;
-    margin-bottom: 20px; /* Добавим отступ для разделения */
+    margin-bottom: 20px;
     width: 100%;
     text-align: center;
 }
@@ -931,69 +907,67 @@ html, body {
 .contact-email-info p {
     margin-bottom: 10px;
     font-weight: 700;
-    color: #fff; /* Убедимся, что цвет заголовков белый */
+    color: #fff;
 }
 
-.phone-numbers-container, /* Новый класс для контейнера номеров */
-.email-address-container { /* Новый класс для контейнера email */
+.phone-numbers-container,
+.email-address-container {
     display: flex;
-    flex-direction: column; /* Располагаем элементы вертикально */
-    align-items: center; /* Центрируем по горизонтали */
-    gap: 8px; /* Отступ между элементами */
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .contact-phone-link {
-    display: inline-flex; /* Используем inline-flex, чтобы иконка и текст были в одну строку */
+    display: inline-flex;
     align-items: center;
-    color: #fff; /* Цвет текста */
-    text-decoration: none; /* Убираем подчеркивание */
-    font-size: 1.1rem; /* Размер шрифта */
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
     font-weight: 500;
-    transition: color 0.2s ease; /* Плавное изменение цвета при наведении */
+    transition: color 0.2s ease;
 }
 
 .contact-phone-link .fas {
-    margin-right: 8px; /* Отступ справа от иконки */
+    margin-right: 8px;
     font-size: 1.1em;
-    color: #fff; /* Цвет иконки */
+    color: #fff;
     transition: color 0.2s ease;
 }
 
 .contact-phone-link:hover {
-    color: var(--accent); /* Изменение цвета текста при наведении */
+    color: var(--accent);
 }
 
 .contact-phone-link:hover .fas {
-    color: var(--accent); /* Изменение цвета иконки при наведении */
+    color: var(--accent);
 }
 
 .contact-email-link {
-    display: inline-flex; /* Используем inline-flex, чтобы иконка и текст были в одну строку */
+    display: inline-flex;
     align-items: center;
-    color: #fff; /* Цвет текста */
-    text-decoration: none; /* Убираем подчеркивание */
-    font-size: 1.1rem; /* Размер шрифта */
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
     font-weight: 500;
-    transition: color 0.2s ease; /* Плавное изменение цвета при наведении */
+    transition: color 0.2s ease;
 }
 
 .contact-email-link .fas {
-    margin-right: 8px; /* Отступ справа от иконки */
+    margin-right: 8px;
     font-size: 1.1em;
-    color: #fff; /* Цвет иконки */
+    color: #fff;
     transition: color 0.2s ease;
 }
 
 .contact-email-link:hover {
-  color: var(--accent); /* Изменение цвета текста при наведении */
+  color: var(--accent);
 }
 
 .contact-email-link:hover .fas {
-  color: var(--accent); /* Изменение цвета иконки при наведении */
+  color: var(--accent);
 }
 
-
-/* АДАПТАЦИЯ: Социальные иконки фиксированные слева на десктопе */
 .social-fixed-left {
   position: fixed;
   bottom: 20px;
@@ -1063,15 +1037,15 @@ html, body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    display: flex; /* Используем flexbox для центрирования кнопки */
-    flex-direction: column; /* Элементы внутри будут располагаться вертикально */
-    align-items: center; /* Центрируем по горизонтали */
-    justify-content: center; /* Центрируем по вертикали */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .signup-text-wrapper {
     max-width: 600px;
-    margin: 0 auto 20px auto; /* Добавим нижний отступ */
+    margin: 0 auto 20px auto;
     text-align: center;
 }
 
@@ -1093,90 +1067,85 @@ html, body {
     color: #fff;
 }
 
-/* Новая объединенная секция для Отзывов и FAQ */
 .reviews-faq-section {
-  background: transparent; /* Общий фон секции прозрачный */
+  background: transparent;
   padding: 60px 20px;
   position: relative;
   z-index: 1;
   display: flex;
-  flex-direction: column; /* Заголовок сверху, потом колонки */
+  flex-direction: column;
   align-items: center;
   box-sizing: border-box;
 }
 
 .reviews-faq-section-title {
-    margin-bottom: 30px; /* Отступ под заголовком секции */
+    margin-bottom: 30px;
 }
 
-/* Общий стеклянный фон для объединенного блока Отзывов и FAQ */
 .reviews-faq-content-wrapper {
   display: flex;
-  flex-direction: column; /* По умолчанию колонки вертикально */
-  gap: 40px; /* Отступ между колонками */
+  flex-direction: column;
+  gap: 40px;
   width: 100%;
-  max-width: 1200px; /* Ограничение общей ширины контента */
-  align-items: center; /* Центрируем колонки на мобильных */
+  max-width: 1200px;
+  align-items: center;
 
-  background: rgba(255,255,255,0.1); /* Слегка размытый, слегка зернистый */
+  background: rgba(255,255,255,0.1);
   border: 1.5px solid rgba(0,0,0,0.08);
   box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
-  backdrop-filter: blur(10px); /* Умеренное размытие */
+  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-radius: 15px; /* Скругленные углы для всего блока */
-  padding: 20px; /* Добавил padding для всего блока */
+  border-radius: 15px;
+  padding: 20px;
 }
 
 .reviews-column,
 .faq-column {
-  flex: 1; /* Распределяем доступное пространство */
-  width: 100%; /* По умолчанию на всю ширину на мобильных */
-  box-sizing: border-box; /* Учитываем padding в ширине */
-  min-height: 400px; /* Минимальная высота для видимости */
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 0; /* Убрал внутренний padding, так как он теперь у reviews-faq-content-wrapper */
+  padding: 0;
   position: relative;
-  /* Убираем индивидуальные фоны, тени, бордеры и блюр, т.к. они теперь у родителя */
   background: transparent;
   border: none;
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  border-radius: 0; /* Убираем бордер-радиус, он теперь у родителя reviews-faq-content-wrapper */
+  border-radius: 0;
 }
 
 .reviews-column {
-  border-radius: 15px; /* Обычный скругленный угол для Reviews колонки */
-  transition: none; /* Убираем анимацию border-radius */
+  border-radius: 15px;
+  transition: none;
 }
 
 .column-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fff; /* Белый цвет для заголовков колонок */
+  color: #fff;
   text-shadow: 0 1px 6px rgba(0,0,0,0.15);
   margin-bottom: 20px;
   text-transform: uppercase;
   text-align: center;
-  width: 100%; /* Чтобы заголовок не сжимался */
+  width: 100%;
 }
 
-
-/* Стили для карусели отзывов */
 .reviews-carousel {
     position: relative;
-    width: 100%; /* Будет занимать всю ширину родительской колонки */
-    max-width: 600px; /* Ограничение ширины для содержимого карусели */
-    margin: 0 auto; /* Центрируем внутри колонки */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
     overflow: hidden;
     padding-top: 20px;
     box-sizing: border-box;
-    display: flex; /* Чтобы внутренние элементы могли быть flex-item */
+    display: flex;
     flex-direction: column;
-    align-items: center; /* Центрируем содержимое карусели */
+    align-items: center;
 }
 
 .carousel-container {
@@ -1190,7 +1159,7 @@ html, body {
 .carousel-inner {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    padding-bottom: 0; /* Убрал отступ, т.к. точки скрыты */
+    padding-bottom: 0;
     width: 100%;
     box-sizing: border-box;
 }
@@ -1198,14 +1167,13 @@ html, body {
 .review-card {
     flex: 0 0 100%;
     max-width: 100%;
-    /* Фон карточки теперь будет прозрачным, чтобы видеть общий стеклянный фон */
     background: transparent;
     border-radius: 0;
     box-shadow: none;
     border: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    padding: 30px; /* Сохраняем внутренние отступы */
+    padding: 30px;
     margin: 0;
     box-sizing: border-box;
     text-align: center;
@@ -1224,7 +1192,7 @@ html, body {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 15px;
-    color: var(--accent); /* Цвет акцента для заголовка */
+    color: var(--accent);
     text-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
@@ -1233,7 +1201,7 @@ html, body {
     line-height: 1.6;
     margin-bottom: 0;
     color: #fff;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3); /* Усилен для лучшей читаемости на фоне */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .carousel-nav-btn {
@@ -1263,11 +1231,10 @@ html, body {
 }
 
 .carousel-dots {
-    display: none; /* СКРЫВАЕМ ТОЧКИ ПОЛНОСТЬЮ */
+    display: none;
 }
 
 .dot {
-    /* Эти стили не будут применяться, т.к. display: none у родителя */
     width: 12px;
     height: 12px;
     background: rgba(0,0,0,0.3);
@@ -1281,16 +1248,14 @@ html, body {
     background: var(--accent);
 }
 
-
-/* Стили для секции FAQ внутри колонки */
 .faq-column .faq-tabs-container {
     max-width: none;
     width: 100%;
-    background: transparent; /* Полностью прозрачный фон */
+    background: transparent;
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    padding: 0; /* Убираем padding, он теперь у родителя reviews-faq-content-wrapper */
+    padding: 0;
     margin: 0;
 }
 
@@ -1301,35 +1266,41 @@ html, body {
     gap: 10px;
     flex-wrap: wrap;
     align-items: center;
-    flex-direction: row; /* Горизонтальное расположение по умолчанию */
+    flex-direction: column;
 }
 
-/* Пирамида для десктопов (теперь этот блок можно удалить, если пирамидка только на мобильных) */
-@media (min-width: 768px) { /* Можно настроить брейкпоинт по необходимости */
+@media (min-width: 768px) {
     .reviews-faq-content-wrapper {
-        flex-direction: row; /* Две колонки в ряд */
+        flex-direction: row;
         justify-content: center;
-        align-items: flex-start; /* Выравниваем по верху */
+        align-items: flex-start;
     }
 
     .reviews-column,
     .faq-column {
-        flex: 1; /* Распределяем пространство */
-        max-width: 48%; /* Примерно пополам с отступом */
+        flex: 1;
+        max-width: 48%;
     }
-    /* Удалены стили faq-tabs-nav для десктопов, так как теперь они будут на мобильных */
     .faq-tabs-nav {
-        flex-direction: row; /* На десктопе снова в ряд, если не указано иное */
-        gap: 10px;
+        flex-direction: column;
+        gap: 5px;
         align-items: center;
     }
     .faq-tabs-nav .tab-button {
         width: auto;
-        padding: 0.5em 1.2em; /* Меньше паддинга для десктопов, чтобы умещалось в ряд */
-        min-width: 100px; /* Чтобы не были слишком узкими */
+        padding: 0.5em 2em;
+        min-width: 150px;
     }
 }
-
+.faq-tabs-nav .tab-button[data-tab="tattoo"] {
+    order: 1;
+}
+.faq-tabs-nav .tab-button[data-tab="piercing"] {
+    order: 2;
+}
+.faq-tabs-nav .tab-button[data-tab="permanent"] {
+    order: 3;
+}
 
 .tab-button {
     background: var(--glass-bg);
@@ -1340,11 +1311,11 @@ html, body {
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.2s, color 0.2s, border-color 0.2s;
-    white-space: nowrap; /* Чтобы текст не переносился */
-    flex-grow: 1; /* Чтобы кнопки занимали доступное место */
-    max-width: 250px; /* Ограничение ширины для больших экранов */
+    white-space: nowrap;
+    flex-grow: 1;
+    max-width: 250px;
     text-align: center;
-    text-transform: uppercase; /* Всегда в верхнем регистре */
+    text-transform: uppercase;
 }
 
 .tab-button:hover {
@@ -1361,24 +1332,22 @@ html, body {
 }
 
 .faq-tabs-content .tab-pane {
-    display: none; /* Скрываем все вкладки по умолчанию */
-    padding-top: 10px; /* Небольшой отступ сверху для контента вкладки */
-    /* Фон, тень и блюр теперь применяются к .reviews-faq-content-wrapper */
+    display: none;
+    padding-top: 10px;
 }
 
 .faq-tabs-content .tab-pane.active {
-    display: block; /* Показываем активную вкладку */
+    display: block;
 }
-
 
 .faq-item {
     margin-bottom: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.2); /* Разделитель между вопросами */
+    border-bottom: 1px solid rgba(255,255,255,0.2);
     padding-bottom: 15px;
 }
 
 .faq-item:last-child {
-    border-bottom: none; /* Убрать границу у последнего элемента */
+    border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
 }
@@ -1386,7 +1355,7 @@ html, body {
 .faq-question {
     font-size: 1.15rem;
     font-weight: 600;
-    color: var(--accent); /* Цвет вопроса */
+    color: var(--accent);
     cursor: pointer;
     padding: 10px 0;
     display: flex;
@@ -1396,52 +1365,50 @@ html, body {
 }
 
 .faq-question:hover {
-    color: #fff; /* Цвет вопроса при наведении */
+    color: #fff;
 }
 
 .faq-question .icon {
-    font-size: 1.2em; /* Размер иконки */
-    width: 1.2em; /* Задаем фиксированную ширину, чтобы она не "прыгала" */
-    height: 1.2em; /* Задаем фиксированную высоту */
-    display: flex; /* Делаем flex для центрирования содержимого */
-    justify-content: center; /* Центрируем содержимое */
-    align-items: center; /* Центрируем содержимое */
+    font-size: 1.2em;
+    width: 1.2em;
+    height: 1.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-left: 10px;
     transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
-    color: #fff; /* Цвет стрелки */
-    border: 1px solid rgba(255,255,255,0.3); /* Тонкая рамка */
-    border-radius: 50%; /* Круглая форма */
-    background-color: rgba(0,0,0,0.2); /* Слегка темный фон */
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.2);
 }
 
 .faq-question:hover .icon {
-    background-color: var(--accent); /* Фон стрелки при наведении */
-    color: #fff; /* Цвет стрелки при наведении */
+    background-color: var(--accent);
+    color: #fff;
 }
 
 .faq-question.active .icon {
-    transform: rotate(180deg); /* Иконка поворачивается при открытии */
-    background-color: var(--accent); /* Фон стрелки при активном состоянии */
-    color: #fff; /* Цвет стрелки при активном состоянии */
+    transform: rotate(180deg);
+    background-color: var(--accent);
+    color: #fff;
 }
 
 .faq-answer {
     font-size: 1rem;
     line-height: 1.6;
     color: #fff;
-    padding: 0; /* Убираем padding-bottom здесь, чтобы контролировать его через open */
-    max-height: 0; /* Скрываем ответ по умолчанию */
+    padding: 0;
+    max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease-out, padding 0.4s ease-out;
 }
 
 .faq-answer.open {
-    max-height: 500px; /* Увеличено для длинных ответов (может быть еще больше при необходимости) */
-    padding: 10px 0 15px 0; /* Показать padding, когда открыт */
+    max-height: 500px;
+    padding: 10px 0 15px 0;
 }
 
-
-/* Медиа-запросы для адаптивности */
 @media (max-width: 1200px) {
   .masonry-gallery { column-count: 3; }
   .hero__content h1 { font-size: 3.2rem; }
@@ -1708,39 +1675,38 @@ html, body {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.6rem; /* Уменьшил gap */
-    max-width: 580px; /* Чтобы не сжимались сильно на планшетах */
+    gap: 0.6rem;
+    max-width: 580px;
     margin-top: 2rem;
     margin-left: auto;
     margin-right: auto;
   }
   .service-card {
-    width: calc(33.333% - 0.4rem); /* 3 карточки в ряд с отступом */
-    max-width: 150px; /* Уменьшил max-width */
-    min-width: 100px; /* Уменьшил min-width */
-    height: 90px; /* Фиксированная высота для компактности */
-    display: flex; /* Для центрирования текста по вертикали */
+    width: calc(33.333% - 0.4rem);
+    max-width: 150px;
+    min-width: 100px;
+    height: 90px;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0.5rem 0.6rem; /* Уменьшил padding */
-    margin-bottom: 0.6rem; /* Уменьшил margin-bottom */
+    padding: 0.5rem 0.6rem;
+    margin-bottom: 0.6rem;
   }
   .service-title {
-    font-size: 0.8rem; /* Уменьшил font-size */
+    font-size: 0.8rem;
     line-height: 1.1;
     margin-bottom: 0;
   }
 
-  /* Адаптация Отзывов и FAQ на мобильных */
   .reviews-faq-section {
     padding-left: 15px;
     padding-right: 15px;
   }
   .reviews-faq-content-wrapper {
-      flex-direction: column; /* На мобильных снова в колонку */
-      gap: 30px; /* Отступ между блоками Отзывов и FAQ */
-      background: rgba(255,255,255,0.1); /* Вернул фон для мобильных */
+      flex-direction: column;
+      gap: 30px;
+      background: rgba(255,255,255,0.1);
       border: 1.5px solid rgba(0,0,0,0.08);
       box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
       backdrop-filter: blur(10px);
@@ -1748,97 +1714,89 @@ html, body {
       border-radius: 15px;
   }
   .reviews-column, .faq-column {
-      max-width: 100%; /* Занимают всю ширину */
-      border-radius: 15px; /* Снова обычные скругления на мобильных для отзывов */
+      max-width: 100%;
+      border-radius: 15px;
   }
-  /* Убираем hover-эффект изменения формы на мобильных, т.к. он будет конфликтовать с JS анимацией */
   .reviews-column:hover {
-      border-radius: 15px; /* Возвращаем к базовому для мобильных */
+      border-radius: 15px;
   }
 
-
-  /* Адаптация FAQ на мобильных - теперь пирамидка */
   .faq-tabs-nav {
-      flex-direction: column; /* Делаем колонку для пирамидки на мобильных */
-      align-items: center; /* Центрируем кнопки */
-      gap: 5px; /* Уменьшаем отступ между строками */
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
   }
   .faq-tabs-nav .tab-button {
-      font-size: 0.9rem; /* Размер шрифта для кнопок */
+      font-size: 0.9rem;
       padding: 0.4em 0.8em;
-      width: auto; /* Ширина по содержимому */
-      min-width: 150px; /* Минимальная ширина */
+      width: auto;
+      min-width: 150px;
   }
-  /* Задаем порядок для создания "пирамидки" */
-  .faq-tabs-nav .tab-button[data-tab="tattoo"] { /* Верхняя кнопка */
+  .faq-tabs-nav .tab-button[data-tab="tattoo"] {
       order: 1;
   }
-  .faq-tabs-nav .tab-button[data-tab="piercing"] { /* Средняя кнопка */
+  .faq-tabs-nav .tab-button[data-tab="piercing"] {
       order: 2;
   }
-  .faq-tabs-nav .tab-button[data-tab="permanent"] { /* Нижняя кнопка */
+  .faq-tabs-nav .tab-button[data-tab="permanent"] {
       order: 3;
   }
 
   .faq-tabs-content .tab-pane {
-      background: transparent; /* Сохраняем прозрачность для содержимого вкладок на мобильных */
+      background: transparent;
   }
 }
 
 @media (max-width: 480px) {
-  /* Адаптация социальных иконок слева/снизу на самых маленьких экранах */
   .social-fixed-left {
       bottom: 0;
       left: 0;
       right: 0;
       width: 100%;
       border-radius: 0;
-      background: rgba(0, 0, 0, 0.2); /* Немного темнее фон */
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); /* Тень сверху */
-      flex-direction: row; /* Иконки в ряд */
-      justify-content: space-around; /* Равномерно распределены */
+      background: rgba(0, 0, 0, 0.2);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+      flex-direction: row;
+      justify-content: space-around;
       padding: 10px 0;
   }
   .social-fixed-left ul {
-    gap: 10px; /* Немного уменьшим отступ */
-    padding: 5px 0; /* Уменьшим padding */
-    width: 100%; /* Занимаем всю ширину */
-    flex-direction: row; /* Иконки в ряд */
-    justify-content: space-around; /* Равномерно распределены */
+    gap: 10px;
+    padding: 5px 0;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
   }
   .social-fixed-left li {
     margin: 0;
   }
   .social-fixed-left a {
-    width: 40px; /* Чуть меньше размер */
+    width: 40px;
     height: 40px;
-    font-size: 20px; /* Чуть меньше иконка */
+    font-size: 20px;
   }
 
-  /* Адаптация контактов на очень маленьких экранах */
   .contact-phone-link, .contact-email-link {
-    font-size: 0.9rem; /* Ещё уменьшим шрифт для лучшей вместимости, но разрешим перенос */
+    font-size: 0.9rem;
     padding: 0;
-    white-space: normal; /* Разрешаем перенос текста */
-    overflow: visible; /* Разрешаем отображение всего текста */
-    text-overflow: clip; /* Отключаем многоточие */
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
     max-width: 100%;
-    word-break: break-word; /* Добавлено для разбивки длинных слов, если они не помещаются */
+    word-break: break-word;
     text-align: center;
   }
   .phone-numbers-container,
   .email-address-container {
-      flex-direction: column; /* Размещаем номера вертикально, если не помещаются */
+      flex-direction: column;
       align-items: center;
-      gap: 5px; /* Уменьшим отступ */
+      gap: 5px;
   }
     .phone-numbers-container a,
     .email-address-container a {
-        text-align: center; /* Центрируем текст внутри ссылок */
+        text-align: center;
     }
 
-
-  /* Адаптация виджета чата на самых маленьких экранах */
   #telegramChatWidget {
     width: 100vw;
     height: 100vh;
@@ -1876,13 +1834,11 @@ html, body {
   .chat-button {
     font-size: 0.8rem;
     padding: 6px 10px;
-    width: calc(100% - 16px); /* Учитываем padding */
+    width: calc(100% - 16px);
     text-align: center;
   }
 }
 
-
-/* Стили для скроллбаров (без изменений) */
 .about-text-content::-webkit-scrollbar,
 .process-text-content::-webkit-scrollbar,
 .service-modal-content::-webkit-scrollbar,
@@ -1922,16 +1878,15 @@ html, body {
   scrollbar-color: rgba(0, 0, 0, 0.4) rgba(255, 255, 255, 0.05);
 }
 
-/* Стили для кнопки открытия чата (теперь она в потоке документа) */
 #openChatBtn {
-  position: static; /* Важно: кнопка теперь не фиксирована */
-  margin-top: 20px; /* Отступ от текста выше */
-  display: flex !important; /* Гарантируем, что кнопка отображается как flex */
+  position: static;
+  margin-top: 20px;
+  display: flex !important;
   justify-content: center;
   align-items: center;
-  width: 60px; /* Ширина */
-  height: 60px; /* Высота */
-  border-radius: 50%; /* Круглая форма */
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   background: var(--glass-bg);
   border: 1.5px solid var(--glass-border);
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
@@ -1939,9 +1894,8 @@ html, body {
   transition: all 0.3s ease;
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  /* Убраны z-index, bottom, right, visibility, pointer-events по умолчанию */
 }
-#openChatBtn.hidden { /* Сохраняем класс для скрытия, если это нужно JS */
+#openChatBtn.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -1963,12 +1917,11 @@ html, body {
   color: #fff;
 }
 
-/* Стили для виджета чата (остается фиксированным) */
 #telegramChatWidget {
   position: fixed;
-  bottom: 20px; /* Переместил на 20px от низа, как социальные иконки */
+  bottom: 20px;
   right: 20px;
-  z-index: 2147483647; /* Высокий z-index, чтобы быть поверх всего */
+  z-index: 2147483647;
   width: 360px;
   height: 500px;
   background: rgba(255,255,255,0.95);
@@ -1984,7 +1937,7 @@ html, body {
   visibility: hidden;
   transform: translateY(20px);
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-  pointer-events: none; /* Скрыто по умолчанию */
+  pointer-events: none;
 }
 
 #telegramChatWidget.active {
@@ -2008,9 +1961,9 @@ html, body {
 }
 
 .close-chat-btn {
-  position: absolute; /* Делаем позицию абсолютной для точного контроля */
-  top: 0.8rem; /* Поднимаем выше */
-  right: 1.1rem; /* Сдвигаем правее */
+  position: absolute;
+  top: 0.8rem;
+  right: 1.1rem;
   background: none;
   border: none;
   font-size: 1.8rem;
@@ -2148,7 +2101,6 @@ html, body {
     margin-bottom: 0;
 }
 
-/* Стиль для кликабельных ссылок контактов в чат-виджете */
 .chat-message .chat-contact-link {
   display: flex;
   align-items: center;

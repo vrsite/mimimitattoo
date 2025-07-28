@@ -39,7 +39,7 @@ closeMenu.addEventListener('click', closeSideMenu);
 
 menuLinks.forEach(link => {
     link.addEventListener('click', (event) => {
-        if (!link.closest('.lang-switch')) { // Исключаем переключение языка из закрытия меню при клике
+        if (!link.closest('.lang-switch')) {
             const targetId = link.getAttribute('href').substring(1);
             const targetSection = document.getElementById(targetId);
             if (targetSection) {
@@ -61,7 +61,6 @@ function closeSideMenu() {
   burger.classList.remove('hidden');
 }
 
-// Языки (мультиязычность)
 const ruBtn = document.getElementById('ruBtn');
 const enBtn = document.getElementById('enBtn');
 const translations = {
@@ -75,7 +74,7 @@ const translations = {
     menu_process: "Процесс",
     menu_signup: "Запись",
     menu_contacts: "Контакты",
-    menu_faq: "FAQ", // Короткое название для меню
+    menu_faq: "FAQ",
     menu_reviews: "Отзывы",
     services_title: "Услуги",
     service_aqua_title: "AQUA",
@@ -126,7 +125,6 @@ const translations = {
     chat_bot_unavailable: "Ошибка: Бот недоступен. Пожалуйста, попробуйте позже.",
     show_all_reviews: "Показать все отзывы",
     hide_all_reviews: "Скрыть отзывы",
-    // Заголовки FAQ (старые, для внутренних данных)
     faq_general_title: "Общие вопросы о татуировках",
     faq_piercing_title: "Вопросы о пирсинге",
     faq_permanent_title: "Вопросы о перманентном макияже",
@@ -141,7 +139,7 @@ const translations = {
     menu_process: "Process",
     menu_signup: "Booking",
     menu_contacts: "Contacts",
-    menu_faq: "FAQ", // Короткое название для меню
+    menu_faq: "FAQ",
     menu_reviews: "Reviews",
     services_title: "Services",
     service_aqua_title: "AQUA",
@@ -175,7 +173,11 @@ const translations = {
     process_step3_title: "3. Creation",
     process_step3_desc: "Once the design is approved, the main stage begins — the application of your tattoo, piercing, or permanent makeup. I work with precision and attention to every detail to ensure the result is both accurate and aesthetically pleasing.",
     process_step4_title: "4. Aftercare Recommendations",
-    process_step4_desc: "At the end of your session, you receive detailed aftercare instructions, as well as a special healing film — already included in the price. This makes the healing process easy and stress-free. I am always available to answer your questions and support you during recovery.",
+    service_mini_desc: "MINI are small tattoos with special meaning. Compact, neat, and subtle, they are perfect for a first tattoo experience or for those who prefer delicate accents. MINI is a way to express yourself with a small but meaningful design.",
+    process_permanent_title: "PERMANENT",
+    process_permanent_desc: "PERMANENT is a permanent makeup service: long-lasting enhancement of eyebrows, lips, or eyelids. Permanent makeup allows you to always look well-groomed and confident, saving time on daily makeup routines.",
+    process_piercing_title: "PIERCING",
+    process_piercing_desc: "PIERCING is a professional body piercing service with jewelry installation. I guarantee sterility, safety, and a personalized approach for every client. Adorn yourself stylishly and safely!",
     process_outro_p1: "My goal is to make every step clear and the result something that brings you joy every day.",
     contact_phone_label: "Phone:",
     contact_phone_number_ua: "+380 96 515 78 90 (UA)",
@@ -190,7 +192,6 @@ const translations = {
     chat_input_placeholder: "Type a message...",
     chat_connection_error: "Error connecting to the bot. Please try again later.",
     chat_bot_unavailable: "Error: Bot is unavailable. Please try again later.",
-    // Заголовки FAQ (старые, для внутренних данных)
     faq_general_title: "General Tattoo Questions",
     faq_piercing_title: "Piercing Questions",
     faq_permanent_title: "Permanent Makeup Questions",
@@ -203,7 +204,6 @@ function setLanguage(lang) {
   currentLang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    // Пропускаем кнопки FAQ, так как их текст задан напрямую в HTML
     if (el.classList.contains('tab-button')) {
       return;
     }
@@ -211,10 +211,6 @@ function setLanguage(lang) {
       el.textContent = translations[lang][key];
     }
   });
-
-  // Обновляем заголовки категорий FAQ, которые теперь кнопки
-  // Их текст статичен, но может быть полезно для data-i18n, если бы он брался из JS
-  // Мы не трогаем текст кнопок, т.к. он уже статически "TATTOO", "PIERCING", "PERMANENT"
 
   const chatInput = document.getElementById('chatInput');
   if (chatInput) {
@@ -256,13 +252,10 @@ function setLanguage(lang) {
       hideAllBtn.textContent = translations[currentLang]['hide_all_portfolio'];
   }
 
-  // Обновляем тексты отзывов в карусели
   updateReviewsCarouselContent();
 
-  // Обновляем тексты вопросов и ответов в FAQ
-  renderFaq(); // Перерендеринг FAQ для обновления текста
+  renderFaq();
 
-    // После смены языка, убедимся, что ни одна вкладка FAQ не активна по умолчанию
     document.querySelectorAll('.tab-button').forEach(button => {
         button.classList.remove('active');
     });
@@ -282,58 +275,56 @@ enBtn.addEventListener('click', () => {
   setLanguage('en');
 });
 
-// Данные отзывов (обновлены 7 отзывов)
 const reviewsData = [
   {
-    name: "Aisling O'Connell", // Ирландское имя 1
+    name: "Aisling O'Connell",
     text: {
       ru: "Моя новая татуировка просто потрясающая! Крис проявила невероятный талант и внимание к деталям. Студия очень чистая и уютная. Однозначно рекомендую!",
       en: "My new tattoo is absolutely stunning! Kris showed incredible talent and and comfortable. Definitely recommend!"
     }
   },
   {
-    name: "Liam Murphy", // Ирландское имя 2
+    name: "Liam Murphy",
     text: {
       ru: "Делал пирсинг, все прошло быстро и без проблем. Мастер была очень профессиональна и дала отличные советы по уходу. Очень доволен результатом!",
       en: "Had a piercing done, it was quick and seamless. The artist was very professional and gave great aftercare advice. Very pleased with the outcome!"
     }
   },
   {
-    name: "Siobhán Doyle", // Ирландское имя 3
+    name: "Siobhán Doyle",
     text: {
       ru: "Перманентный макияж моих губ выглядит так естественно и красиво. Крис - настоящий художник, она сделала именно то, что я хотела. Большое спасибо!",
       en: "My permanent lip makeup looks so natural and beautiful. Kris is a true artist; she did exactly what I wanted. Thank you so much!"
     }
   },
   {
-    name: "Cillian Walsh", // Ирландское имя 4
+    name: "Cillian Walsh",
     text: {
       ru: "Я давно хотел татуировку в стиле блэкворк, и Крис превзошла все мои ожидания. Четкие линии и глубокий черный цвет. Я впечатлен мастерством!",
       en: "I've wanted a blackwork tattoo for a long long time, and Kris exceeded all my expectations. Crisp lines and deep black. I'm truly impressed by the artistry!"
     }
   },
   {
-    name: "Niamh Kelly", // Ирландское имя 5
+    name: "Niamh Kelly",
     text: {
       ru: "Обратилась за перекрытием старой, неудачной татуировки. Крис сделала невозможное! Теперь у меня прекрасный новый дизайн, которым я горжусь. Не могу поверить, как это здорово!",
       en: "I came in to get an old, failed tattoo covered up. Kris did the impossible! Now I have a beautiful new design that I'm proud to show off. I can't believe how amazing it looks!"
     }
   },
   {
-    name: "Brendan Daly", // Ирландское имя 6
+    name: "Brendan Daly",
     text: {
       ru: "Отличный опыт с мини-тату. Работа сделана очень аккуратно и с душой. Крис очень дружелюбна и внимательна. Результат точно такой, как я представлял.",
       en: "Great experience with my mini-tattoo. The work was done very precisely and with passion. Kris is very friendly and attentive. The result is exactly as I imagined."
     }
   },
   {
-    name: "Aoife Ryan", // Ирландское имя 7
+    name: "Aoife Ryan",
     text: {
       ru: "Моя первая татуировка, и я так счастлива, что выбрала Mimimitattoo. Крис была невероятно терпелива и помогла мне чувствовать себя комфортно. Очень рекомендую для первого раза!",
       en: "My first tattoo, and I'm so happy I chose Mimimitattoo. Kris was incredibly patient and made me feel so comfortable. Highly recommend for a first-timer!"
     }
   },
-  // Остальные 8 отзывов без изменений
   {
     name: "Павел К.",
     text: {
@@ -392,7 +383,6 @@ const reviewsData = [
   }
 ];
 
-// ************** Лайтбокс для портфолио **************
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxClose = document.getElementById('lightboxClose');
@@ -400,7 +390,7 @@ const lightboxPrev = document.getElementById('lightboxPrev');
 const lightboxNext = document.getElementById('lightboxNext');
 const lightboxPrevPreview = document.getElementById('lightboxPrevPreview');
 const lightboxNextPreview = document.getElementById('lightboxNextPreview');
-const burgerButton = document.getElementById('burger'); // Получаем кнопку бургер-меню
+const burgerButton = document.getElementById('burger');
 
 let currentPortfolioIndex = 0;
 let allPortfolioImages = [];
@@ -427,14 +417,14 @@ function openLightbox(index) {
   updateLightboxImages();
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
-  burgerButton.classList.add('hidden'); // Скрываем бургер-меню
+  burgerButton.classList.add('hidden');
 }
 function closeLightbox() {
   lightbox.classList.remove('active');
   document.body.style.overflow = '';
   lightboxPrevPreview.style.backgroundImage = 'none';
   lightboxNextPreview.style.backgroundImage = 'none';
-  burgerButton.classList.remove('hidden'); // Показываем бургер-меню обратно
+  burgerButton.classList.remove('hidden');
 }
 function showPrevPortfolio() {
   currentPortfolioIndex = (currentPortfolioIndex - 1 + allPortfolioImages.length) % allPortfolioImages.length;
@@ -448,7 +438,6 @@ function showNextPortfolio() {
 document.addEventListener('DOMContentLoaded', () => {
     const featuredGalleryImgs = document.querySelectorAll('#featuredPortfolioGallery img');
     const fullGalleryImgs = document.querySelectorAll('#fullPortfolioGallery img');
-    // Обновляем пути к изображениям портфолио
     allPortfolioImages = Array.from(featuredGalleryImgs).concat(Array.from(fullGalleryImgs));
 
     allPortfolioImages.forEach((img, idx) => {
@@ -469,12 +458,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 
-// ************** Модальные окна услуг **************
 const serviceCards = document.querySelectorAll('.service-card');
 const serviceModalsContainer = document.getElementById('serviceModalsContainer');
 
 const serviceImages = {
-  // Пути к изображениям услуг остаются без изменений, так как они не в подпапке portfolio
   aqua: 'akva.PNG',
   coverup: 'coverup.PNG',
   line: 'line.JPG',
@@ -486,7 +473,7 @@ const serviceImages = {
 function createServiceModal(serviceKey) {
     const titleKey = `service_${serviceKey}_title`;
     const descKey = `service_${serviceKey}_desc`;
-    const imageUrl = `images/${serviceImages[serviceKey]}`; // Путь к изображению услуги
+    const imageUrl = `images/${serviceImages[serviceKey]}`;
 
     const modalBackdrop = document.createElement('div');
     modalBackdrop.classList.add('service-modal-backdrop');
@@ -521,7 +508,7 @@ serviceCards.forEach(card => {
         if (modal) {
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            burgerButton.classList.add('hidden'); // Скрываем бургер-меню при открытии модального окна услуги
+            burgerButton.classList.add('hidden');
             const modalTitleElement = modal.querySelector('.service-modal-title');
             const modalDescElement = modal.querySelector('.service-modal-description');
             if (modalTitleElement && modalDescElement) {
@@ -539,13 +526,13 @@ serviceModalsContainer.addEventListener('click', (event) => {
         if (modalToClose) {
             modalToClose.classList.remove('active');
             document.body.style.overflow = '';
-            burgerButton.classList.remove('hidden'); // Показываем бургер-меню обратно при закрытии модального окна услуги
+            burgerButton.classList.remove('hidden');
         }
     }
     else if (event.target.classList.contains('service-modal-backdrop')) {
         event.target.classList.remove('active');
         document.body.style.overflow = '';
-        burgerButton.classList.remove('hidden'); // Показываем бургер-меню обратно при закрытии по клику на бэкдроп
+        burgerButton.classList.remove('hidden');
     }
 });
 
@@ -557,14 +544,13 @@ document.addEventListener('keydown', (event) => {
     if (activeServiceModal) {
       activeServiceModal.classList.remove('active');
       document.body.style.overflow = '';
-      burgerButton.classList.remove('hidden'); // Показываем бургер-меню при закрытии по ESC
+      burgerButton.classList.remove('hidden');
     } else if (activeLightbox) {
-      closeLightbox(); // Это уже скрывает бургер-меню
+      closeLightbox();
     }
   }
 });
 
-// ************** Портфолио: кнопки "Показать все / Скрыть все" **************
 const viewMorePortfolioBtn = document.getElementById('viewMorePortfolioBtn');
 const fullPortfolioGallery = document.getElementById('fullPortfolioGallery');
 const hideAllPortfolioBtn = document.getElementById('hideAllPortfolioBtn');
@@ -592,7 +578,6 @@ if (hideAllPortfolioBtn && fullPortfolioGallery && viewMorePortfolioBtn) {
     });
 }
 
-// ************** Чат-виджет Telegram **************
 const openChatBtn = document.getElementById('openChatBtn');
 const telegramChatWidget = document.getElementById('telegramChatWidget');
 const closeChatBtn = document.getElementById('closeChatBtn');
@@ -606,9 +591,7 @@ const BOT_SERVER_URL = 'https://telegram-chat-backend-dz5f.onrender.com';
 let socket;
 let isInitialBotMessage = true;
 
-// Загрузка Socket.IO и инициализация бота с небольшой задержкой
 document.addEventListener('DOMContentLoaded', () => {
-    // Небольшая задержка для полной прогрузки DOM и CSS
     setTimeout(() => {
         if (!window.io) {
             const script = document.createElement('script');
@@ -620,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             initializeChatWidgetSocket();
         }
-    }, 500); // Задержка в 500 мс
+    }, 500);
 });
 
 function initializeChatWidgetSocket() {
@@ -631,18 +614,18 @@ function initializeChatWidgetSocket() {
     socket = io(BOT_SERVER_URL);
 
     socket.on('connect', () => {
-        console.log('Socket.IO connected!'); // Для отладки
+        console.log('Socket.IO connected!');
         if (telegramChatWidget.classList.contains('active')) {
              sendMessageToBot('/start', false);
         }
     });
 
     socket.on('disconnect', () => {
-        console.log('Socket.IO disconnected.'); // Для отладки
+        console.log('Socket.IO disconnected.');
     });
 
     socket.on('connect_error', (error) => {
-        console.error('Socket.IO connection error:', error); // Для отладки
+        console.error('Socket.IO connection error:', error);
         addMessage(translations[currentLang]['chat_connection_error'] || 'Ошибка подключения к боту. Пожалуйста, попробуйте позже.', 'bot');
     });
 
@@ -705,7 +688,6 @@ function updateChatButtons(buttons) {
 
 openChatBtn.addEventListener('click', () => {
     telegramChatWidget.classList.add('active');
-    // openChatBtn.classList.add('hidden'); // Удалено, т.к. кнопка теперь в потоке документа
     if (isMobileScreen()) {
         document.body.style.overflow = 'hidden';
     }
@@ -728,7 +710,6 @@ openChatBtn.addEventListener('click', () => {
 
 closeChatBtn.addEventListener('click', () => {
     telegramChatWidget.classList.remove('active');
-    // openChatBtn.classList.remove('hidden'); // Удалено, т.к. кнопка теперь в потоке документа
     if (isMobileScreen()) {
         document.body.style.overflow = '';
     }
@@ -773,24 +754,18 @@ chatButtons.addEventListener('click', (e) => {
     }
 });
 
-
-// ====================================================================
-// КОД ДЛЯ РАЗДЕЛА ОТЗЫВОВ
-// ====================================================================
-
 const reviewsCarousel = document.getElementById('reviewsCarousel');
 const carouselInner = document.getElementById('carouselInner');
 const carouselPrev = document.getElementById('carouselPrev');
 const carouselNext = document.getElementById('carouselNext');
 const carouselDots = document.getElementById('carouselDots');
-const reviewsColumn = document.getElementById('reviews-column'); // Получаем элемент колонки отзывов
+const reviewsColumn = document.getElementById('reviews-column');
 
 let currentReviewIndex = 0;
 let autoSlideInterval;
 
-// Определяем набор форм для border-radius
 const borderRadiusShapes = [
-    '60% 40% 40% 60% / 60% 60% 40% 40%', // Базовая форма
+    '60% 40% 40% 60% / 60% 60% 40% 40%',
     '40% 60% 60% 40% / 40% 40% 60% 60%',
     '55% 45% 45% 55% / 65% 35% 65% 35%',
     '45% 55% 55% 45% / 35% 65% 35% 65%',
@@ -809,44 +784,22 @@ function createReviewCard(review, lang) {
 
 function updateReviewsCarouselContent() {
     carouselInner.innerHTML = '';
-    // carouselDots.innerHTML = ''; // Точки теперь скрыты через CSS, нет необходимости очищать JS
-
-    // Если отзывов нет, показываем заглушку и выходим.
     if (reviewsData.length === 0) {
         carouselInner.innerHTML = `<div class="review-placeholder">${translations[currentLang]['reviews_placeholder']}</div>`;
-        // Также скрываем навигационные кнопки и точки, если отзывов нет.
         carouselPrev.style.display = 'none';
         carouselNext.style.display = 'none';
-        // carouselDots.style.display = 'none'; // Уже скрыто через CSS
-        // Устанавливаем обычный border-radius, если нет отзывов для анимации
         if (reviewsColumn) {
             reviewsColumn.style.borderRadius = '15px';
         }
         return;
     } else {
-        // Убедимся, что навигационные элементы видны, если отзывы есть.
         carouselPrev.style.display = '';
         carouselNext.style.display = '';
-        // carouselDots.style.display = 'flex'; // Уже скрыто через CSS
     }
-
 
     reviewsData.forEach((review, index) => {
         const carouselCard = createReviewCard(review, currentLang);
         carouselInner.appendChild(carouselCard);
-
-        // Точки больше не создаются в JS, так как они скрыты через CSS.
-        /*
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
-        dot.dataset.index = index;
-        dot.addEventListener('click', () => {
-            currentReviewIndex = index;
-            showCurrentReview();
-            resetAutoSlide();
-        });
-        carouselDots.appendChild(dot);
-        */
     });
 
     showCurrentReview();
@@ -855,39 +808,25 @@ function updateReviewsCarouselContent() {
 
 function showCurrentReview() {
     const cards = carouselInner.querySelectorAll('.review-card');
-    // const dots = carouselDots.querySelectorAll('.dot'); // Точки скрыты
-
-    // Если нет карточек отзывов, возможно, уже отображена заглушка (проверено выше)
     if (cards.length === 0) return;
 
-    // Убедимся, что индекс находится в пределах массива
     currentReviewIndex = (currentReviewIndex % cards.length + cards.length) % cards.length;
 
-    // Снимаем класс 'active' со всех карточек
     cards.forEach((card) => {
         card.classList.remove('active');
     });
-    // dots.forEach((dot) => { // Точки скрыты
-    //     dot.classList.remove('active');
-    // });
 
-    // Добавляем класс 'active' к текущей карточке и точке
     cards[currentReviewIndex].classList.add('active');
-    // dots[currentReviewIndex].classList.add('active'); // Точки скрыты
 
-    // Перемещаем carousel-inner, чтобы текущая карточка была в центре
     if (cards[currentReviewIndex]) {
         const cardWidth = cards[currentReviewIndex].offsetWidth;
         carouselInner.style.transform = `translateX(-${currentReviewIndex * cardWidth}px)`;
     }
 
-    // Динамически меняем border-radius для reviews-column ТОЛЬКО ЕСЛИ ЭТО НЕ МОБИЛЬНЫЙ ЭКРАН
-    // Чтобы избежать конфликта с медиа-запросом, который возвращает обычный радиус на мобильных
     if (reviewsColumn && !isMobileScreen()) {
         const shapeIndex = currentReviewIndex % borderRadiusShapes.length;
         reviewsColumn.style.borderRadius = borderRadiusShapes[shapeIndex];
     } else if (reviewsColumn && isMobileScreen()) {
-        // На мобильных просто сбрасываем к стандартному радиусу, если он был изменен JS
         reviewsColumn.style.borderRadius = '15px';
     }
 }
@@ -913,18 +852,12 @@ function initReviewsCarousel() {
   carouselPrev.addEventListener('click', prevReview);
   carouselNext.addEventListener('click', nextReview);
 
-  // Обновление карусели при изменении размера окна
   window.addEventListener('resize', () => {
       showCurrentReview();
   });
 }
 
 
-// ====================================================================
-// КОД ДЛЯ РАЗДЕЛА FAQ
-// ====================================================================
-
-// Общие вопросы о татуировках
 const generalFaqData = [
     {
         question: {
@@ -1141,14 +1074,13 @@ function createFaqItem(questionText, answerText, qIndex, aIndexPrefix) {
 
     const questionDiv = document.createElement('div');
     questionDiv.classList.add('faq-question');
-    questionDiv.innerHTML = `<span data-i18n-faq-q="${aIndexPrefix}${qIndex}">${questionText}</span> <span class="icon fas fa-chevron-down"></span>`; // Используем Font Awesome иконку
+    questionDiv.innerHTML = `<span data-i18n-faq-q="${aIndexPrefix}${qIndex}">${questionText}</span> <span class="icon fas fa-chevron-down"></span>`;
 
     const answerDiv = document.createElement('div');
     answerDiv.classList.add('faq-answer');
     answerDiv.innerHTML = `<span data-i18n-faq-a="${aIndexPrefix}${qIndex}">${answerText}</span>`;
 
     questionDiv.addEventListener('click', () => {
-        // Закрываем все другие открытые ответы в ТЕКУЩЕЙ вкладке, если есть
         questionDiv.closest('.tab-pane').querySelectorAll('.faq-question.active').forEach(activeQ => {
             if (activeQ !== questionDiv) {
                 activeQ.classList.remove('active');
@@ -1179,7 +1111,6 @@ function renderFaq() {
 
     if (!faqGeneralContainer || !faqPiercingContainer || !faqPermanentContainer) return;
 
-    // Очищаем содержимое перед рендерингом
     faqGeneralContainer.innerHTML = '';
     faqPiercingContainer.innerHTML = '';
     faqPermanentContainer.innerHTML = '';
@@ -1199,8 +1130,6 @@ function renderFaq() {
         faqPermanentContainer.appendChild(faqItem);
     });
 
-    // При первоначальной загрузке или смене языка, ни одна вкладка не активна по умолчанию.
-    // Все вкладки будут скрыты.
     document.querySelectorAll('.tab-button').forEach(button => {
         button.classList.remove('active');
     });
@@ -1209,32 +1138,27 @@ function renderFaq() {
     });
 }
 
-// Функция для активации/деактивации вкладок FAQ
 function activateTab(tabName) {
     const targetTabButton = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
     const targetTabPane = document.getElementById(`tab-${tabName}`);
 
-    // Если нажата уже активная вкладка, деактивируем её
     if (targetTabButton.classList.contains('active')) {
         targetTabButton.classList.remove('active');
         targetTabPane.classList.remove('active');
-        // Закрываем все аккордеоны внутри этой вкладки при её скрытии
         targetTabPane.querySelectorAll('.faq-question.active').forEach(activeQ => {
             activeQ.classList.remove('active');
             activeQ.querySelector('.icon').classList.remove('fa-chevron-up');
             activeQ.querySelector('.icon').classList.add('fa-chevron-down');
             activeQ.nextElementSibling.classList.remove('open');
         });
-        return; // Выходим, так как вкладка закрыта
+        return;
     }
 
-    // Если есть активная вкладка (не та, на которую нажали), деактивируем её
     document.querySelectorAll('.tab-button.active').forEach(button => {
         button.classList.remove('active');
     });
     document.querySelectorAll('.tab-pane.active').forEach(pane => {
         pane.classList.remove('active');
-        // Закрываем все аккордеоны внутри предыдущей вкладки при её деактивации
         pane.querySelectorAll('.faq-question.active').forEach(activeQ => {
             activeQ.classList.remove('active');
             activeQ.querySelector('.icon').classList.remove('fa-chevron-up');
@@ -1243,12 +1167,10 @@ function activateTab(tabName) {
         });
     });
 
-    // Активируем выбранную панель и кнопку
     targetTabButton.classList.add('active');
     targetTabPane.classList.add('active');
 }
 
-// Обработчики кликов по кнопкам вкладок
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.tab-button').forEach(button => {
         button.addEventListener('click', () => {
@@ -1258,16 +1180,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
-// Расширяем функцию setLanguage, чтобы она обновлялась и FAQ
 const originalSetLanguage = setLanguage;
 setLanguage = function(lang) {
-    // Вызываем оригинальную функцию для общей локализации
     originalSetLanguage(lang);
 
-    // Обновляем тексты вопросов и ответов в FAQ в соответствии с выбранным языком
-    // Обратите внимание: текст кнопок TATTOO, PIERCING, PERMANENT теперь статичен в HTML
-    // Но тексты вопросов и ответов внутри вкладок все равно нужно обновить:
     generalFaqData.forEach((item, index) => {
         const qSpan = document.querySelector(`[data-i18n-faq-q="general_${index}"]`);
         const aSpan = document.querySelector(`[data-i18n-faq-a="general_${index}"]`);
@@ -1289,13 +1205,11 @@ setLanguage = function(lang) {
         if (aSpan) aSpan.textContent = item.answer[lang];
     });
 
-    // После смены языка, убедимся, что все вкладки FAQ свернуты и ни одна не активна
     document.querySelectorAll('.tab-button').forEach(button => {
         button.classList.remove('active');
     });
     document.querySelectorAll('.tab-pane').forEach(pane => {
         pane.classList.remove('active');
-        // Убедимся, что все аккордеоны внутри вкладок тоже закрыты
         pane.querySelectorAll('.faq-question.active').forEach(activeQ => {
             activeQ.classList.remove('active');
             activeQ.querySelector('.icon').classList.remove('fa-chevron-up');
@@ -1305,8 +1219,6 @@ setLanguage = function(lang) {
     });
 };
 
-
-// Вызовы инициализации после полной загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
     setLanguage(currentLang);
     initReviewsCarousel();
