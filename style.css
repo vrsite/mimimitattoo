@@ -19,6 +19,7 @@ html, body {
   min-height: 100vh;
   position: relative;
   z-index: 0;
+  overflow-x: hidden; /* Предотвращаем горизонтальный скролл */
 }
 
 /* Fixed background for the rest of the site */
@@ -41,6 +42,7 @@ html, body {
     z-index: 0;
     width: 100%;
     min-height: 100vh;
+    box-sizing: border-box; /* Важно для адаптивности */
 }
 
 
@@ -55,6 +57,7 @@ html, body {
   justify-content: center;
   background-color: transparent;
   z-index: 1;
+  box-sizing: border-box;
 }
 
 .hero__video {
@@ -79,12 +82,13 @@ html, body {
   -webkit-backdrop-filter: none;
   padding: 0;
   display: inline-block;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%; /* Убедимся, что занимает всю ширину контейнера */
+  max-width: 100%; /* Убедимся, что занимает всю ширину контейнера */
+  box-sizing: border-box;
 }
 /* Заголовки и подзаголовки Hero */
 .hero__content h1 {
-  font-size: 5.5rem;
+  font-size: 5.5rem; /* rem для лучшей адаптации */
   font-weight: 700;
   letter-spacing: 2px;
   margin-bottom: 1.1rem;
@@ -94,7 +98,7 @@ html, body {
   color: #fff;
 }
 .hero__content p {
-  font-size: 2rem;
+  font-size: 2rem; /* rem для лучшей адаптации */
   margin-bottom: 2.2rem;
   font-weight: 400;
   line-height: 1.2;
@@ -157,6 +161,7 @@ html, body {
   border-left: 1.5px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box; /* Важно для адаптивности */
 }
 .side-menu.open {
   right: 0;
@@ -165,8 +170,8 @@ html, body {
 }
 .close-menu {
   position: absolute;
-  top: 0.7rem; /* Отступ сверху */
-  right: 1.2rem; /* Отступ справа */
+  top: 1.2rem; /* Оптимизированное значение для верхнего отступа */
+  right: 1.5rem; /* Оптимизированное значение для правого отступа */
   background: none;
   border: none;
   font-size: 2.2rem;
@@ -262,11 +267,10 @@ html, body {
   flex-direction: column;
   align-items: center;
   padding: 60px 0 40px 0;
+  box-sizing: border-box;
 }
-/* Секция Отзывы сохраняет свой полупрозрачный фон */
-.reviews-section,
-.contacts-section,
-.faq-section { /* Добавлено для FAQ */
+/* Секция Контакты сохраняет свой полупрозрачный фон */
+.contacts-section {
     background: rgba(255,255,255,0.08);
     padding: 60px 0 40px 0;
     position: relative;
@@ -274,6 +278,7 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 
@@ -289,7 +294,7 @@ html, body {
   position: relative;
   z-index: 1;
   background: transparent;
-  max-width: 1200px;
+  max-width: 1200px; /* Центрирование контента */
   margin: 0 auto;
 }
 
@@ -303,7 +308,7 @@ html, body {
 .about-video-container {
   flex-shrink: 0;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Ограничение ширины */
   height: 250px;
   border-radius: 0;
   overflow: hidden;
@@ -332,6 +337,7 @@ html, body {
   min-height: auto;
   position: relative;
   overflow: auto;
+  padding: 40px; /* Увеличил padding для лучшего внешнего вида */
 }
 
 .about-text-content::before {
@@ -360,7 +366,7 @@ html, body {
   position: relative;
   z-index: 1;
   background: transparent;
-  max-width: 1200px;
+  max-width: 1200px; /* Центрирование контента */
   margin: 0 auto;
 }
 
@@ -374,7 +380,7 @@ html, body {
 .process-video-container {
   flex-shrink: 0;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Ограничение ширины */
   height: 250px;
   border-radius: 0;
   overflow: hidden;
@@ -473,11 +479,6 @@ html, body {
   margin-bottom: 1.2rem;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: auto; /* Позволяет содержимому определять высоту */
-  display: flex; /* Для выравнивания содержимого */
-  flex-direction: column; /* Элементы внутри карточки располагаются вертикально */
-  justify-content: flex-start; /* Выравнивание содержимого к верху */
-  align-items: center; /* Центрирование по горизонтали */
 }
 .service-card:hover {
   transform: translateY(-5px);
@@ -599,13 +600,14 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .masonry-gallery {
   column-count: 4;
   column-gap: 1.5rem;
   width: 90vw;
-  max-width: 1200px;
+  max-width: 1200px; /* Центрирование контента */
   margin: 0 auto;
 }
 .masonry-gallery img {
@@ -786,14 +788,15 @@ html, body {
 
 .service-modal-close {
   position: absolute;
-  top: 0.8rem;
-  right: 1.2rem;
+  top: 1.2rem; /* Оптимизированное значение для верхнего отступа */
+  right: 1.5rem; /* Оптимизированное значение для правого отступа */
   background: none;
   border: none;
   font-size: 2rem;
   color: var(--accent);
   cursor: pointer;
   transition: color 0.2s;
+  z-index: 901; /* Убедимся, что поверх контента модалки */
 }
 .service-modal-close:hover {
   color: #c00;
@@ -801,12 +804,13 @@ html, body {
 
 .contacts-section {
   padding: 60px 20px;
-  background: transparent;
+  background: rgba(255,255,255,0.08); /* Такой же фон, как у FAQ и Отзывов */
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
 }
 
 .contacts-content-wrapper {
@@ -889,98 +893,103 @@ html, body {
     width: 100%; /* Чтобы LI занимали всю ширину контейнера */
 }
 
-/* Стиль для текстовых ссылок соцсетей */
 .social-links-inline a {
   display: inline-flex;
   align-items: center;
-  color: #fff; /* Белый цвет текста */
+  color: #fff;
   font-weight: 400;
   font-size: 1.1rem;
   text-decoration: none;
   transition: color 0.2s;
-  white-space: nowrap; /* Важно, чтобы текст не переносился */
-  padding: 5px 0; /* Отступы для текста, не для кнопки */
+  white-space: nowrap; /* Важно, чтобы текст не переносился внутри ссылки */
 }
 
 .social-links-inline a .fab {
   font-size: 1.4em;
   margin-right: 10px;
-  color: #fff; /* Белый цвет иконки */
+  color: #fff;
   transition: color 0.2s;
 }
 
 .social-links-inline a:hover {
-  color: var(--accent); /* Цвет при наведении */
+  color: var(--accent);
 }
 
 .social-links-inline a:hover .fab {
-  color: var(--accent); /* Цвет иконки при наведении */
+  color: var(--accent);
 }
 
-
-.contact-phone-numbers {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 100%; /* Добавим, чтобы занимал всю ширину для центрирования */
-}
-
-.contact-phone-numbers p {
-    margin-bottom: 10px;
-    font-weight: 700;
-    text-align: center; /* Центрируем заголовок */
-}
-
-.phone-numbers-horizontal {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Центрируем номера телефонов */
-    gap: 15px;
-}
-
-/* Стиль для текстовых ссылок телефонов и почты */
-.contact-phone-link, .contact-email-link {
-    display: inline-flex;
-    align-items: center;
-    padding: 0px 5px; /* Минимальный padding для текста */
-    background: transparent; /* Убираем фон кнопки */
-    border: none; /* Убираем рамку кнопки */
-    color: #fff; /* Цвет текста */
-    text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: 500;
-    transition: color 0.2s;
-    white-space: nowrap; /* Важно, чтобы текст не переносился */
-    max-width: 100%; /* чтобы не вылазил за пределы */
-    box-sizing: border-box; /* Учитываем padding */
-    overflow: hidden; /* Обрезать текст, если не помещается */
-    text-overflow: ellipsis; /* Добавить многоточие */
-}
-
-.contact-phone-link .fas, .contact-email-link .fas {
-    margin-right: 8px;
-    font-size: 1.1em;
-    color: #fff; /* Цвет иконки */
-    flex-shrink: 0; /* Иконка не сжимается */
-}
-
-.contact-phone-link:hover, .contact-email-link:hover {
-    color: var(--accent); /* Цвет при наведении */
-}
-
-.contact-phone-link:hover .fas, .contact-email-link:hover .fas {
-    color: var(--accent); /* Цвет иконки при наведении */
-}
-
-
+.contact-phone-numbers,
 .contact-email-info {
     margin-top: 20px;
-    width: 100%; /* Добавим, чтобы занимал всю ширину для центрирования */
+    margin-bottom: 20px; /* Добавим отступ для разделения */
+    width: 100%;
+    text-align: center;
 }
 
+.contact-phone-numbers p,
 .contact-email-info p {
     margin-bottom: 10px;
     font-weight: 700;
-    text-align: center; /* Центрируем заголовок */
+    color: #fff; /* Убедимся, что цвет заголовков белый */
+}
+
+.phone-numbers-container, /* Новый класс для контейнера номеров */
+.email-address-container { /* Новый класс для контейнера email */
+    display: flex;
+    flex-direction: column; /* Располагаем элементы вертикально */
+    align-items: center; /* Центрируем по горизонтали */
+    gap: 8px; /* Отступ между элементами */
+}
+
+.contact-phone-link {
+    display: inline-flex; /* Используем inline-flex, чтобы иконка и текст были в одну строку */
+    align-items: center;
+    color: #fff; /* Цвет текста */
+    text-decoration: none; /* Убираем подчеркивание */
+    font-size: 1.1rem; /* Размер шрифта */
+    font-weight: 500;
+    transition: color 0.2s ease; /* Плавное изменение цвета при наведении */
+}
+
+.contact-phone-link .fas {
+    margin-right: 8px; /* Отступ справа от иконки */
+    font-size: 1.1em;
+    color: #fff; /* Цвет иконки */
+    transition: color 0.2s ease;
+}
+
+.contact-phone-link:hover {
+    color: var(--accent); /* Изменение цвета текста при наведении */
+}
+
+.contact-phone-link:hover .fas {
+    color: var(--accent); /* Изменение цвета иконки при наведении */
+}
+
+.contact-email-link {
+    display: inline-flex; /* Используем inline-flex, чтобы иконка и текст были в одну строку */
+    align-items: center;
+    color: #fff; /* Цвет текста */
+    text-decoration: none; /* Убираем подчеркивание */
+    font-size: 1.1rem; /* Размер шрифта */
+    font-weight: 500;
+    transition: color 0.2s ease; /* Плавное изменение цвета при наведении */
+}
+
+.contact-email-link .fas {
+    margin-right: 8px; /* Отступ справа от иконки */
+    font-size: 1.1em;
+    color: #fff; /* Цвет иконки */
+    transition: color 0.2s ease;
+}
+
+.contact-email-link:hover {
+  color: var(--accent); /* Изменение цвета текста при наведении */
+}
+
+.contact-email-link:hover .fas {
+  color: var(--accent); /* Изменение цвета иконки при наведении */
 }
 
 
@@ -1041,6 +1050,7 @@ html, body {
     text-align: center;
     position: relative;
     z-index: 1;
+    box-sizing: border-box;
 }
 
 .signup-content {
@@ -1083,48 +1093,120 @@ html, body {
     color: #fff;
 }
 
-/* Стили для раздела "Отзывы" */
+/* Новая объединенная секция для Отзывов и FAQ */
+.reviews-faq-section {
+  background: transparent; /* Общий фон секции прозрачный */
+  padding: 60px 20px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column; /* Заголовок сверху, потом колонки */
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.reviews-faq-section-title {
+    margin-bottom: 30px; /* Отступ под заголовком секции */
+}
+
+/* Общий стеклянный фон для объединенного блока Отзывов и FAQ */
+.reviews-faq-content-wrapper {
+  display: flex;
+  flex-direction: column; /* По умолчанию колонки вертикально */
+  gap: 40px; /* Отступ между колонками */
+  width: 100%;
+  max-width: 1200px; /* Ограничение общей ширины контента */
+  align-items: center; /* Центрируем колонки на мобильных */
+
+  background: rgba(255,255,255,0.1); /* Слегка размытый, слегка зернистый */
+  border: 1.5px solid rgba(0,0,0,0.08);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px); /* Умеренное размытие */
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px; /* Скругленные углы для всего блока */
+  padding: 20px; /* Добавил padding для всего блока */
+}
+
+.reviews-column,
+.faq-column {
+  flex: 1; /* Распределяем доступное пространство */
+  width: 100%; /* По умолчанию на всю ширину на мобильных */
+  box-sizing: border-box; /* Учитываем padding в ширине */
+  min-height: 400px; /* Минимальная высота для видимости */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0; /* Убрал внутренний padding, так как он теперь у reviews-faq-content-wrapper */
+  position: relative;
+  /* Убираем индивидуальные фоны, тени, бордеры и блюр, т.к. они теперь у родителя */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0; /* Убираем бордер-радиус, он теперь у родителя reviews-faq-content-wrapper */
+}
+
+.reviews-column {
+  border-radius: 15px; /* Обычный скругленный угол для Reviews колонки */
+  transition: none; /* Убираем анимацию border-radius */
+}
+
+.column-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff; /* Белый цвет для заголовков колонок */
+  text-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%; /* Чтобы заголовок не сжимался */
+}
+
+
+/* Стили для карусели отзывов */
 .reviews-carousel {
     position: relative;
-    width: 100%;
-    max-width: 800px; /* Ограничьте ширину карусели */
-    margin: 0 auto 30px auto; /* Центрируем карусель */
-    overflow: hidden; /* Важно, чтобы содержимое не выходило за пределы карусели */
-    padding-top: 20px; /* Отступ для стрелок */
+    width: 100%; /* Будет занимать всю ширину родительской колонки */
+    max-width: 600px; /* Ограничение ширины для содержимого карусели */
+    margin: 0 auto; /* Центрируем внутри колонки */
+    overflow: hidden; 
+    padding-top: 20px; 
     box-sizing: border-box;
+    display: flex; /* Чтобы внутренние элементы могли быть flex-item */
+    flex-direction: column;
+    align-items: center; /* Центрируем содержимое карусели */
 }
 
 .carousel-container {
     position: relative;
     width: 100%;
-    overflow: hidden; /* Скрываем части карточек, которые не активны */
-    padding: 0 60px; /* Добавить отступ внутри контейнера для стрелок */
+    overflow: hidden; 
+    padding: 0;
     box-sizing: border-box;
-    /* Убрал overflow: visible, так как он может влиять на центрирование */
 }
 
 .carousel-inner {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    padding-bottom: 20px; /* Отступ для тени карточек */
-    /* width: auto; */ /* Установим auto, чтобы flex-элементы определяли общую ширину */
+    padding-bottom: 0; /* Убрал отступ, т.к. точки скрыты */
+    width: 100%;
     box-sizing: border-box;
-    align-items: flex-start; /* Выравнивание по верху */
-    /* margin: 0; */ /* Убираем auto здесь, так как трансформация будет управлять позицией */
-    width: fit-content; /* Ширина по контенту */
 }
 
 .review-card {
-    flex: 0 0 100%; /* Одна карточка на весь слайд */
+    flex: 0 0 100%; 
     max-width: 100%;
-    background: rgba(255,255,255,0.2);
-    border-radius: 15px;
-    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
-    border: 1.2px solid rgba(0,0,0,0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 30px;
-    /* margin: 0 auto; */ /* Убрал margin auto, так как это будет мешать transform translateX */
+    /* Фон карточки теперь будет прозрачным, чтобы видеть общий стеклянный фон */
+    background: transparent; 
+    border-radius: 0; 
+    box-shadow: none; 
+    border: none; 
+    backdrop-filter: none; 
+    -webkit-backdrop-filter: none; 
+    padding: 30px; /* Сохраняем внутренние отступы */
+    margin: 0; 
     box-sizing: border-box;
     text-align: center;
     color: #fff;
@@ -1142,7 +1224,7 @@ html, body {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 15px;
-    color: var(--accent);
+    color: var(--accent); /* Цвет акцента для заголовка */
     text-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
@@ -1151,6 +1233,7 @@ html, body {
     line-height: 1.6;
     margin-bottom: 0;
     color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3); /* Усилен для лучшей читаемости на фоне */
 }
 
 .carousel-nav-btn {
@@ -1159,20 +1242,20 @@ html, body {
     transform: translateY(-50%);
     background: rgba(255,255,255,0.3);
     border: none;
-    font-size: 1.8rem; /* Ещё немного уменьшим */
+    font-size: 1.8rem; 
     color: var(--accent);
     cursor: pointer;
-    padding: 6px 10px; /* Уменьшен padding */
+    padding: 6px 10px; 
     border-radius: 50%;
     transition: background 0.3s ease, color 0.3s ease;
     z-index: 10;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 .carousel-nav-btn.prev {
-    left: 0px; /* Отступ от края контейнера карусели */
+    left: 10px; 
 }
 .carousel-nav-btn.next {
-    right: 0px; /* Отступ от края контейнера карусели */
+    right: 10px; 
 }
 .carousel-nav-btn:hover {
     background: var(--accent);
@@ -1180,12 +1263,11 @@ html, body {
 }
 
 .carousel-dots {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    display: none; /* СКРЫВАЕМ ТОЧКИ ПОЛНОСТЬЮ */
 }
 
 .dot {
+    /* Эти стили не будут применяться, т.к. display: none у родителя */
     width: 12px;
     height: 12px;
     background: rgba(0,0,0,0.3);
@@ -1199,48 +1281,106 @@ html, body {
     background: var(--accent);
 }
 
-/* Удалены стили для .full-reviews-grid, так как этой секции больше нет */
 
-/* Стили для секции FAQ */
-.faq-section {
-    background: rgba(255,255,255,0.08); /* Такой же фон, как у отзывов/контактов */
-    padding: 60px 20px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
+/* Стили для секции FAQ внутри колонки */
+.faq-column .faq-tabs-container {
+    max-width: none; 
+    width: 100%;
+    background: transparent; /* Полностью прозрачный фон */
+    box-shadow: none; 
+    backdrop-filter: none; 
+    -webkit-backdrop-filter: none; 
+    padding: 0; /* Убираем padding, он теперь у родителя reviews-faq-content-wrapper */
+    margin: 0; 
+}
+
+.faq-tabs-nav {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    flex-direction: row; /* Горизонтальное расположение по умолчанию */
 }
 
-.faq-container {
-    max-width: 800px;
-    width: 90%;
-    margin: 20px auto 0 auto;
-    background: rgba(255,255,255,0.1);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #fff;
-    text-align: left;
+/* Пирамида для десктопов */
+@media (min-width: 768px) { /* Можно настроить брейкпоинт по необходимости */
+    .reviews-faq-content-wrapper {
+        flex-direction: row; /* Две колонки в ряд */
+        justify-content: center;
+        align-items: flex-start; /* Выравниваем по верху */
+    }
+
+    .reviews-column,
+    .faq-column {
+        flex: 1; /* Распределяем пространство */
+        max-width: 48%; /* Примерно пополам с отступом */
+    }
+
+    .faq-tabs-nav {
+        flex-direction: column; /* Расположение колонок для пирамиды */
+        align-items: center; /* Центрируем колонки */
+        gap: 5px; /* Уменьшаем отступ между строками */
+    }
+
+    .faq-tabs-nav .tab-button {
+        width: auto; /* Ширина по содержимому */
+        padding: 0.5em 2em; /* Больше отступов для десктопов */
+        min-width: 150px; /* Минимальная ширина, чтобы не были слишком узкими */
+    }
+
+    .faq-tabs-nav .tab-button[data-tab="tattoo"] { /* Верхняя кнопка */
+        order: 1; /* Первая в пирамиде */
+    }
+    .faq-tabs-nav .tab-button[data-tab="piercing"] { /* Средняя кнопка */
+        order: 2; /* Вторая в пирамиде */
+    }
+    .faq-tabs-nav .tab-button[data-tab="permanent"] { /* Нижняя кнопка */
+        order: 3; /* Третья в пирамиде */
+    }
 }
 
-.faq-category-title {
-    font-size: 1.8rem;
-    font-weight: 700;
+
+.tab-button {
+    background: var(--glass-bg);
+    border: 1.5px solid var(--glass-border);
     color: var(--accent);
-    text-shadow: 0 1px 6px rgba(0,0,0,0.15);
-    margin-bottom: 25px;
-    margin-top: 30px;
+    padding: 0.5em 1.2em;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    white-space: nowrap; /* Чтобы текст не переносился */
+    flex-grow: 1; /* Чтобы кнопки занимали доступное место */
+    max-width: 250px; /* Ограничение ширины для больших экранов */
     text-align: center;
-    text-transform: uppercase;
+    text-transform: uppercase; /* Всегда в верхнем регистре */
 }
 
-.faq-category-title:first-of-type {
-    margin-top: 0; /* Убрать верхний отступ для первого заголовка */
+.tab-button:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
 }
+
+.tab-button.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.faq-tabs-content .tab-pane {
+    display: none; /* Скрываем все вкладки по умолчанию */
+    padding-top: 10px; /* Небольшой отступ сверху для контента вкладки */
+    /* Фон, тень и блюр теперь применяются к .reviews-faq-content-wrapper */
+}
+
+.faq-tabs-content .tab-pane.active {
+    display: block; /* Показываем активную вкладку */
+}
+
 
 .faq-item {
     margin-bottom: 15px;
@@ -1407,7 +1547,6 @@ html, body {
         font-size: 1.1rem;
         box-sizing: border-box;
         min-height: auto;
-        position: relative;
         overflow: auto;
         max-height: unset;
         min-height: auto;
@@ -1585,7 +1724,6 @@ html, body {
     margin-top: 2rem;
     margin-left: auto;
     margin-right: auto;
-    align-items: stretch; /* Карточки одинаковой высоты */
   }
   .service-card {
     width: calc(50% - 0.4rem); /* 2 карточки в ряд с отступом */
@@ -1593,7 +1731,6 @@ html, body {
     min-width: unset;
     padding: 0.8rem 1rem;
     margin-bottom: 0.8rem;
-    height: auto; /* Высота по содержимому */
   }
   .service-title {
     font-size: 0.9rem;
@@ -1601,51 +1738,42 @@ html, body {
     margin-bottom: 0;
   }
 
-  /* Адаптация отзывов на мобильных */
-  .reviews-carousel {
-      padding-left: 15px;
-      padding-right: 15px;
-      margin: 0 auto 30px auto; /* Центрируем карусель на мобильных */
+  /* Адаптация Отзывов и FAQ на мобильных */
+  .reviews-faq-section {
+    padding-left: 15px;
+    padding-right: 15px;
   }
-  .carousel-container {
-      padding: 0 40px; /* Меньше отступ для кнопок на мобильных */
-      overflow: hidden; /* Скрываем части карточек, которые не активны */
+  .reviews-faq-content-wrapper {
+      flex-direction: column; /* На мобильных снова в колонку */
+      gap: 30px; /* Отступ между блоками Отзывов и FAQ */
+      background: rgba(255,255,255,0.1); /* Вернул фон для мобильных */
+      border: 1.5px solid rgba(0,0,0,0.08);
+      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 15px; 
   }
-  .reviews-carousel .carousel-inner {
-      margin-left: 0; /* Убираем любые лишние маржины */
-      margin-right: 0;
-      width: auto; /* Ширина по содержимому для гибкости */
-      justify-content: flex-start; /* Оставляем flex-start для корректной работы transform */
+  .reviews-column, .faq-column {
+      max-width: 100%; /* Занимают всю ширину */
+      border-radius: 15px; /* Снова обычные скругления на мобильных для отзывов */
   }
-  .reviews-carousel .review-card {
-      margin: 0; /* Убираем маржины, центрирование будет через transform и offset */
-      padding: 20px;
-  }
-  .carousel-nav-btn {
-      font-size: 1.6rem;
-      padding: 4px 8px;
-  }
-  .carousel-nav-btn.prev {
-      left: 0px; 
-  }
-  .carousel-nav-btn.next {
-      right: 0px;
+  /* Убираем hover-эффект изменения формы на мобильных, т.к. он будет конфликтовать с JS анимацией */
+  .reviews-column:hover {
+      border-radius: 15px; /* Возвращаем к базовому для мобильных */
   }
 
+
   /* Адаптация FAQ на мобильных */
-  .faq-container {
-    padding: 15px;
-  }
-  .faq-question {
-      font-size: 1rem;
-  }
-  .faq-answer {
+  .faq-tabs-nav .tab-button {
       font-size: 0.9rem;
+      padding: 0.4em 0.8em;
   }
-  .faq-category-title {
-    font-size: 1.4rem; /* Меньше на очень маленьких экранах */
-    margin-bottom: 20px;
-    margin-top: 25px;
+  .faq-tabs-nav {
+      gap: 5px; /* Уменьшаем отступ между кнопками */
+      flex-direction: row; /* На мобильных снова в ряд */
+  }
+  .faq-tabs-content .tab-pane {
+      background: transparent; /* Сохраняем прозрачность для содержимого вкладок на мобильных */
   }
 }
 
@@ -1681,32 +1809,32 @@ html, body {
 
   /* Адаптация контактов на очень маленьких экранах */
   .contact-phone-link, .contact-email-link {
-    font-size: 0.7rem; /* ЕЩЁ уменьшим шрифт для лучшей вместимости на 261px */
-    padding: 4px 6px; /* Чуть меньше padding */
+    font-size: 0.8rem; /* Ещё уменьшим шрифт для лучшей вместимости */
+    padding: 0; /* Чуть меньше padding */
     white-space: nowrap; /* Гарантируем одну строку */
     overflow: hidden; /* Скрываем выходящий текст */
     text-overflow: ellipsis; /* Добавляем многоточие */
-    max-width: calc(100% - 12px); /* Адаптируем max-width с учетом нового padding */
-    width: fit-content; /* Ширина по содержимому */
-    margin: 0 auto; /* Центрируем каждую кнопку */
+    max-width: 100%; /* Убедимся, что не вылезает за родителя */
   }
-  .phone-numbers-horizontal {
+  .phone-numbers-container,
+  .email-address-container {
       flex-direction: column; /* Размещаем номера вертикально, если не помещаются */
       align-items: center;
       gap: 8px; /* Уменьшим отступ */
   }
+    .phone-numbers-container a,
+    .email-address-container a {
+        text-align: center; /* Центрируем текст внутри ссылок */
+    }
+
 
   /* Адаптация виджета чата на самых маленьких экранах */
   #telegramChatWidget {
-    position: fixed; /* Остается fixed */
     width: 100vw;
     height: 100vh;
     bottom: 0;
     right: 0;
     border-radius: 0;
-    left: 0; /* Чтобы занять всю ширину */
-    top: 0; /* Чтобы занять всю высоту */
-    margin: 0; /* Убираем все автоматические маржины, которые могут мешать full-screen */
   }
   .open-chat-btn {
     width: 50px;
