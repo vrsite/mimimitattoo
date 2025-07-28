@@ -16,11 +16,11 @@ function isMobileScreen() {
 burger.addEventListener('click', () => {
   sideMenu.classList.add('open');
   menuBackdrop.classList.add('open');
-  
+
   if (isMobileScreen()) {
     document.body.style.overflow = 'hidden';
   }
-  
+
   burger.classList.add('hidden');
 });
 
@@ -53,11 +53,11 @@ menuLinks.forEach(link => {
 function closeSideMenu() {
   sideMenu.classList.remove('open');
   menuBackdrop.classList.remove('open');
-  
+
   if (isMobileScreen()) {
     document.body.style.overflow = '';
   }
-  
+
   burger.classList.remove('hidden');
 }
 
@@ -92,7 +92,7 @@ const translations = {
     service_piercing_desc: "PIERCING — профессиональное прокалывание различных частей тела с установкой украшений. Гарантирую стерильность, безопасность и индивидуальный подход к каждому клиенту. Украсьте себя стильно и безопасно!",
     portfolio_title: "Портфолио",
     reviews_title: "Отзывы",
-    reviews_placeholder: "Отзывы появятся скоро!", 
+    reviews_placeholder: "Отзывы появятся скоро!",
     view_all_portfolio: "Показать все работы",
     hide_all_portfolio: "Скрыть все работы",
     about_p1: "Привет, меня зовут Kris.",
@@ -124,7 +124,7 @@ const translations = {
     chat_input_placeholder: "Напишите сообщение...",
     chat_connection_error: "Ошибка подключения к боту. Пожалуйста, попробуйте позже.",
     chat_bot_unavailable: "Ошибка: Бот недоступен. Пожалуйста, попробуйте позже.",
-    show_all_reviews: "Показать все отзывы", 
+    show_all_reviews: "Показать все отзывы",
     hide_all_reviews: "Скрыть отзывы",
     // Заголовки FAQ (старые, для внутренних данных)
     faq_general_title: "Общие вопросы о татуировках",
@@ -158,7 +158,7 @@ const translations = {
     service_piercing_desc: "PIERCING is a professional body piercing service with jewelry installation. I guarantee sterility, safety, and a personalized approach for every client. Adorn yourself stylishly and safely!",
     portfolio_title: "Portfolio",
     reviews_title: "Reviews",
-    reviews_placeholder: "Reviews will appear soon!", 
+    reviews_placeholder: "Reviews will appear soon!",
     view_all_portfolio: "VIEW ALL WORKS",
     hide_all_portfolio: "HIDE ALL WORKS",
     about_p1: "Hello, my name is Kris.",
@@ -309,7 +309,7 @@ const reviewsData = [
     name: "Cillian Walsh", // Ирландское имя 4
     text: {
       ru: "Я давно хотел татуировку в стиле блэкворк, и Крис превзошла все мои ожидания. Четкие линии и глубокий черный цвет. Я впечатлен мастерством!",
-      en: "I've wanted a blackwork tattoo for a long time, and Kris exceeded all my expectations. Crisp lines and deep black. I'm truly impressed by the artistry!"
+      en: "I've wanted a blackwork tattoo for a long long time, and Kris exceeded all my expectations. Crisp lines and deep black. I'm truly impressed by the artistry!"
     }
   },
   {
@@ -402,7 +402,7 @@ const lightboxPrevPreview = document.getElementById('lightboxPrevPreview');
 const lightboxNextPreview = document.getElementById('lightboxNextPreview');
 const burgerButton = document.getElementById('burger'); // Получаем кнопку бургер-меню
 
-let currentPortfolioIndex = 0; 
+let currentPortfolioIndex = 0;
 let allPortfolioImages = [];
 
 function updateLightboxImages() {
@@ -436,20 +436,20 @@ function closeLightbox() {
   lightboxNextPreview.style.backgroundImage = 'none';
   burgerButton.classList.remove('hidden'); // Показываем бургер-меню обратно
 }
-function showPrevPortfolio() { 
+function showPrevPortfolio() {
   currentPortfolioIndex = (currentPortfolioIndex - 1 + allPortfolioImages.length) % allPortfolioImages.length;
   updateLightboxImages();
 }
-function showNextPortfolio() { 
+function showNextPortfolio() {
   currentPortfolioIndex = (currentPortfolioIndex + 1) % allPortfolioImages.length;
   updateLightboxImages();
 }
 
-document.addEventListener('DOMContentLoaded', () => { 
+document.addEventListener('DOMContentLoaded', () => {
     const featuredGalleryImgs = document.querySelectorAll('#featuredPortfolioGallery img');
     const fullGalleryImgs = document.querySelectorAll('#fullPortfolioGallery img');
     // Обновляем пути к изображениям портфолио
-    allPortfolioImages = Array.from(featuredGalleryImgs).concat(Array.from(fullGalleryImgs)); 
+    allPortfolioImages = Array.from(featuredGalleryImgs).concat(Array.from(fullGalleryImgs));
 
     allPortfolioImages.forEach((img, idx) => {
         img.addEventListener('click', () => openLightbox(idx));
@@ -458,14 +458,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 lightboxClose.addEventListener('click', closeLightbox);
-lightboxPrev.addEventListener('click', showPrevPortfolio); 
-lightboxNext.addEventListener('click', showNextPortfolio); 
+lightboxPrev.addEventListener('click', showPrevPortfolio);
+lightboxNext.addEventListener('click', showNextPortfolio);
 
 document.addEventListener('keydown', (e) => {
   if (!lightbox.classList.contains('active')) return;
   if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft') showPrevPortfolio(); 
-  if (e.key === 'ArrowRight') showNextPortfolio(); 
+  if (e.key === 'ArrowLeft') showPrevPortfolio();
+  if (e.key === 'ArrowRight') showNextPortfolio();
 });
 
 
@@ -627,7 +627,7 @@ function initializeChatWidgetSocket() {
     if (socket && socket.connected) {
         return;
     }
-    
+
     socket = io(BOT_SERVER_URL);
 
     socket.on('connect', () => {
@@ -648,7 +648,7 @@ function initializeChatWidgetSocket() {
 
     socket.on('botMessage', (data) => {
         if (isInitialBotMessage) {
-            chatMessages.innerHTML = ''; 
+            chatMessages.innerHTML = '';
             isInitialBotMessage = false;
         }
         addMessage(data.text, 'bot');
@@ -671,9 +671,9 @@ function addMessage(text, sender) {
 
     const messageElement = document.createElement('div');
     messageElement.classList.add('chat-message', `${sender}-message`);
-    messageElement.innerHTML = text.replace(/\n/g, '<br>'); 
+    messageElement.innerHTML = text.replace(/\n/g, '<br>');
     chatMessages.appendChild(messageElement);
-    chatMessages.scrollTop = chatMessages.scrollHeight; 
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function updateChatButtons(buttons) {
@@ -682,7 +682,7 @@ function updateChatButtons(buttons) {
         return;
     }
 
-    chatButtons.innerHTML = ''; 
+    chatButtons.innerHTML = '';
     if (buttons && buttons.length > 0) {
         buttons.forEach(row => {
             const buttonRowDiv = document.createElement('div');
@@ -691,38 +691,38 @@ function updateChatButtons(buttons) {
                 const buttonElement = document.createElement('button');
                 buttonElement.classList.add('chat-button');
                 buttonElement.textContent = buttonData.text;
-                buttonElement.dataset.callback = buttonData.callback_data; 
+                buttonElement.dataset.callback = buttonData.callback_data;
                 buttonRowDiv.appendChild(buttonElement);
             });
             chatButtons.appendChild(buttonRowDiv);
         });
-        chatButtons.style.display = 'flex'; 
+        chatButtons.style.display = 'flex';
     } else {
-        chatButtons.style.display = 'none'; 
+        chatButtons.style.display = 'none';
     }
-    chatMessages.scrollTop = chatMessages.scrollHeight; 
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 openChatBtn.addEventListener('click', () => {
     telegramChatWidget.classList.add('active');
     // openChatBtn.classList.add('hidden'); // Удалено, т.к. кнопка теперь в потоке документа
     if (isMobileScreen()) {
-        document.body.style.overflow = 'hidden'; 
+        document.body.style.overflow = 'hidden';
     }
-    
+
     chatMessages.innerHTML = `
         <div class="chat-message bot-message">
-            <span data-i18n="chat_welcome_message">${translations[currentLang]['chat_welcome_message']}</span>
+            <span data-i18n="chat_welcome_message">${translations[currentLang]['chat_welcome_message'] || 'Здравствуйте! Я Mimimi Tattoo Bot. Чем могу помочь?'}</span>
         </div>
     `;
-    isInitialBotMessage = true; 
-    chatInput.value = ''; 
-    updateChatButtons([]); 
+    isInitialBotMessage = true;
+    chatInput.value = '';
+    updateChatButtons([]);
 
     if (!socket || !socket.connected) {
-        initializeChatWidgetSocket(); 
+        initializeChatWidgetSocket();
     } else {
-        sendMessageToBot('/start', false); 
+        sendMessageToBot('/start', false);
     }
 });
 
@@ -730,10 +730,10 @@ closeChatBtn.addEventListener('click', () => {
     telegramChatWidget.classList.remove('active');
     // openChatBtn.classList.remove('hidden'); // Удалено, т.к. кнопка теперь в потоке документа
     if (isMobileScreen()) {
-        document.body.style.overflow = ''; 
+        document.body.style.overflow = '';
     }
     if (socket && socket.connected) {
-        socket.disconnect(); 
+        socket.disconnect();
     }
 });
 
@@ -742,12 +742,12 @@ async function sendMessageToBot(messageText, isCallback = false) {
         addMessage(translations[currentLang]['chat_bot_unavailable'] || 'Ошибка: Бот недоступен. Пожалуйста, попробуйте позже.', 'bot');
         return;
     }
-    
-    if (!isCallback) { 
+
+    if (!isCallback) {
         addMessage(messageText, 'user');
     }
-    
-    chatInput.value = ''; 
+
+    chatInput.value = '';
     socket.emit('webMessage', { message: messageText, isCallback: isCallback });
 }
 
@@ -768,8 +768,8 @@ chatButtons.addEventListener('click', (e) => {
         const callbackData = e.target.dataset.callback;
         const buttonText = e.target.textContent;
 
-        addMessage(buttonText, 'user'); 
-        sendMessageToBot(callbackData, true); 
+        addMessage(buttonText, 'user');
+        sendMessageToBot(callbackData, true);
     }
 });
 
@@ -820,13 +820,13 @@ function updateReviewsCarouselContent() {
         // carouselDots.style.display = 'none'; // Уже скрыто через CSS
         // Устанавливаем обычный border-radius, если нет отзывов для анимации
         if (reviewsColumn) {
-            reviewsColumn.style.borderRadius = '15px'; 
+            reviewsColumn.style.borderRadius = '15px';
         }
         return;
     } else {
         // Убедимся, что навигационные элементы видны, если отзывы есть.
-        carouselPrev.style.display = ''; 
-        carouselNext.style.display = ''; 
+        carouselPrev.style.display = '';
+        carouselNext.style.display = '';
         // carouselDots.style.display = 'flex'; // Уже скрыто через CSS
     }
 
@@ -848,9 +848,9 @@ function updateReviewsCarouselContent() {
         carouselDots.appendChild(dot);
         */
     });
-    
+
     showCurrentReview();
-    resetAutoSlide(); 
+    resetAutoSlide();
 }
 
 function showCurrentReview() {
@@ -858,7 +858,7 @@ function showCurrentReview() {
     // const dots = carouselDots.querySelectorAll('.dot'); // Точки скрыты
 
     // Если нет карточек отзывов, возможно, уже отображена заглушка (проверено выше)
-    if (cards.length === 0) return; 
+    if (cards.length === 0) return;
 
     // Убедимся, что индекс находится в пределах массива
     currentReviewIndex = (currentReviewIndex % cards.length + cards.length) % cards.length;
@@ -904,18 +904,18 @@ function prevReview() {
 
 function resetAutoSlide() {
   clearInterval(autoSlideInterval);
-  autoSlideInterval = setInterval(nextReview, 5000); 
+  autoSlideInterval = setInterval(nextReview, 5000);
 }
 
 function initReviewsCarousel() {
-  updateReviewsCarouselContent(); 
+  updateReviewsCarouselContent();
 
   carouselPrev.addEventListener('click', prevReview);
   carouselNext.addEventListener('click', nextReview);
 
   // Обновление карусели при изменении размера окна
   window.addEventListener('resize', () => {
-      showCurrentReview(); 
+      showCurrentReview();
   });
 }
 
@@ -1177,10 +1177,10 @@ function renderFaq() {
     const faqPiercingContainer = document.getElementById('faqPiercing');
     const faqPermanentContainer = document.getElementById('faqPermanent');
 
-    if (!faqGeneralContainer || !faqPiercingContainer || !faqPermanentContainer) return; 
+    if (!faqGeneralContainer || !faqPiercingContainer || !faqPermanentContainer) return;
 
     // Очищаем содержимое перед рендерингом
-    faqGeneralContainer.innerHTML = ''; 
+    faqGeneralContainer.innerHTML = '';
     faqPiercingContainer.innerHTML = '';
     faqPermanentContainer.innerHTML = '';
 
@@ -1260,11 +1260,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Расширяем функцию setLanguage, чтобы она обновлялась и FAQ
-const originalSetLanguage = setLanguage; 
+const originalSetLanguage = setLanguage;
 setLanguage = function(lang) {
     // Вызываем оригинальную функцию для общей локализации
-    originalSetLanguage(lang); 
-    
+    originalSetLanguage(lang);
+
     // Обновляем тексты вопросов и ответов в FAQ в соответствии с выбранным языком
     // Обратите внимание: текст кнопок TATTOO, PIERCING, PERMANENT теперь статичен в HTML
     // Но тексты вопросов и ответов внутри вкладок все равно нужно обновить:
@@ -1308,7 +1308,7 @@ setLanguage = function(lang) {
 
 // Вызовы инициализации после полной загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
-    setLanguage(currentLang); 
-    initReviewsCarousel(); 
-    renderFaq(); 
+    setLanguage(currentLang);
+    initReviewsCarousel();
+    renderFaq();
 });
