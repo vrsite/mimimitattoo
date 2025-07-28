@@ -4,15 +4,12 @@ const sideMenu = document.getElementById('sideMenu');
 const closeMenu = document.getElementById('closeMenu');
 const menuBackdrop = document.getElementById('menuBackdrop');
 
-// Получаем все ссылки внутри бокового меню
 const menuLinks = sideMenu.querySelectorAll('ul li a');
 
-// Функция для проверки, является ли экран мобильным (до 900px)
 function isMobileScreen() {
   return window.matchMedia("(max-width: 900px)").matches;
 }
 
-// Обработчики открытия/закрытия меню
 burger.addEventListener('click', () => {
   sideMenu.classList.add('open');
   menuBackdrop.classList.add('open');
@@ -24,7 +21,6 @@ burger.addEventListener('click', () => {
   burger.classList.add('hidden');
 });
 
-// Закрытие меню при клике вне его области (включая бэкдроп)
 document.addEventListener('click', (event) => {
   if (sideMenu.classList.contains('open')) {
     if (event.target !== burger && !burger.contains(event.target) &&
@@ -173,11 +169,7 @@ const translations = {
     process_step3_title: "3. Creation",
     process_step3_desc: "Once the design is approved, the main stage begins — the application of your tattoo, piercing, or permanent makeup. I work with precision and attention to every detail to ensure the result is both accurate and aesthetically pleasing.",
     process_step4_title: "4. Aftercare Recommendations",
-    service_mini_desc: "MINI are small tattoos with special meaning. Compact, neat, and subtle, they are perfect for a first tattoo experience or for those who prefer delicate accents. MINI is a way to express yourself with a small but meaningful design.",
-    process_permanent_title: "PERMANENT",
-    process_permanent_desc: "PERMANENT is a permanent makeup service: long-lasting enhancement of eyebrows, lips, or eyelids. Permanent makeup allows you to always look well-groomed and confident, saving time on daily makeup routines.",
-    process_piercing_title: "PIERCING",
-    process_piercing_desc: "PIERCING is a professional body piercing service with jewelry installation. I guarantee sterility, safety, and a personalized approach for every client. Adorn yourself stylishly and safely!",
+    process_step4_desc: "At the end of your session, you receive detailed aftercare instructions, as well as a special healing film — already included in the price. This makes the healing process easy and stress-free. I am always available to answer your questions and support you during recovery.",
     process_outro_p1: "My goal is to make every step clear and the result something that brings you joy every day.",
     contact_phone_label: "Phone:",
     contact_phone_number_ua: "+380 96 515 78 90 (UA)",
