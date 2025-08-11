@@ -1,3 +1,5 @@
+console.log('admin.js loaded');
+
 const WORKER_URL = 'https://mimimi-admin-proxy.vadimirobertovich96.workers.dev';
 
 let token = '';
@@ -136,7 +138,7 @@ async function loadImages() {
     const btnDel = document.createElement('button');
     btnDel.textContent = 'Удалить';
     btnDel.onclick = async () => {
-      if (!confirm(\`Удалить ${f.name}?\`)) return;
+      if (!confirm('Удалить ' + f.name + '?')) return;
       await api('/delete-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
