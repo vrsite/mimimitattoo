@@ -1,7 +1,7 @@
 console.log('admin.js loaded');
 'use strict';
 
-const WORKER_URL = 'https://mimimi-admin-proxy.vadimirobertovich96.workers.dev';
+const WORKER_URL = 'https://mimimi-admin-proxy.vadimrobertovich96.workers.dev';
 
 let token = '';
 
