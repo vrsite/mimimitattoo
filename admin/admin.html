@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Админка — mimimitattoo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div id="login">
+    <h1>Вход в админку</h1>
+    <input type="password" id="password" placeholder="Пароль" />
+    <button id="btnLogin">Войти</button>
+    <p id="loginError"></p>
+  </div>
+
+  <div id="app" style="display:none">
+    <header>
+      <h1>Админ-панель</h1>
+      <select id="branch">
+        <option value="draft" selected>Черновик</option>
+        <option value="main">Публикация</option>
+      </select>
+      <button id="btnPublish">Опубликовать черновик → main</button>
+    </header>
+
+    <section>
+      <h2>Редактор текста (index.html)</h2>
+      <div class="toolbar">
+        <button data-cmd="bold">B</button>
+        <button data-cmd="italic">I</button>
+        <button data-cmd="underline">U</button>
+        <button id="btnSaveHtml">Сохранить</button>
+      </div>
+      <iframe id="editor" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+    </section>
+
+    <section>
+      <h2>Портфолио (images/portfolio)</h2>
+      <div id="images"></div>
+      <div class="upload">
+        <input type="file" id="fileInput" multiple />
+        <button id="btnUpload">Загрузить</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
