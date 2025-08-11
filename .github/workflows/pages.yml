@@ -1,0 +1,41 @@
+name: Deploy Pages (main + draft)
+
+on:
+  push:
+    branches: [ main, draft ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy_main:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+
+      - name: Publish main to gh-pages root
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: .
+          keep_files: true
+
+  deploy_draft:
+    if: github.ref == 'refs/heads/draft'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout draft
+        uses: actions/checkout@v4
+
+      - name: Publish draft to gh-pages/draft
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: .
+          destination_dir: draft
+          keep_files: true
