@@ -1,4 +1,5 @@
 console.log('admin.js loaded');
+'use strict';
 
 const WORKER_URL = 'https://mimimi-admin-proxy.vadimirobertovich96.workers.dev';
 
@@ -7,21 +8,22 @@ let token = '';
 async function api(path, options = {}) {
   const headers = options.headers || {};
   if (token) headers['Authorization'] = 'Bearer ' + token;
-  const res = await fetch(WORKER_URL + path, { ...options, headers });
+  const res = await fetch(WORKER_URL + path, Object.assign({}, options, { headers }));
   if (!res.ok) {
-    const t = await res.text().catch(() => '');
-    throw new Error(`API ${path} failed: ${res.status} ${t}`);
+    let t = '';
+    try { t = await res.text(); } catch (e) {}
+    throw new Error('API ' + path + ' failed: ' + res.status + ' ' + t);
   }
   return res;
 }
 
-document.getElementById('btnLogin').onclick = async () => {
+document.getElementById('btnLogin').onclick = async function () {
   const pass = document.getElementById('password').value.trim();
   try {
     const res = await fetch(WORKER_URL + '/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: pass }),
+      body: JSON.stringify({ password: pass })
     });
     const data = await res.json();
     if (!data.ok) throw new Error('Неверный пароль');
@@ -31,11 +33,11 @@ document.getElementById('btnLogin').onclick = async () => {
     document.getElementById('app').style.display = 'block';
     init();
   } catch (e) {
-    document.getElementById('loginError').textContent = e.message;
+    document.getElementById('loginError').textContent = e.message || String(e);
   }
 };
 
-window.addEventListener('load', () => {
+window.addEventListener('load', function () {
   const saved = localStorage.getItem('admin_token');
   if (saved) {
     token = saved;
@@ -53,113 +55,131 @@ async function init() {
   document.getElementById('btnUpload').onclick = uploadFiles;
   document.getElementById('btnPublish').onclick = publishDraft;
 
-  document.querySelectorAll('.toolbar button[data-cmd]').forEach(btn => {
-    btn.onclick = () => {
-      const cmd = btn.getAttribute('data-cmd');
-      const iframe = document.getElementById('editor');
+  var buttons = document.querySelectorAll('.toolbar button[data-cmd]');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].onclick = function () {
+      var cmd = this.getAttribute('data-cmd');
+      var iframe = document.getElementById('editor');
       iframe.contentWindow.document.execCommand(cmd, false, null);
       iframe.contentWindow.focus();
     };
-  });
+  }
 
-  document.getElementById('branch').onchange = async () => {
+  document.getElementById('branch').onchange = async function () {
     await loadEditor();
     await loadImages();
   };
 }
 
 function currentBranch() {
-  return document.getElementById('branch').value || 'draft';
+  var el = document.getElementById('branch');
+  return (el && el.value) ? el.value : 'draft';
 }
 
 async function loadEditor() {
-  const branch = currentBranch();
-  const res = await api(`/file?path=index.html&branch=${encodeURIComponent(branch)}`, { method: 'GET' });
+  var branch = currentBranch();
+  const res = await api('/file?path=index.html&branch=' + encodeURIComponent(branch), { method: 'GET' });
   const html = await res.text();
 
-  const iframe = document.getElementById('editor');
+  var iframe = document.getElementById('editor');
   iframe.srcdoc = html;
 
-  iframe.onload = () => {
-    const doc = iframe.contentDocument;
+  iframe.onload = function () {
+    var doc = iframe.contentDocument;
+    if (!doc) return;
     doc.body.setAttribute('contenteditable', 'true');
-    const style = doc.createElement('style');
-    style.textContent = `
-      *:focus { outline: 1px dashed #4a90e2; }
-      a, button, [onclick] { pointer-events:none; }
-      video, iframe, script { pointer-events:none; }
-    `;
+    var style = doc.createElement('style');
+    style.textContent = ''
+      + '*:focus { outline: 1px dashed #4a90e2; }\n'
+      + 'a, button, [onclick] { pointer-events:none; }\n'
+      + 'video, iframe, script { pointer-events:none; }\n';
     doc.head.appendChild(style);
   };
 }
 
 async function saveEditor() {
-  const branch = currentBranch();
-  const iframe = document.getElementById('editor');
-  const doc = iframe.contentDocument.cloneNode(true);
-  doc.body.removeAttribute('contenteditable');
-  [...doc.head.querySelectorAll('style')].forEach(s => {
-    if (s.textContent.includes('*:focus { outline')) s.remove();
-  });
+  var branch = currentBranch();
+  var iframe = document.getElementById('editor');
+  var srcDoc = iframe.contentDocument;
+  if (!srcDoc) return alert('Editor not ready');
 
-  const serializer = new XMLSerializer();
-  let html = serializer.serializeToString(doc);
+  var doc = srcDoc.cloneNode(true);
+  doc.body.removeAttribute('contenteditable');
+  var styles = doc.head.querySelectorAll('style');
+  for (var i = styles.length - 1; i >= 0; i--) {
+    var s = styles[i];
+    if ((s.textContent || '').indexOf('*:focus { outline') !== -1) s.remove();
+  }
+
+  var serializer = new XMLSerializer();
+  var html = serializer.serializeToString(doc);
   if (!/^<!DOCTYPE html/i.test(html)) html = '<!DOCTYPE html>\n' + html;
 
-  const base64 = btoa(unescape(encodeURIComponent(html)));
+  var base64 = btoa(unescape(encodeURIComponent(html)));
   await api('/file', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       path: 'index.html',
       contentBase64: base64,
-      branch,
-      message: `Edit index.html via admin (${branch})`,
-    }),
+      branch: branch,
+      message: 'Edit index.html via admin (' + branch + ')'
+    })
   });
   alert('Сохранено!');
 }
 
 async function loadImages() {
-  const branch = currentBranch();
-  const res = await api(`/list-images?branch=${encodeURIComponent(branch)}`, { method: 'GET' });
+  var branch = currentBranch();
+  const res = await api('/list-images?branch=' + encodeURIComponent(branch), { method: 'GET' });
   const data = await res.json();
-  const cont = document.getElementById('images');
+  var cont = document.getElementById('images');
   cont.innerHTML = '';
-  (data.files || []).forEach(f => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    const img = document.createElement('img');
-    img.src = `https://raw.githubusercontent.com/${encodeURIComponent('vrsite')}/${encodeURIComponent('mimimitattoo')}/${encodeURIComponent(branch)}/${encodeURIComponent('images/portfolio')}/${encodeURIComponent(f.name)}`;
-    const name = document.createElement('div');
-    name.className = 'name';
-    name.textContent = f.name;
+  var files = data.files || [];
+  for (var i = 0; i < files.length; i++) {
+    (function (f) {
+      var card = document.createElement('div');
+      card.className = 'card';
 
-    const btnDel = document.createElement('button');
-    btnDel.textContent = 'Удалить';
-    btnDel.onclick = async () => {
-      if (!confirm('Удалить ' + f.name + '?')) return;
-      await api('/delete-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: f.name, branch }),
-      });
-      await loadImages();
-    };
+      var img = document.createElement('img');
+      img.src = 'https://raw.githubusercontent.com/'
+        + encodeURIComponent('vrsite') + '/'
+        + encodeURIComponent('mimimitattoo') + '/'
+        + encodeURIComponent(branch) + '/'
+        + encodeURIComponent('images/portfolio') + '/'
+        + encodeURIComponent(f.name);
 
-    card.appendChild(img);
-    card.appendChild(name);
-    card.appendChild(btnDel);
-    cont.appendChild(card);
-  });
+      var name = document.createElement('div');
+      name.className = 'name';
+      name.textContent = f.name;
+
+      var btnDel = document.createElement('button');
+      btnDel.textContent = 'Удалить';
+      btnDel.onclick = async function () {
+        if (!confirm('Удалить ' + f.name + '?')) return;
+        await api('/delete-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: f.name, branch: branch })
+        });
+        await loadImages();
+      };
+
+      card.appendChild(img);
+      card.appendChild(name);
+      card.appendChild(btnDel);
+      cont.appendChild(card);
+    })(files[i]);
+  }
 }
 
 async function uploadFiles() {
-  const branch = currentBranch();
-  const inp = document.getElementById('fileInput');
-  if (!inp.files.length) return alert('Выберите файлы');
-  for (const file of inp.files) {
-    const fd = new FormData();
+  var branch = currentBranch();
+  var inp = document.getElementById('fileInput');
+  if (!inp.files.length) { alert('Выберите файлы'); return; }
+  for (var i = 0; i < inp.files.length; i++) {
+    var file = inp.files[i];
+    var fd = new FormData();
     fd.append('file', file);
     fd.append('filename', file.name);
     fd.append('branch', branch);
@@ -174,7 +194,7 @@ async function publishDraft() {
   const res = await api('/publish', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: 'Publish draft → main' }),
+    body: JSON.stringify({ message: 'Publish draft -> main' })
   });
   const data = await res.json();
   if (!data.ok && !data.merged) {
