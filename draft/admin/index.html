@@ -1,51 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Админка — mimimitattoo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="admin.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — Mimimi Tattoo</title>
+  <style>
+    body { margin: 0; font-family: system-ui, Arial, sans-serif; background:#0f1115; color:#e7e7e7; }
+    header { padding: 12px 16px; border-bottom: 1px solid #2a2f3a; display:flex; gap:12px; align-items:center; }
+    header label { display:flex; align-items:center; gap:6px; }
+    input, select, button { background:#1a1f29; color:#e7e7e7; border:1px solid #2a2f3a; border-radius:6px; padding:8px 10px; }
+    button { cursor:pointer; }
+    main { padding: 12px 16px; }
+    #editor { width: 100%; height: 80vh; border: 1px solid #2a2f3a; background:#0b0e13; border-radius:8px; }
+  </style>
 </head>
 <body>
-  <div id="login">
-    <h1>Вход в админку</h1>
-    <input type="password" id="password" placeholder="Пароль" />
-    <button id="btnLogin">Войти</button>
-    <p id="loginError"></p>
-  </div>
-
-  <div id="app" style="display:none">
-    <header>
-      <h1>Админ-панель</h1>
+  <header>
+    <strong>Предпросмотр сайта</strong>
+    <label>Файл:
+      <input id="path" value="index.html" placeholder="index.html">
+    </label>
+    <label>Ветка:
       <select id="branch">
-        <option value="draft" selected>Черновик</option>
-        <option value="main">Публикация</option>
+        <option value="draft" selected>draft</option>
+        <option value="main">main</option>
       </select>
-      <button id="btnPublish">Опубликовать черновик → main</button>
-    </header>
+    </label>
+    <button id="reload">Обновить</button>
+  </header>
 
-    <section>
-      <h2>Редактор текста (index.html)</h2>
-      <div class="toolbar">
-        <button data-cmd="bold">B</button>
-        <button data-cmd="italic">I</button>
-        <button data-cmd="underline">U</button>
-        <button id="btnSaveHtml">Сохранить</button>
-      </div>
-      <!-- Без allow-scripts, чтобы не было предупреждения -->
-      <iframe id="editor" sandbox="allow-same-origin allow-forms"></iframe>
-    </section>
+  <main>
+    <!-- sandbox оставляем пустым: скрипты внутри просматриваемого HTML не выполняются -->
+    <iframe id="editor" sandbox=""></iframe>
+  </main>
 
-    <section>
-      <h2>Портфолио (images/portfolio)</h2>
-      <div id="images"></div>
-      <div class="upload">
-        <input type="file" id="fileInput" multiple />
-        <button id="btnUpload">Загрузить</button>
-      </div>
-    </section>
-  </div>
-
-  <script src="admin.js?v=6"></script>
+  <!-- ВАЖНО: параметр ?v=8 сбрасывает кэш, чтобы загрузилась последняя версия admin.js -->
+  <script src="admin.js?v=8"></script>
 </body>
 </html>
