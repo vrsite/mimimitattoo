@@ -38,7 +38,7 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadBtn = document.getElementById('uploadBtn');
 const imagesGrid = document.getElementById('imagesGrid');
 
-console.log('admin.js loaded v36');
+console.log('admin.js loaded v37');
 
 // ===== API =====
 async function api(path, opts = {}) {
@@ -47,7 +47,8 @@ async function api(path, opts = {}) {
     method: opts.method || 'GET',
     headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
-    cache: 'no-store'
+    cache: 'no-store',
+    credentials: 'include'
   });
   const text = await res.text();
   let data = null;
@@ -64,6 +65,19 @@ async function api(path, opts = {}) {
 function joinPath(...parts) {
   return parts.filter(Boolean).join('/').replace(/\/{2,}/g, '/');
 }
+
+// Базовый URL сайта для корректного предпросмотра (автоматически убираем /admin/…)
+const SITE_BASE = (() => {
+  try {
+    const u = new URL(document.baseURI);
+    const parts = u.pathname.split('/').filter(Boolean);
+    const i = parts.indexOf('admin');
+    const root = i >= 0 ? '/' + parts.slice(0, i).join('/') + '/' : '/';
+    return `${u.origin}${root}`;
+  } catch {
+    return window.location.origin + '/';
+  }
+})();
 
 function injectBaseAndStripScripts(html, baseHref) {
   html = (html || '').replace(/<script[\s\S]*?<\/script>/gi, '');
@@ -99,6 +113,7 @@ async function doLogin() {
       showApp();
       await initAfterLogin();
     } else {
+      loginError.textContent = 'Неверный пароль. Попробуйте снова.';
       loginError.style.display = 'block';
       adminPasswordEl.focus();
     }
@@ -159,8 +174,7 @@ async function loadFileForEdit() {
   fileContent.value = resp.content || '';
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
 
-  const baseHref = `https://vrsite.github.io/mimimitattoo/${CONTENT_ROOT ? `${CONTENT_ROOT}/` : ''}`;
-  const html = injectBaseAndStripScripts(resp.content || '', baseHref);
+  const html = injectBaseAndStripScripts(resp.content || '', SITE_BASE);
   editor.srcdoc = html;
 }
 
