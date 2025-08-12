@@ -38,7 +38,7 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadBtn = document.getElementById('uploadBtn');
 const imagesGrid = document.getElementById('imagesGrid');
 
-console.log('admin.js loaded v34');
+console.log('admin.js loaded v35');
 
 // ===== API =====
 async function api(path, opts = {}) {
