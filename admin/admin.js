@@ -1,0 +1,300 @@
+// ========== КОНФИГ ==========
+const API_URL = 'https://mimimi-admin-proxy.vadimrobertovich96.workers.dev';
+const AUTH_KEY = 'mimimiAdminOK'; // хранится в sessionStorage
+
+// ЭЛЕМЕНТЫ
+const app = document.getElementById('app');
+
+// Login
+const loginView = document.getElementById('loginView');
+const loginBtn = document.getElementById('loginBtn');
+const loginResetBtn = document.getElementById('loginReset');
+const adminPasswordEl = document.getElementById('adminPassword');
+const loginError = document.getElementById('loginError');
+const togglePwdBtn = document.getElementById('togglePwd');
+
+// Header
+const branchSelect = document.getElementById('branch');
+const logoutBtn = document.getElementById('logoutBtn');
+
+// Файлы
+const refreshFilesBtn = document.getElementById('refreshFiles');
+const filesUl = document.getElementById('filesUl');
+const filesCount = document.getElementById('filesCount');
+
+// Редактор
+const editPath = document.getElementById('editPath');
+const loadFileBtn = document.getElementById('loadFileBtn');
+const saveFileBtn = document.getElementById('saveFileBtn');
+const fileContent = document.getElementById('fileContent');
+const fileShaEl = document.getElementById('fileSha');
+const commitMessageEl = document.getElementById('commitMessage');
+const editor = document.getElementById('editor');
+
+// Картинки
+const imagesDirInput = document.getElementById('imagesDir');
+const refreshImagesBtn = document.getElementById('refreshImages');
+const uploadInput = document.getElementById('uploadInput');
+const uploadBtn = document.getElementById('uploadBtn');
+const imagesGrid = document.getElementById('imagesGrid');
+
+console.log('admin.js loaded');
+
+// ========== API ==========
+async function api(path, opts = {}) {
+  const url = `${API_URL}${path}`;
+  const res = await fetch(url, {
+    method: opts.method || 'GET',
+    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch { /* not JSON */ }
+  if (!res.ok) {
+    const msg = `API ${path} failed: ${res.status} ${text}`;
+    console.error(msg);
+    throw new Error(msg);
+  }
+  return data;
+}
+
+// ========== УТИЛИТЫ ==========
+function currentBranch() {
+  return (branchSelect?.value || 'main').trim() || 'main';
+}
+
+function injectBaseAndStripScripts(html, baseHref) {
+  html = (html || '').replace(/<script[\s\S]*?<\/script>/gi, '');
+  html = html.replace(/<script\b[^>]*>(?:\s*<\/script>)?/gi, '');
+  if (/<head[^>]*>/i.test(html)) {
+    html = html.replace(/<head([^>]*)>/i, `<head$1><base href="${baseHref}">`);
+  } else {
+    html = `<head><base href="${baseHref}"></head>` + html;
+  }
+  return html;
+}
+
+function showApp() {
+  loginView.style.display = 'none';
+  app.style.visibility = 'visible';
+}
+function showLogin() {
+  app.style.visibility = 'hidden';
+  loginView.style.display = 'flex';
+  adminPasswordEl.value = '';
+  adminPasswordEl.focus();
+  loginError.style.display = 'none';
+}
+
+// ========== АВТОРИЗАЦИЯ ==========
+async function doLogin() {
+  const pwd = (adminPasswordEl.value || '').trim();
+  if (!pwd) return;
+  try {
+    const d = await api('/login', { method: 'POST', body: { password: pwd } });
+    if (d?.ok) {
+      // сессия только на текущую вкладку/окно
+      sessionStorage.setItem(AUTH_KEY, '1');
+      showApp();
+      await initAfterLogin();
+    } else {
+      loginError.style.display = 'block';
+      adminPasswordEl.focus();
+    }
+  } catch (e) {
+    loginError.textContent = 'Ошибка входа. Проверьте соединение и попробуйте снова.';
+    loginError.style.display = 'block';
+  }
+}
+function doLogout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  api('/logout', { method: 'POST', body: {} }).finally(() => {
+    showLogin();
+  });
+}
+
+// ========== ФАЙЛЫ ==========
+let currentSha = null;
+
+async function loadFilesList() {
+  const branch = currentBranch();
+  const data = await api(`/list-files?branch=${encodeURIComponent(branch)}`);
+  const files = (data.files || []).filter(f =>
+    !/^admin\//i.test(f.path) && !/^images\//i.test(f.path)
+  ).sort((a,b) => a.path.localeCompare(b.path));
+  filesUl.innerHTML = '';
+  filesCount.textContent = String(files.length);
+
+  if (!files.length) {
+    filesUl.innerHTML = `<li class="muted">Файлов не найдено</li>`;
+    return;
+  }
+
+  for (const f of files) {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${f.path}</span><span class="tag">${(f.size || 0)}b</span>`;
+    li.addEventListener('click', async () => {
+      Array.from(filesUl.children).forEach(x => x.classList.remove('active'));
+      li.classList.add('active');
+      editPath.value = f.path;
+      await loadFileForEdit();
+    });
+    filesUl.appendChild(li);
+  }
+
+  // Автовыбор index.html
+  const idx = Array.from(filesUl.children).find(li => li.textContent.trim().startsWith('index.html'));
+  if (idx) idx.click();
+}
+
+async function loadFileForEdit() {
+  const branch = currentBranch();
+  const path = (editPath?.value || '').trim();
+  if (!path) return;
+  const resp = await api(`/file?path=${encodeURIComponent(path)}&branch=${encodeURIComponent(branch)}`);
+  currentSha = resp.sha || null;
+  fileContent.value = resp.content || '';
+  fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
+
+  // Предпросмотр
+  const baseHref = `https://vrsite.github.io/mimimitattoo/${branch}/`;
+  const html = injectBaseAndStripScripts(resp.content || '', baseHref);
+  editor.srcdoc = html;
+}
+
+async function saveFile() {
+  const branch = currentBranch();
+  const path = (editPath?.value || '').trim();
+  const content = fileContent.value ?? '';
+  const message = (commitMessageEl?.value || '').trim() || `Update ${path}`;
+  if (!path) return alert('Выберите файл слева');
+
+  const resp = await api(`/file`, {
+    method: 'PUT',
+    body: { path, branch, content, message, ...(currentSha ? { sha: currentSha } : {}) }
+  });
+  currentSha = resp.content?.sha || resp.sha || null;
+  fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
+  alert('Сохранено. Обновление главного сайта займёт до 10–60 секунд (кеш GitHub Pages).');
+  await loadFileForEdit().catch(console.error);
+}
+
+// ========== ИЗОБРАЖЕНИЯ ==========
+async function loadImages() {
+  const branch = currentBranch();
+  const dir = (imagesDirInput?.value || 'images/portfolio').trim();
+  const resp = await api(`/list-images?dir=${encodeURIComponent(dir)}&branch=${encodeURIComponent(branch)}`);
+  const list = resp.images || [];
+  imagesGrid.innerHTML = '';
+
+  if (!list.length) {
+    imagesGrid.innerHTML = `<div class="muted">Нет файлов в ${dir}</div>`;
+    return;
+  }
+
+  for (const it of list) {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const img = document.createElement('img');
+    img.src = it.download_url;
+    img.alt = it.name;
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const name = document.createElement('div');
+    name.textContent = it.name;
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'danger';
+    delBtn.textContent = 'Удалить';
+    delBtn.addEventListener('click', async () => {
+      if (!confirm(`Удалить ${it.name}?`)) return;
+      try {
+        await api(`/delete-image`, {
+          method: 'DELETE',
+          body: { path: it.path, branch, sha: it.sha, message: `Delete ${it.path}` }
+        });
+        await loadImages();
+      } catch (e) {
+        alert('Не удалось удалить: ' + e.message);
+      }
+    });
+
+    meta.appendChild(name);
+    meta.appendChild(delBtn);
+    card.appendChild(img);
+    card.appendChild(meta);
+    imagesGrid.appendChild(card);
+  }
+}
+
+function dataUrlToBase64(u) {
+  const i = u.indexOf('base64,');
+  return i >= 0 ? u.slice(i + 7) : u;
+}
+
+async function uploadSelectedFiles() {
+  const branch = currentBranch();
+  const dir = (imagesDirInput?.value || 'images/portfolio').trim();
+  const files = Array.from(uploadInput.files || []);
+  if (!files.length) return alert('Выберите файлы');
+
+  for (const file of files) {
+    const b64 = await new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(dataUrlToBase64(String(r.result || '')));
+      r.onerror = () => reject(r.error || new Error('read error'));
+      r.readAsDataURL(file);
+    });
+    await api(`/upload-image`, {
+      method: 'POST',
+      body: { dir, branch, name: file.name, contentBase64: b64, message: `Add ${dir}/${file.name}` }
+    });
+  }
+  uploadInput.value = '';
+  await loadImages().catch(console.error);
+}
+
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
+async function initAfterLogin() {
+  // Список файлов
+  await loadFilesList().catch(console.error);
+
+  // Картинки
+  await loadImages().catch(console.error);
+
+  // Слушатели
+  refreshFilesBtn?.addEventListener('click', () => loadFilesList().catch(console.error));
+  loadFileBtn?.addEventListener('click', () => loadFileForEdit().catch(console.error));
+  saveFileBtn?.addEventListener('click', () => saveFile().catch(console.error));
+  refreshImagesBtn?.addEventListener('click', () => loadImages().catch(console.error));
+  uploadBtn?.addEventListener('click', () => uploadSelectedFiles().catch(console.error));
+  branchSelect?.addEventListener('change', () => { loadFilesList().catch(console.error); loadImages().catch(console.error); });
+  logoutBtn?.addEventListener('click', doLogout);
+}
+
+function initLoginUI() {
+  togglePwdBtn?.addEventListener('click', () => {
+    const t = adminPasswordEl.type === 'password' ? 'text' : 'password';
+    adminPasswordEl.type = t;
+    togglePwdBtn.textContent = t === 'password' ? 'Показать' : 'Скрыть';
+  });
+  loginBtn?.addEventListener('click', doLogin);
+  loginResetBtn?.addEventListener('click', () => { adminPasswordEl.value=''; loginError.style.display='none'; adminPasswordEl.focus(); });
+  adminPasswordEl?.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  initLoginUI();
+
+  // если уже авторизованы в этой вкладке — сразу показываем приложение
+  const ok = sessionStorage.getItem(AUTH_KEY) === '1';
+  if (ok) {
+    showApp();
+    await initAfterLogin();
+  } else {
+    showLogin();
+  }
+});
