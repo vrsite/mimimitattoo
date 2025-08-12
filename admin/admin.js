@@ -38,7 +38,7 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadBtn = document.getElementById('uploadBtn');
 const imagesGrid = document.getElementById('imagesGrid');
 
-console.log('admin.js loaded v32');
+console.log('admin.js loaded v34');
 
 // ===== API =====
 async function api(path, opts = {}) {
@@ -64,9 +64,12 @@ async function api(path, opts = {}) {
 function joinPath(...parts) {
   return parts.filter(Boolean).join('/').replace(/\/{2,}/g, '/');
 }
+
 function injectBaseAndStripScripts(html, baseHref) {
+  // Удаляем любые скрипты перед предпросмотром
   html = (html || '').replace(/<script[\s\S]*?<\/script>/gi, '');
   html = html.replace(/<script\b[^>]*>(?:\s*<\/script>)?/gi, '');
+  // Вставляем <base> для корректных относительных путей
   if (/<head[^>]*>/i.test(html)) {
     html = html.replace(/<head([^>]*)>/i, `<head$1><base href="${baseHref}">`);
   } else {
@@ -74,6 +77,7 @@ function injectBaseAndStripScripts(html, baseHref) {
   }
   return html;
 }
+
 function showApp() {
   loginView.style.display = 'none';
   app.style.visibility = 'visible';
@@ -158,6 +162,7 @@ async function loadFileForEdit() {
   fileContent.value = resp.content || '';
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
 
+  // Предпросмотр: подставляем base на прод-сайт GitHub Pages
   const baseHref = `https://vrsite.github.io/mimimitattoo/${CONTENT_ROOT ? `${CONTENT_ROOT}/` : ''}`;
   const html = injectBaseAndStripScripts(resp.content || '', baseHref);
   editor.srcdoc = html;
