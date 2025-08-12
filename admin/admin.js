@@ -1,7 +1,7 @@
 // ===== КОНФИГ =====
 const API_URL = 'https://mimimi-admin-proxy.vadimrobertovich96.workers.dev';
 const AUTH_KEY = 'mimimiAdminOK';
-const CONTENT_ROOT = ''; // публичные файлы сайта в КОРНЕ репозитория
+const CONTENT_ROOT = ''; // сайт публикуется из корня ветки main
 
 // ЭЛЕМЕНТЫ
 const app = document.getElementById('app');
@@ -38,7 +38,7 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadBtn = document.getElementById('uploadBtn');
 const imagesGrid = document.getElementById('imagesGrid');
 
-console.log('admin.js loaded v35');
+console.log('admin.js loaded v36');
 
 // ===== API =====
 async function api(path, opts = {}) {
@@ -51,7 +51,7 @@ async function api(path, opts = {}) {
   });
   const text = await res.text();
   let data = null;
-  try { data = text ? JSON.parse(text) : null; } catch { /* not JSON */ }
+  try { data = text ? JSON.parse(text) : null; } catch {}
   if (!res.ok) {
     const msg = `API ${path} failed: ${res.status} ${text}`;
     console.error(msg);
@@ -66,10 +66,8 @@ function joinPath(...parts) {
 }
 
 function injectBaseAndStripScripts(html, baseHref) {
-  // Удаляем любые скрипты перед предпросмотром
   html = (html || '').replace(/<script[\s\S]*?<\/script>/gi, '');
   html = html.replace(/<script\b[^>]*>(?:\s*<\/script>)?/gi, '');
-  // Вставляем <base> для корректных относительных путей
   if (/<head[^>]*>/i.test(html)) {
     html = html.replace(/<head([^>]*)>/i, `<head$1><base href="${baseHref}">`);
   } else {
@@ -127,7 +125,6 @@ async function loadFilesList() {
     .filter(f => !/^admin\//i.test(f.path.slice(prefix.length)));
 
   files.sort((a,b) => a.path.localeCompare(b.path));
-
   filesUl.innerHTML = '';
   filesCount.textContent = String(files.length);
 
@@ -162,7 +159,6 @@ async function loadFileForEdit() {
   fileContent.value = resp.content || '';
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
 
-  // Предпросмотр: подставляем base на прод-сайт GitHub Pages
   const baseHref = `https://vrsite.github.io/mimimitattoo/${CONTENT_ROOT ? `${CONTENT_ROOT}/` : ''}`;
   const html = injectBaseAndStripScripts(resp.content || '', baseHref);
   editor.srcdoc = html;
