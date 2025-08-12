@@ -13,31 +13,30 @@
     header .spacer { flex:1; }
     input, select, button, textarea { background:#151a22; color:#e6e8eb; border:1px solid #2a2f3a; border-radius:8px; padding:8px 10px; }
     input:focus, select:focus, textarea:focus { outline:none; border-color:#3b82f6; }
-    button { cursor:pointer; transition: .15s ease; }
+    button { cursor:pointer; transition:.15s ease; }
     button:hover { transform: translateY(-1px); }
     .primary { background:#2563eb; border-color:#1d4ed8; }
     .danger { background:#b91c1c; border-color:#7f1d1d; }
     .muted { color:#aab1bd; font-size:12px; }
-    .layout { display:grid; grid-template-columns: 300px 1fr; height: calc(100vh - 64px); }
+    .layout { display:grid; grid-template-columns:300px 1fr; height:calc(100vh - 64px); }
     aside { border-right:1px solid #202632; overflow:auto; background:#0c0e13; }
     main { overflow:auto; padding:16px; display:grid; gap:16px; background:radial-gradient(1200px 600px at 10% -10%, rgba(37,99,235,.08), transparent), radial-gradient(900px 400px at 90% -10%, rgba(220,38,38,.08), transparent); }
-    section { border:1px solid #202632; border-radius:12px; padding:14px; background:#0b0e13; box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+    section { border:1px solid #202632; border-radius:12px; padding:14px; background:#0b0e13; box-shadow:0 8px 20px rgba(0,0,0,.25); }
     h3 { margin:0 0 10px 0; font-size:16px; }
     .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
     .file-list { list-style:none; padding:0; margin:0; }
-    .file-list li { padding:10px 12px; border-bottom:1px solid #161b24; cursor:pointer; display:flex; justify-content:space-between; gap:8px;}
+    .file-list li { padding:10px 12px; border-bottom:1px solid #161b24; cursor:pointer; display:flex; justify-content:space-between; gap:8px; }
     .file-list li:hover { background:#121723; }
     .file-list li.active { background:#182135; border-left:3px solid #3b82f6; }
-    #fileContent { width:100%; min-height:280px; resize:vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    #fileContent { width:100%; min-height:280px; resize:vertical; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     #editor { width:100%; height:50vh; border:1px solid #202632; border-radius:10px; background:#0b0e13; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:12px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px; }
     .card { border:1px solid #202632; border-radius:10px; overflow:hidden; background:#0f1218; }
     .card img { width:100%; height:130px; object-fit:cover; background:#11141a; display:block; }
     .card .meta { padding:8px; display:flex; gap:8px; align-items:center; justify-content:space-between; }
     .tag { padding:2px 6px; border-radius:999px; border:1px solid #2a2f3a; font-size:11px; color:#aab1bd }
-    /* Login overlay */
     #loginView { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(9,11,15,.75), rgba(9,11,15,.9)); z-index:999; }
-    .login-card { width: min(92vw, 380px); background:#0b0e13; border:1px solid #202632; border-radius:14px; padding:20px; box-shadow:0 20px 50px rgba(0,0,0,.5); }
+    .login-card { width:min(92vw, 380px); background:#0b0e13; border:1px solid #202632; border-radius:14px; padding:20px; box-shadow:0 20px 50px rgba(0,0,0,.5); }
     .login-card h2 { margin:0 0 10px; font-size:18px; }
     .field { display:flex; flex-direction:column; gap:6px; margin:10px 0; }
     .field-row { display:flex; gap:8px; align-items:center; }
@@ -57,7 +56,7 @@
         <div id="loginError" class="muted" style="color:#fca5a5; display:none;">Неверный пароль. Попробуйте снова.</div>
       </div>
       <div class="row">
-        <button id="loginBtn" class="primary">Войти</button>
+        <button id="loginBtn" class="primary" type="button">Войти</button>
         <button id="loginReset" type="button">Сбросить</button>
       </div>
     </div>
@@ -65,7 +64,7 @@
 
   <header>
     <strong>Админка Mimimi Tattoo</strong>
-    <span class="muted">Версия admin v35. Все правки идут в корень репозитория (ветка main) и публикуются сразу на сайт. Обновление занимает 10–60 сек.</span>
+    <span class="muted">Версия admin v36. Все правки идут в корень репозитория (ветка main) и публикуются сразу на сайт. Обновление занимает 10–60 сек.</span>
     <div class="spacer"></div>
     <button id="logoutBtn">Выйти</button>
   </header>
@@ -118,6 +117,6 @@
     </main>
   </div>
 
-  <script src="admin.js?v=35"></script>
+  <script src="admin.js?v=36"></script>
 </body>
 </html>
