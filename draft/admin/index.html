@@ -3,27 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Admin — Mimimi Tattoo</title>
+  <title>Админка — Mimimi Tattoo</title>
   <style>
     :root { color-scheme: dark; }
-    body { margin: 0; font-family: system-ui, Arial, sans-serif; background:#0f1115; color:#e7e7e7; }
-    header { padding: 12px 16px; border-bottom: 1px solid #2a2f3a; display:flex; gap:12px; align-items:center; flex-wrap: wrap; }
-    header label { display:flex; align-items:center; gap:6px; }
+    body { margin:0; font-family: system-ui, Arial, sans-serif; background:#0f1115; color:#e7e7e7; }
+    header { padding:10px 14px; border-bottom:1px solid #2a2f3a; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    header .spacer { flex:1; }
     input, select, button, textarea { background:#1a1f29; color:#e7e7e7; border:1px solid #2a2f3a; border-radius:6px; padding:8px 10px; }
     button { cursor:pointer; }
-    main { padding: 12px 16px; display: grid; gap: 16px; }
+    .layout { display:grid; grid-template-columns: 280px 1fr; height: calc(100vh - 56px); }
+    aside { border-right:1px solid #2a2f3a; overflow:auto; }
+    main { overflow:auto; padding:12px; display:grid; gap:16px; }
+    h3 { margin:0 0 10px 0; font-size:16px; }
+    .file-list { list-style:none; padding:0; margin:0; }
+    .file-list li { padding:8px 10px; border-bottom:1px solid #222835; cursor:pointer; }
+    .file-list li:hover { background:#151a24; }
+    .file-list li.active { background:#1a2130; }
+    #fileContent { width:100%; min-height:260px; resize:vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
     section { border:1px solid #2a2f3a; border-radius:10px; padding:12px; background:#0b0e13; }
-    section h3 { margin: 0 0 10px 0; font-size: 16px; }
-    #editor { width: 100%; height: 60vh; border: 1px solid #2a2f3a; background:#0b0e13; border-radius:8px; }
-    #fileContent { width: 100%; min-height: 240px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    #editor { width:100%; height:50vh; border:1px solid #2a2f3a; border-radius:8px; background:#0b0e13; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap:12px; }
     .card { border:1px solid #2a2f3a; border-radius:8px; overflow:hidden; background:#0f1218; }
-    .card img { display:block; width:100%; height:120px; object-fit:cover; background:#11141a; }
-    .card .meta { padding:8px; display:flex; flex-direction:column; gap:6px; }
-    .muted { color:#a9b0bf; font-size: 12px; }
+    .card img { width:100%; height:120px; object-fit:cover; background:#11141a; display:block; }
+    .card .meta { padding:8px; display:flex; gap:6px; align-items:center; justify-content:space-between; }
+    .muted { color:#a9b0bf; font-size:12px; }
     .danger { background:#3a1a1a; border-color:#6a2a2a; }
-    .success { background:#163a1a; border-color:#2a6a2a; }
   </style>
 </head>
 <body>
@@ -31,53 +36,61 @@
     <strong>Админка Mimimi Tattoo</strong>
     <label>Ветка:
       <select id="branch">
-        <option value="draft" selected>draft</option>
-        <option value="main">main</option>
+        <option value="main" selected>main</option>
+        <option value="draft">draft</option>
       </select>
     </label>
-    <label>Файл:
-      <input id="path" value="index.html" placeholder="index.html">
-    </label>
-    <button id="reload">Предпросмотр</button>
-    <span class="muted">Предпросмотр не выполняет скрипты страницы и безопасен.</span>
+    <span class="muted">Все правки по умолчанию — в main (сразу на сайт)</span>
+    <div class="spacer"></div>
+    <button id="logoutBtn">Выйти</button>
   </header>
 
-  <main>
-    <section id="preview">
-      <h3>Предпросмотр сайта</h3>
-      <!-- sandbox оставляем пустым: скрипты из просматриваемого HTML не выполняются -->
-      <iframe id="editor" sandbox=""></iframe>
-    </section>
-
-    <section id="textEditor">
-      <h3>Редактор файлов (тексты, HTML, CSS, JS)</h3>
-      <div class="row">
-        <input id="editPath" value="index.html" style="min-width:260px" />
-        <button id="loadFileBtn">Загрузить</button>
-        <button id="saveFileBtn">Сохранить</button>
-        <span id="fileSha" class="muted"></span>
+  <div class="layout">
+    <aside>
+      <div style="padding:10px;">
+        <h3>Страницы и файлы</h3>
+        <div class="row">
+          <button id="refreshFiles">Обновить список</button>
+        </div>
       </div>
-      <textarea id="fileContent" placeholder="Содержимое файла..."></textarea>
-      <div class="row">
-        <input id="commitMessage" placeholder="Сообщение коммита (опционально)" style="min-width:320px">
-      </div>
-    </section>
+      <ul id="filesUl" class="file-list"></ul>
+    </aside>
 
-    <section id="images">
-      <h3>Портфолио — изображения</h3>
-      <div class="row">
-        <label>Папка:
-          <input id="imagesDir" value="images/portfolio" style="min-width:260px">
-        </label>
-        <button id="refreshImages">Обновить список</button>
-        <input id="uploadInput" type="file" multiple accept="image/*">
-        <button id="uploadBtn">Загрузить</button>
-      </div>
-      <div id="imagesGrid" class="grid"></div>
-    </section>
-  </main>
+    <main>
+      <section>
+        <h3>Редактор файла</h3>
+        <div class="row">
+          <input id="editPath" placeholder="Путь к файлу" style="min-width:280px" readonly>
+          <button id="loadFileBtn">Загрузить</button>
+          <button id="saveFileBtn">Сохранить</button>
+          <span id="fileSha" class="muted"></span>
+        </div>
+        <textarea id="fileContent" placeholder="Содержимое файла..."></textarea>
+        <div class="row">
+          <input id="commitMessage" placeholder="Сообщение коммита (необязательно)" style="min-width:320px">
+        </div>
+      </section>
 
-  <!-- Важно: ?v=8 сбрасывает кэш, чтобы загрузилась последняя версия admin.js -->
-  <script src="admin.js?v=8"></script>
+      <section>
+        <h3>Предпросмотр выбранного файла (без скриптов)</h3>
+        <iframe id="editor" sandbox=""></iframe>
+      </section>
+
+      <section>
+        <h3>Портфолио — изображения</h3>
+        <div class="row">
+          <label>Папка:
+            <input id="imagesDir" value="images/portfolio" style="min-width:260px">
+          </label>
+          <button id="refreshImages">Обновить список</button>
+          <input id="uploadInput" type="file" multiple accept="image/*">
+          <button id="uploadBtn">Загрузить</button>
+        </div>
+        <div id="imagesGrid" class="grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js?v=10"></script>
 </body>
 </html>
