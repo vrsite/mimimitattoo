@@ -5,36 +5,79 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin — Mimimi Tattoo</title>
   <style>
+    :root { color-scheme: dark; }
     body { margin: 0; font-family: system-ui, Arial, sans-serif; background:#0f1115; color:#e7e7e7; }
-    header { padding: 12px 16px; border-bottom: 1px solid #2a2f3a; display:flex; gap:12px; align-items:center; }
+    header { padding: 12px 16px; border-bottom: 1px solid #2a2f3a; display:flex; gap:12px; align-items:center; flex-wrap: wrap; }
     header label { display:flex; align-items:center; gap:6px; }
-    input, select, button { background:#1a1f29; color:#e7e7e7; border:1px solid #2a2f3a; border-radius:6px; padding:8px 10px; }
+    input, select, button, textarea { background:#1a1f29; color:#e7e7e7; border:1px solid #2a2f3a; border-radius:6px; padding:8px 10px; }
     button { cursor:pointer; }
-    main { padding: 12px 16px; }
-    #editor { width: 100%; height: 80vh; border: 1px solid #2a2f3a; background:#0b0e13; border-radius:8px; }
+    main { padding: 12px 16px; display: grid; gap: 16px; }
+    section { border:1px solid #2a2f3a; border-radius:10px; padding:12px; background:#0b0e13; }
+    section h3 { margin: 0 0 10px 0; font-size: 16px; }
+    #editor { width: 100%; height: 60vh; border: 1px solid #2a2f3a; background:#0b0e13; border-radius:8px; }
+    #fileContent { width: 100%; min-height: 240px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .card { border:1px solid #2a2f3a; border-radius:8px; overflow:hidden; background:#0f1218; }
+    .card img { display:block; width:100%; height:120px; object-fit:cover; background:#11141a; }
+    .card .meta { padding:8px; display:flex; flex-direction:column; gap:6px; }
+    .muted { color:#a9b0bf; font-size: 12px; }
+    .danger { background:#3a1a1a; border-color:#6a2a2a; }
+    .success { background:#163a1a; border-color:#2a6a2a; }
   </style>
 </head>
 <body>
   <header>
-    <strong>Предпросмотр сайта</strong>
-    <label>Файл:
-      <input id="path" value="index.html" placeholder="index.html">
-    </label>
+    <strong>Админка Mimimi Tattoo</strong>
     <label>Ветка:
       <select id="branch">
         <option value="draft" selected>draft</option>
         <option value="main">main</option>
       </select>
     </label>
-    <button id="reload">Обновить</button>
+    <label>Файл:
+      <input id="path" value="index.html" placeholder="index.html">
+    </label>
+    <button id="reload">Предпросмотр</button>
+    <span class="muted">Предпросмотр не выполняет скрипты страницы и безопасен.</span>
   </header>
 
   <main>
-    <!-- sandbox оставляем пустым: скрипты внутри просматриваемого HTML не выполняются -->
-    <iframe id="editor" sandbox=""></iframe>
+    <section id="preview">
+      <h3>Предпросмотр сайта</h3>
+      <!-- sandbox оставляем пустым: скрипты из просматриваемого HTML не выполняются -->
+      <iframe id="editor" sandbox=""></iframe>
+    </section>
+
+    <section id="textEditor">
+      <h3>Редактор файлов (тексты, HTML, CSS, JS)</h3>
+      <div class="row">
+        <input id="editPath" value="index.html" style="min-width:260px" />
+        <button id="loadFileBtn">Загрузить</button>
+        <button id="saveFileBtn">Сохранить</button>
+        <span id="fileSha" class="muted"></span>
+      </div>
+      <textarea id="fileContent" placeholder="Содержимое файла..."></textarea>
+      <div class="row">
+        <input id="commitMessage" placeholder="Сообщение коммита (опционально)" style="min-width:320px">
+      </div>
+    </section>
+
+    <section id="images">
+      <h3>Портфолио — изображения</h3>
+      <div class="row">
+        <label>Папка:
+          <input id="imagesDir" value="images/portfolio" style="min-width:260px">
+        </label>
+        <button id="refreshImages">Обновить список</button>
+        <input id="uploadInput" type="file" multiple accept="image/*">
+        <button id="uploadBtn">Загрузить</button>
+      </div>
+      <div id="imagesGrid" class="grid"></div>
+    </section>
   </main>
 
-  <!-- ВАЖНО: параметр ?v=8 сбрасывает кэш, чтобы загрузилась последняя версия admin.js -->
+  <!-- Важно: ?v=8 сбрасывает кэш, чтобы загрузилась последняя версия admin.js -->
   <script src="admin.js?v=8"></script>
 </body>
 </html>
