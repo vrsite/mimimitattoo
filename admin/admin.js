@@ -1,7 +1,7 @@
 // ===== КОНФИГ =====
 const API_URL = 'https://mimimi-admin-proxy.vadimrobertovich96.workers.dev';
 const AUTH_KEY = 'mimimiAdminOK';
-const CONTENT_ROOT = ''; // вся публичная версия сайта теперь в корне репозитория
+const CONTENT_ROOT = ''; // публичные файлы сайта в КОРНЕ репозитория
 
 // ЭЛЕМЕНТЫ
 const app = document.getElementById('app');
@@ -38,7 +38,7 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadBtn = document.getElementById('uploadBtn');
 const imagesGrid = document.getElementById('imagesGrid');
 
-console.log('admin.js loaded');
+console.log('admin.js loaded v32');
 
 // ===== API =====
 async function api(path, opts = {}) {
@@ -46,7 +46,8 @@ async function api(path, opts = {}) {
   const res = await fetch(url, {
     method: opts.method || 'GET',
     headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
-    body: opts.body ? JSON.stringify(opts.body) : undefined
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+    cache: 'no-store'
   });
   const text = await res.text();
   let data = null;
@@ -63,7 +64,6 @@ async function api(path, opts = {}) {
 function joinPath(...parts) {
   return parts.filter(Boolean).join('/').replace(/\/{2,}/g, '/');
 }
-
 function injectBaseAndStripScripts(html, baseHref) {
   html = (html || '').replace(/<script[\s\S]*?<\/script>/gi, '');
   html = html.replace(/<script\b[^>]*>(?:\s*<\/script>)?/gi, '');
@@ -74,7 +74,6 @@ function injectBaseAndStripScripts(html, baseHref) {
   }
   return html;
 }
-
 function showApp() {
   loginView.style.display = 'none';
   app.style.visibility = 'visible';
@@ -115,14 +114,14 @@ function doLogout() {
 let currentSha = null;
 
 async function loadFilesList() {
-  // Берём все файлы репозитория, фильтруем по расширениям и исключаем админку
   const data = await api(`/list-files?branch=${encodeURIComponent('main')}`);
-  const prefix = CONTENT_ROOT ? `${CONTENT_ROOT}/` : ''; // корректно работает и для корня
+  const prefix = CONTENT_ROOT ? `${CONTENT_ROOT}/` : '';
   const allow = /\.(html?|css|js)$/i;
   const files = (data.files || [])
     .filter(f => f.path.startsWith(prefix))
     .filter(f => allow.test(f.path))
     .filter(f => !/^admin\//i.test(f.path.slice(prefix.length)));
+
   files.sort((a,b) => a.path.localeCompare(b.path));
 
   filesUl.innerHTML = '';
@@ -134,7 +133,7 @@ async function loadFilesList() {
   }
 
   for (const f of files) {
-    const displayPath = f.path.slice(prefix.length); // если CONTENT_ROOT пуст — остаётся полный путь
+    const displayPath = f.path.slice(prefix.length);
     const li = document.createElement('li');
     li.innerHTML = `<span>${displayPath}</span><span class="tag">${(f.size || 0)}b</span>`;
     li.addEventListener('click', async () => {
@@ -159,7 +158,6 @@ async function loadFileForEdit() {
   fileContent.value = resp.content || '';
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
 
-  // Предпросмотр с base на корень
   const baseHref = `https://vrsite.github.io/mimimitattoo/${CONTENT_ROOT ? `${CONTENT_ROOT}/` : ''}`;
   const html = injectBaseAndStripScripts(resp.content || '', baseHref);
   editor.srcdoc = html;
