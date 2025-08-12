@@ -32,7 +32,8 @@
         <button data-cmd="underline">U</button>
         <button id="btnSaveHtml">Сохранить</button>
       </div>
-      <iframe id="editor" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+      <!-- Без allow-scripts, чтобы не было предупреждения -->
+      <iframe id="editor" sandbox="allow-same-origin allow-forms"></iframe>
     </section>
 
     <section>
@@ -45,6 +46,6 @@
     </section>
   </div>
 
-  <script src="admin.js?v=2"></script>
+  <script src="admin.js?v=6"></script>
 </body>
 </html>
