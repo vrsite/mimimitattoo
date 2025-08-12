@@ -1,11 +1,12 @@
-// ========== КОНФИГ ==========
+// ===== КОНФИГ =====
 const API_URL = 'https://mimimi-admin-proxy.vadimrobertovich96.workers.dev';
-const AUTH_KEY = 'mimimiAdminOK'; // хранится в sessionStorage
+const AUTH_KEY = 'mimimiAdminOK';
+const CONTENT_ROOT = ''; // вся публичная версия сайта теперь в корне репозитория
 
 // ЭЛЕМЕНТЫ
 const app = document.getElementById('app');
 
-// Login
+// Login UI
 const loginView = document.getElementById('loginView');
 const loginBtn = document.getElementById('loginBtn');
 const loginResetBtn = document.getElementById('loginReset');
@@ -14,15 +15,14 @@ const loginError = document.getElementById('loginError');
 const togglePwdBtn = document.getElementById('togglePwd');
 
 // Header
-const branchSelect = document.getElementById('branch');
 const logoutBtn = document.getElementById('logoutBtn');
 
-// Файлы
+// Files
 const refreshFilesBtn = document.getElementById('refreshFiles');
 const filesUl = document.getElementById('filesUl');
 const filesCount = document.getElementById('filesCount');
 
-// Редактор
+// Editor
 const editPath = document.getElementById('editPath');
 const loadFileBtn = document.getElementById('loadFileBtn');
 const saveFileBtn = document.getElementById('saveFileBtn');
@@ -31,7 +31,7 @@ const fileShaEl = document.getElementById('fileSha');
 const commitMessageEl = document.getElementById('commitMessage');
 const editor = document.getElementById('editor');
 
-// Картинки
+// Images
 const imagesDirInput = document.getElementById('imagesDir');
 const refreshImagesBtn = document.getElementById('refreshImages');
 const uploadInput = document.getElementById('uploadInput');
@@ -40,7 +40,7 @@ const imagesGrid = document.getElementById('imagesGrid');
 
 console.log('admin.js loaded');
 
-// ========== API ==========
+// ===== API =====
 async function api(path, opts = {}) {
   const url = `${API_URL}${path}`;
   const res = await fetch(url, {
@@ -59,9 +59,9 @@ async function api(path, opts = {}) {
   return data;
 }
 
-// ========== УТИЛИТЫ ==========
-function currentBranch() {
-  return (branchSelect?.value || 'main').trim() || 'main';
+// ===== Утилиты =====
+function joinPath(...parts) {
+  return parts.filter(Boolean).join('/').replace(/\/{2,}/g, '/');
 }
 
 function injectBaseAndStripScripts(html, baseHref) {
@@ -87,14 +87,13 @@ function showLogin() {
   loginError.style.display = 'none';
 }
 
-// ========== АВТОРИЗАЦИЯ ==========
+// ===== Аутентификация =====
 async function doLogin() {
   const pwd = (adminPasswordEl.value || '').trim();
   if (!pwd) return;
   try {
     const d = await api('/login', { method: 'POST', body: { password: pwd } });
     if (d?.ok) {
-      // сессия только на текущую вкладку/окно
       sessionStorage.setItem(AUTH_KEY, '1');
       showApp();
       await initAfterLogin();
@@ -102,89 +101,91 @@ async function doLogin() {
       loginError.style.display = 'block';
       adminPasswordEl.focus();
     }
-  } catch (e) {
+  } catch {
     loginError.textContent = 'Ошибка входа. Проверьте соединение и попробуйте снова.';
     loginError.style.display = 'block';
   }
 }
 function doLogout() {
   sessionStorage.removeItem(AUTH_KEY);
-  api('/logout', { method: 'POST', body: {} }).finally(() => {
-    showLogin();
-  });
+  api('/logout', { method: 'POST', body: {} }).finally(() => showLogin());
 }
 
-// ========== ФАЙЛЫ ==========
+// ===== Файлы =====
 let currentSha = null;
 
 async function loadFilesList() {
-  const branch = currentBranch();
-  const data = await api(`/list-files?branch=${encodeURIComponent(branch)}`);
-  const files = (data.files || []).filter(f =>
-    !/^admin\//i.test(f.path) && !/^images\//i.test(f.path)
-  ).sort((a,b) => a.path.localeCompare(b.path));
+  // Берём все файлы репозитория, фильтруем по расширениям и исключаем админку
+  const data = await api(`/list-files?branch=${encodeURIComponent('main')}`);
+  const prefix = CONTENT_ROOT ? `${CONTENT_ROOT}/` : ''; // корректно работает и для корня
+  const allow = /\.(html?|css|js)$/i;
+  const files = (data.files || [])
+    .filter(f => f.path.startsWith(prefix))
+    .filter(f => allow.test(f.path))
+    .filter(f => !/^admin\//i.test(f.path.slice(prefix.length)));
+  files.sort((a,b) => a.path.localeCompare(b.path));
+
   filesUl.innerHTML = '';
   filesCount.textContent = String(files.length);
 
   if (!files.length) {
-    filesUl.innerHTML = `<li class="muted">Файлов не найдено</li>`;
+    filesUl.innerHTML = `<li class="muted">Файлов не найдено${CONTENT_ROOT ? ` в ${CONTENT_ROOT}/` : ''}</li>`;
     return;
   }
 
   for (const f of files) {
+    const displayPath = f.path.slice(prefix.length); // если CONTENT_ROOT пуст — остаётся полный путь
     const li = document.createElement('li');
-    li.innerHTML = `<span>${f.path}</span><span class="tag">${(f.size || 0)}b</span>`;
+    li.innerHTML = `<span>${displayPath}</span><span class="tag">${(f.size || 0)}b</span>`;
     li.addEventListener('click', async () => {
       Array.from(filesUl.children).forEach(x => x.classList.remove('active'));
       li.classList.add('active');
-      editPath.value = f.path;
+      editPath.value = displayPath;
       await loadFileForEdit();
     });
     filesUl.appendChild(li);
   }
 
-  // Автовыбор index.html
   const idx = Array.from(filesUl.children).find(li => li.textContent.trim().startsWith('index.html'));
   if (idx) idx.click();
 }
 
 async function loadFileForEdit() {
-  const branch = currentBranch();
-  const path = (editPath?.value || '').trim();
-  if (!path) return;
-  const resp = await api(`/file?path=${encodeURIComponent(path)}&branch=${encodeURIComponent(branch)}`);
+  const displayPath = (editPath?.value || '').trim();
+  if (!displayPath) return;
+  const fullPath = joinPath(CONTENT_ROOT, displayPath);
+  const resp = await api(`/file?path=${encodeURIComponent(fullPath)}&branch=${encodeURIComponent('main')}`);
   currentSha = resp.sha || null;
   fileContent.value = resp.content || '';
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
 
-  // Предпросмотр
-  const baseHref = `https://vrsite.github.io/mimimitattoo/${branch}/`;
+  // Предпросмотр с base на корень
+  const baseHref = `https://vrsite.github.io/mimimitattoo/${CONTENT_ROOT ? `${CONTENT_ROOT}/` : ''}`;
   const html = injectBaseAndStripScripts(resp.content || '', baseHref);
   editor.srcdoc = html;
 }
 
 async function saveFile() {
-  const branch = currentBranch();
-  const path = (editPath?.value || '').trim();
+  const displayPath = (editPath?.value || '').trim();
+  if (!displayPath) return alert('Выберите файл слева');
+  const fullPath = joinPath(CONTENT_ROOT, displayPath);
   const content = fileContent.value ?? '';
-  const message = (commitMessageEl?.value || '').trim() || `Update ${path}`;
-  if (!path) return alert('Выберите файл слева');
+  const message = (commitMessageEl?.value || '').trim() || `Update ${fullPath}`;
 
   const resp = await api(`/file`, {
     method: 'PUT',
-    body: { path, branch, content, message, ...(currentSha ? { sha: currentSha } : {}) }
+    body: { path: fullPath, branch: 'main', content, message, ...(currentSha ? { sha: currentSha } : {}) }
   });
   currentSha = resp.content?.sha || resp.sha || null;
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
-  alert('Сохранено. Обновление главного сайта займёт до 10–60 секунд (кеш GitHub Pages).');
+  alert('Сохранено. Обновление сайта займёт 10–60 секунд (кеш GitHub Pages).');
   await loadFileForEdit().catch(console.error);
 }
 
-// ========== ИЗОБРАЖЕНИЯ ==========
+// ===== Изображения =====
 async function loadImages() {
-  const branch = currentBranch();
   const dir = (imagesDirInput?.value || 'images/portfolio').trim();
-  const resp = await api(`/list-images?dir=${encodeURIComponent(dir)}&branch=${encodeURIComponent(branch)}`);
+  const resp = await api(`/list-images?dir=${encodeURIComponent(dir)}&branch=${encodeURIComponent('main')}`);
   const list = resp.images || [];
   imagesGrid.innerHTML = '';
 
@@ -214,7 +215,7 @@ async function loadImages() {
       try {
         await api(`/delete-image`, {
           method: 'DELETE',
-          body: { path: it.path, branch, sha: it.sha, message: `Delete ${it.path}` }
+          body: { path: it.path, branch: 'main', sha: it.sha, message: `Delete ${it.path}` }
         });
         await loadImages();
       } catch (e) {
@@ -236,7 +237,6 @@ function dataUrlToBase64(u) {
 }
 
 async function uploadSelectedFiles() {
-  const branch = currentBranch();
   const dir = (imagesDirInput?.value || 'images/portfolio').trim();
   const files = Array.from(uploadInput.files || []);
   if (!files.length) return alert('Выберите файлы');
@@ -250,28 +250,23 @@ async function uploadSelectedFiles() {
     });
     await api(`/upload-image`, {
       method: 'POST',
-      body: { dir, branch, name: file.name, contentBase64: b64, message: `Add ${dir}/${file.name}` }
+      body: { dir, branch: 'main', name: file.name, contentBase64: b64, message: `Add ${dir}/${file.name}` }
     });
   }
   uploadInput.value = '';
   await loadImages().catch(console.error);
 }
 
-// ========== ИНИЦИАЛИЗАЦИЯ ==========
+// ===== Инициализация =====
 async function initAfterLogin() {
-  // Список файлов
   await loadFilesList().catch(console.error);
-
-  // Картинки
   await loadImages().catch(console.error);
 
-  // Слушатели
   refreshFilesBtn?.addEventListener('click', () => loadFilesList().catch(console.error));
   loadFileBtn?.addEventListener('click', () => loadFileForEdit().catch(console.error));
   saveFileBtn?.addEventListener('click', () => saveFile().catch(console.error));
   refreshImagesBtn?.addEventListener('click', () => loadImages().catch(console.error));
   uploadBtn?.addEventListener('click', () => uploadSelectedFiles().catch(console.error));
-  branchSelect?.addEventListener('change', () => { loadFilesList().catch(console.error); loadImages().catch(console.error); });
   logoutBtn?.addEventListener('click', doLogout);
 }
 
@@ -288,13 +283,6 @@ function initLoginUI() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   initLoginUI();
-
-  // если уже авторизованы в этой вкладке — сразу показываем приложение
   const ok = sessionStorage.getItem(AUTH_KEY) === '1';
-  if (ok) {
-    showApp();
-    await initAfterLogin();
-  } else {
-    showLogin();
-  }
+  if (ok) { showApp(); await initAfterLogin(); } else { showLogin(); }
 });
