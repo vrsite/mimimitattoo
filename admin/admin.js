@@ -5,7 +5,7 @@ const CONTENT_ROOT = ''; // сайт публикуется из корня ве
 const BRANCH = 'main';
 const TRANSLATIONS_PATH = 'data/translations.json';
 
-console.log('admin.js loaded v38');
+console.log('admin.js loaded v39 (Bearer)');
 
 // ЭЛЕМЕНТЫ
 const app = document.getElementById('app');
@@ -59,15 +59,19 @@ const en_chat_welcome_message = document.getElementById('en_chat_welcome_message
 const btnSyncToJson = document.getElementById('btnSyncToJson');
 const btnSyncFromJson = document.getElementById('btnSyncFromJson');
 
-// ===== API =====
+// ===== API (Bearer) =====
 async function api(path, opts = {}) {
   const url = `${API_URL}${path}`;
+  const token = sessionStorage.getItem('authToken') || '';
   const res = await fetch(url, {
     method: opts.method || 'GET',
-    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+      ...(opts.headers || {})
+    },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
-    cache: 'no-store',
-    credentials: 'include'
+    cache: 'no-store'
   });
   const text = await res.text();
   let data = null;
@@ -121,14 +125,15 @@ function showLogin() {
   loginError.style.display = 'none';
 }
 
-// ===== Аутентификация =====
+// ===== Аутентификация (Bearer) =====
 async function doLogin() {
   const pwd = (adminPasswordEl.value || '').trim();
   if (!pwd) return;
   try {
     const d = await api('/login', { method: 'POST', body: { password: pwd } });
-    if (d?.ok) {
+    if (d?.ok && d?.token) {
       sessionStorage.setItem(AUTH_KEY, '1');
+      sessionStorage.setItem('authToken', d.token);
       showApp();
       await initAfterLogin();
     } else {
@@ -142,8 +147,11 @@ async function doLogin() {
   }
 }
 function doLogout() {
+  const t = sessionStorage.getItem('authToken');
   sessionStorage.removeItem(AUTH_KEY);
-  api('/logout', { method: 'POST', body: {} }).finally(() => showLogin());
+  sessionStorage.removeItem('authToken');
+  api('/logout', { method: 'POST', headers: t ? { Authorization: `Bearer ${t}` } : {}, body: {} })
+    .finally(() => showLogin());
 }
 
 // ===== Файлы =====
@@ -334,16 +342,13 @@ async function loadTranslationsJsonPanel() {
     const content = resp.content || '';
     originalTranslationsText = content;
     translationsJsonTA.value = content;
-    // Попытка авто-форматирования, если сырая строка:
     try {
       const parsed = JSON.parse(content);
       translationsJsonTA.value = JSON.stringify(parsed, null, 2);
     } catch {}
-    // Автозаполнение быстрых полей
     syncFromJsonToQuickFields();
     setTRStatus('Загружено.');
   } catch (e) {
-    // Если файла нет — подготовим шаблон
     const fallback = { ru: {}, en: {} };
     translationsSha = null;
     originalTranslationsText = JSON.stringify(fallback, null, 2);
@@ -395,7 +400,6 @@ function resetTranslationsChanges() {
   translationsJsonTA.value = originalTranslationsText || '';
   setTRError('');
   setTRStatus('');
-  // вернуть быстрые поля к состоянию файла
   try { syncFromJsonToQuickFields(); } catch {}
 }
 
@@ -443,8 +447,7 @@ async function initAfterLogin() {
   btnSyncFromJson?.addEventListener('click', () => syncFromJsonToQuickFields());
   btnSyncToJson?.addEventListener('click', () => syncFromQuickFieldsToJson());
 
-  // Автозагрузка translations при первом заходе в панель (ленивая)
-  // Если textarea пустая — подтянем файл
+  // Автозагрузка translations при первом заходе (если пусто)
   if (translationsJsonTA && !translationsJsonTA.value.trim()) {
     await loadTranslationsJsonPanel().catch(console.error);
   }
