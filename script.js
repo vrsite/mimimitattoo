@@ -60,8 +60,49 @@ function closeSideMenu() {
 const ruBtn = document.getElementById('ruBtn');
 const enBtn = document.getElementById('enBtn');
 
-// Переименовано: было "const translations = { ... }"
-const defaultTranslations = {
+// ПУТЬ К ВНЕШНИМ ПЕРЕВОДАМ (GitHub/хостинг): data/translations.json
+const TRANSLATIONS_URL = 'data/translations.json';
+
+// Глубокий мерж объектов (чтобы внешние переводы аккуратно дополняли дефолтные, а не ломали их)
+function deepMerge(target, source) {
+  if (!source || typeof source !== 'object') return target;
+  Object.keys(source).forEach(key => {
+    const srcVal = source[key];
+    const tgtVal = target[key];
+    if (srcVal && typeof srcVal === 'object' && !Array.isArray(srcVal)) {
+      if (!tgtVal || typeof tgtVal !== 'object') target[key] = {};
+      deepMerge(target[key], srcVal);
+    } else {
+      target[key] = srcVal;
+    }
+  });
+  return target;
+}
+
+// Загружаем внешние переводы и мержим в текущие
+async function loadExternalTranslations() {
+  try {
+    const resp = await fetch(`${TRANSLATIONS_URL}?v=${Date.now()}`, { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const external = await resp.json();
+
+    // Мержим по языкам (если их нет во внешних — просто пропускаем)
+    if (external && typeof external === 'object') {
+      if (external.ru && typeof external.ru === 'object') deepMerge(translations.ru, external.ru);
+      if (external.en && typeof external.en === 'object') deepMerge(translations.en, external.en);
+    }
+
+    // Применяем сразу после загрузки
+    if (typeof setLanguage === 'function') {
+      setLanguage(currentLang);
+    }
+  } catch (err) {
+    console.warn('Не удалось загрузить внешние переводы:', err);
+    // Тихо продолжаем с дефолтными переводами из кода
+  }
+}
+
+const translations = {
   ru: {
     main_title: "MIMIMI TATTOO",
     main_subtitle: "искусство на коже, созданное с любовью",
@@ -191,36 +232,6 @@ const defaultTranslations = {
     faq_permanent_title: "Permanent Makeup Questions",
   }
 };
-
-// Добавлено: загрузка внешнего translations.json с глубоким слиянием
-let translations = defaultTranslations;
-
-function deepMerge(target, source) {
-  if (typeof source !== 'object' || source === null) return target;
-  const out = Array.isArray(target) ? [...target] : { ...target };
-  for (const [k, v] of Object.entries(source)) {
-    if (v && typeof v === 'object' && !Array.isArray(v)) {
-      out[k] = deepMerge(target[k] || {}, v);
-    } else {
-      out[k] = v;
-    }
-  }
-  return out;
-}
-
-(async function loadExternalTranslations() {
-  try {
-    const res = await fetch('data/translations.json?v=' + Date.now());
-    if (!res.ok) return;
-    const remote = await res.json();
-    translations = deepMerge(defaultTranslations, remote);
-    if (typeof currentLang === 'string' && typeof setLanguage === 'function') {
-      setLanguage(currentLang);
-    }
-  } catch (e) {
-    console.warn('translations.json not loaded, using defaults', e);
-  }
-})();
 
 let currentLang = 'ru';
 
@@ -1082,7 +1093,7 @@ const permanentMakeupFaqData = [
     {
     question: {
     ru: "Есть ли противопоказания к перманентному макияжу?",
-    en: "Are there any contraindications for permanent makeup?"
+    en: "Are there any contraindications for permanent makeup?",
     },
     answer: {
     ru: "Да, как и у любой косметической процедуры, существуют некоторые противопоказания. Важно заранее обсудить ваше состояние здоровья со мной на консультации, чтобы убедиться, что процедура будет безопасной и принесет наилучший результат.",
@@ -1244,7 +1255,13 @@ setLanguage = function(lang) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 1) Сначала ставим дефолтные переводы, чтобы сайт сразу отобразился
     setLanguage(currentLang);
+
+    // 2) Инициализация существующего функционала
     initReviewsCarousel();
     renderFaq();
+
+    // 3) Пытаемся подтянуть внешний translations.json и обновить тексты, если получится
+    loadExternalTranslations();
 });
