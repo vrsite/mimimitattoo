@@ -1,199 +1,196 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Админка — Mimimi Tattoo</title>
-  <style>
-    :root { color-scheme: dark; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: Inter, system-ui, Arial, sans-serif; background:#0f1117; color:#e6e8eb; }
-    a { color:#8ab4f8; text-decoration:none; }
-    header { padding:12px 16px; border-bottom:1px solid #2a2f3a; display:flex; align-items:center; gap:12px; flex-wrap:wrap; backdrop-filter:saturate(120%) blur(6px); position:sticky; top:0; background:#0f1117cc; z-index:10; }
-    header .spacer { flex:1; }
-    input, select, button, textarea { background:#151a22; color:#e6e8eb; border:1px solid #2a2f3a; border-radius:10px; padding:10px 12px; }
-    input:focus, select:focus, textarea:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 3px #1d4ed83a; }
-    button { cursor:pointer; transition:.15s ease; }
-    button:hover { transform: translateY(-1px); }
-    .primary { background:#2563eb; border-color:#1d4ed8; }
-    .danger { background:#b91c1c; border-color:#7f1d1d; }
-    .success { background:#16a34a; border-color:#15803d; }
-    .muted { color:#aab1bd; font-size:12px; }
-    .layout { display:grid; grid-template-columns:300px 1fr; height:calc(100vh - 64px); }
-    aside { border-right:1px solid #202632; overflow:auto; background:#0c0e13; }
-    main { overflow:auto; padding:16px; display:grid; gap:16px; background:
-      radial-gradient(1200px 600px at 10% -10%, rgba(37,99,235,.08), transparent),
-      radial-gradient(900px 400px at 90% -10%, rgba(220,38,38,.08), transparent); }
-    section { border:1px solid #202632; border-radius:14px; padding:14px; background:#0b0e13; box-shadow:0 8px 20px rgba(0,0,0,.25); }
-    h3 { margin:0 0 10px 0; font-size:16px; }
-    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    .file-list { list-style:none; padding:0; margin:0; }
-    .file-list li { padding:10px 12px; border-bottom:1px solid #161b24; cursor:pointer; display:flex; justify-content:space-between; gap:8px; }
-    .file-list li:hover { background:#121723; }
-    .file-list li.active { background:#182135; border-left:3px solid #3b82f6; }
-    #fileContent { width:100%; min-height:280px; resize:vertical; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    #editor { width:100%; height:50vh; border:1px solid #202632; border-radius:10px; background:#0b0e13; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px; }
-    .card { border:1px solid #202632; border-radius:10px; overflow:hidden; background:#0f1218; }
-    .card img { width:100%; height:130px; object-fit:cover; background:#11141a; display:block; }
-    .card .meta { padding:8px; display:flex; gap:8px; align-items:center; justify-content:space-between; }
-    .tag { padding:2px 6px; border-radius:999px; border:1px solid #2a2f3a; font-size:11px; color:#aab1bd }
-    #loginView { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(9,11,15,.75), rgba(9,11,15,.9)); z-index:999; }
-    .login-card { width:min(92vw, 380px); background:#0b0e13; border:1px solid #202632; border-radius:14px; padding:20px; box-shadow:0 20px 50px rgba(0,0,0,.5); }
-    .login-card h2 { margin:0 0 10px; font-size:18px; }
-    .field { display:flex; flex-direction:column; gap:6px; margin:10px 0; }
-    .field-row { display:flex; gap:8px; align-items:center; }
-
-    /* Небольшое меню быстрых ссылок по секциям */
-    .subnav { display:flex; gap:8px; flex-wrap:wrap; }
-    .subnav a { padding:8px 10px; border:1px solid #202632; border-radius:999px; background:#0f1218; color:#cfd5df; font-size:12px; }
-    .subnav a:hover { border-color:#3b82f6; color:#fff; }
-
-    /* Тексты (RU/EN) */
-    .two-col { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
-    .panel { flex:1 1 380px; min-width:300px; }
-    .quick { flex:1 1 320px; min-width:280px; }
-    .quick h4 { margin:0 0 8px; font-size:15px; }
-    .quick p { margin:0 0 8px; opacity:.7; font-size:12px; }
-    .quick label { display:block; margin-top:10px; font-size:12px; color:#aab1bd; }
-    .quick input { width:100%; margin-top:6px; }
-    .status { margin-top:10px; color:#9acd32; font-size:12px; }
-    .error { color:#ff6767; margin-top:8px; font-size:12px; display:none; }
-
-    /* Мобильные правки */
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-      aside { height:auto; max-height:40vh; }
-      #editor { height:40vh; }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>MIMIMI Admin</title>
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
-  <div id="loginView">
+  <!-- Login View -->
+  <div id="loginView" class="login-view">
     <div class="login-card">
-      <h2>Вход в админку</h2>
-      <div class="muted">Введите пароль администратора, чтобы продолжить.</div>
-      <div class="field">
+      <h1 class="app-title">MIMIMI Admin</h1>
+      <div class="login-field">
         <label for="adminPassword">Пароль</label>
-        <div class="field-row">
-          <input id="adminPassword" type="password" placeholder="••••••••" style="flex:1">
-          <button id="togglePwd" type="button">Показать</button>
+        <div class="pwd-wrap">
+          <input id="adminPassword" type="password" placeholder="Введите пароль" autocomplete="current-password" />
+          <button id="togglePwd" class="btn ghost" type="button">Показать</button>
         </div>
-        <div id="loginError" class="muted" style="color:#fca5a5; display:none;">Неверный пароль. Попробуйте снова.</div>
       </div>
-      <div class="row">
-        <button id="loginBtn" class="primary" type="button">Войти</button>
-        <button id="loginReset" type="button">Сбросить</button>
+      <div id="loginError" class="error" style="display:none"></div>
+      <div class="login-actions">
+        <button id="loginBtn" class="btn primary">Войти</button>
+        <button id="loginReset" class="btn ghost">Сбросить</button>
       </div>
+      <div class="muted small">Совет: после изменения механизма входа — перелогиниться.</div>
     </div>
   </div>
 
-  <header>
-    <strong>Админка Mimimi Tattoo</strong>
-    <span class="muted">Версия admin v38. Правки идут в ветку main и публикуются сразу на сайт. Обновление 10–60 сек.</span>
-    <div class="spacer"></div>
-    <button id="logoutBtn">Выйти</button>
-  </header>
-
-  <div class="layout" id="app" style="visibility:hidden;">
-    <aside>
-      <div style="padding:10px;">
-        <h3>Страницы и файлы</h3>
-        <div class="row">
-          <button id="refreshFiles">Обновить список</button>
-          <span class="tag" id="filesCount">0</span>
+  <!-- App -->
+  <div id="app" class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <div class="brand-text">
+          <div class="brand-title">MIMIMI Admin</div>
+          <div class="brand-sub">Панель управления</div>
         </div>
       </div>
-      <ul id="filesUl" class="file-list"></ul>
-    </aside>
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="files">Файлы</button>
+        <button class="tab" data-tab="images">Изображения</button>
+        <button class="tab" data-tab="translations">Тексты (RU/EN)</button>
+      </nav>
+      <div class="header-actions">
+        <button id="logoutBtn" class="btn danger">Выйти</button>
+      </div>
+    </header>
 
-    <main>
-      <section>
-        <div class="row" style="justify-content:space-between; align-items:center;">
-          <h3 style="margin:0;">Редактор файла</h3>
-          <nav class="subnav">
-            <a href="#editorSection">Редактор</a>
-            <a href="#previewSection">Предпросмотр</a>
-            <a href="#portfolioSection">Портфолио</a>
-            <a href="#translationsSection">Тексты (RU/EN)</a>
-          </nav>
-        </div>
-        <div class="row" style="margin-top:8px;">
-          <input id="editPath" placeholder="Путь к файлу" style="min-width:320px" readonly>
-          <button id="loadFileBtn">Загрузить</button>
-          <button id="saveFileBtn" class="primary">Сохранить</button>
-          <span id="fileSha" class="muted"></span>
-        </div>
-        <textarea id="fileContent" placeholder="Содержимое файла..."></textarea>
-        <div class="row">
-          <input id="commitMessage" placeholder="Сообщение коммита (опционально)" style="min-width:360px">
-          <span class="muted">Если сайт не обновился — подождите до 60 сек и обновите Ctrl+F5.</span>
-        </div>
-      </section>
-
-      <section id="previewSection">
-        <h3>Предпросмотр выбранного файла (без скриптов)</h3>
-        <iframe id="editor" sandbox=""></iframe>
-      </section>
-
-      <section id="portfolioSection">
-        <h3>Портфолио — изображения</h3>
-        <div class="row">
-          <label>Папка:
-            <input id="imagesDir" value="images/portfolio" style="min-width:260px">
-          </label>
-          <button id="refreshImages">Обновить список</button>
-          <input id="uploadInput" type="file" multiple accept="image/*">
-          <button id="uploadBtn" class="primary">Загрузить</button>
-        </div>
-        <div id="imagesGrid" class="grid"></div>
-      </section>
-
-      <!-- Новая панель: Тексты (RU/EN) -->
-      <section id="translationsSection">
-        <h3>Тексты (RU/EN)</h3>
-        <div class="two-col">
-          <div class="panel">
-            <label for="translationsJson" class="muted">Редактор JSON (data/translations.json)</label>
-            <textarea id="translationsJson" style="width:100%; height:360px; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px;"></textarea>
-            <div id="translationsJsonError" class="error"></div>
-            <div class="row" style="margin-top:12px;">
-              <button id="btnLoadTranslations">Загрузить текущие</button>
-              <button id="btnPrettyTranslations">Форматировать</button>
-              <button id="btnValidateTranslations">Проверить JSON</button>
-              <button id="btnSaveTranslations" class="primary">Сохранить</button>
-              <button id="btnResetTranslations" class="danger">Сбросить изменения</button>
+    <!-- Main -->
+    <main class="main">
+      <!-- Tab: Files -->
+      <section class="tab-panel active" id="tab-files" role="tabpanel" aria-labelledby="tab-files">
+        <div class="split-3">
+          <!-- Column A: Files List -->
+          <aside class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Файлы <span class="tag" id="filesCount">0</span></div>
+              <div class="panel-actions">
+                <button id="refreshFiles" class="btn ghost small">Обновить</button>
+              </div>
             </div>
-            <div id="translationsStatus" class="status"></div>
+            <ul id="filesUl" class="list"></ul>
+          </aside>
+
+          <!-- Column B: Editor -->
+          <section class="panel" id="editorPane">
+            <div class="panel-header">
+              <div class="panel-title">Редактор</div>
+              <div class="panel-actions">
+                <button id="btnEditorFullscreen" class="btn ghost small" title="Во весь экран">⤢</button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="editPath">Путь к файлу</label>
+              <div class="inline">
+                <input id="editPath" type="text" placeholder="index.html" />
+                <button id="loadFileBtn" class="btn">Открыть</button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="commitMessage">Комментарий к коммиту</label>
+              <input id="commitMessage" type="text" placeholder="Update index.html" />
+            </div>
+
+            <div class="form-row">
+              <label for="fileContent">Содержимое файла</label>
+              <textarea id="fileContent" class="code-area" spellcheck="false" placeholder="Здесь будет содержимое файла..."></textarea>
+            </div>
+
+            <div class="panel-footer">
+              <div id="fileSha" class="muted"></div>
+              <div class="spacer"></div>
+              <button id="saveFileBtn" class="btn primary">Сохранить</button>
+            </div>
+          </section>
+
+          <!-- Column C: Preview -->
+          <section class="panel" id="previewPane">
+            <div class="panel-header">
+              <div class="panel-title">Предпросмотр</div>
+              <div class="panel-actions">
+                <button id="btnPreviewFullscreen" class="btn ghost small" title="Во весь экран">⤢</button>
+              </div>
+            </div>
+            <iframe id="editor" class="preview-frame" title="Предпросмотр"></iframe>
+          </section>
+        </div>
+      </section>
+
+      <!-- Tab: Images -->
+      <section class="tab-panel" id="tab-images" role="tabpanel" aria-labelledby="tab-images">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Изображения</div>
+            <div class="panel-actions">
+              <label class="muted small" for="imagesDir">Папка</label>
+              <input id="imagesDir" type="text" value="images/portfolio" class="mono small" />
+              <button id="refreshImages" class="btn ghost small">Обновить</button>
+            </div>
           </div>
 
-          <div class="quick">
-            <h4>Быстрые поля</h4>
-            <p>Для частых правок. Эти поля синхронизируются с JSON.</p>
-
-            <label>RU: Заголовок (main_title)</label>
-            <input id="ru_main_title" type="text">
-
-            <label>EN: Заголовок (main_title)</label>
-            <input id="en_main_title" type="text">
-
-            <label>RU: Приветствие в чате (chat_welcome_message)</label>
-            <input id="ru_chat_welcome_message" type="text">
-
-            <label>EN: Приветствие в чате (chat_welcome_message)</label>
-            <input id="en_chat_welcome_message" type="text">
-
-            <div class="row" style="margin-top:10px;">
-              <button id="btnSyncToJson" class="success">Записать в JSON сверху</button>
-              <button id="btnSyncFromJson">Подтянуть из JSON</button>
+          <div class="panel-body">
+            <div class="upload-row">
+              <input id="uploadInput" type="file" accept="image/*" multiple />
+              <button id="uploadBtn" class="btn">Загрузить</button>
             </div>
-            <div class="muted" style="margin-top:8px;">Подсказка: после сохранения обновите главную — новые тексты подтянутся автоматически.</div>
+            <div id="imagesGrid" class="grid-images"></div>
           </div>
+        </div>
+      </section>
+
+      <!-- Tab: Translations -->
+      <section class="tab-panel" id="tab-translations" role="tabpanel" aria-labelledby="tab-translations">
+        <div class="split-2">
+          <!-- JSON editor -->
+          <section class="panel" id="translationsPane">
+            <div class="panel-header">
+              <div class="panel-title">Файл переводов</div>
+              <div class="panel-actions">
+                <button id="btnTranslationsFullscreen" class="btn ghost small" title="Во весь экран">⤢</button>
+              </div>
+            </div>
+            <div class="panel-toolbar">
+              <button id="btnLoadTranslations" class="btn ghost small">Загрузить файл</button>
+              <button id="btnPrettyTranslations" class="btn ghost small">Форматировать</button>
+              <button id="btnValidateTranslations" class="btn ghost small">Проверить</button>
+              <button id="btnSaveTranslations" class="btn primary small">Сохранить</button>
+              <button id="btnResetTranslations" class="btn ghost small">Отменить изменения</button>
+              <div class="spacer"></div>
+              <span id="translationsStatus" class="status"></span>
+            </div>
+            <textarea id="translationsJson" class="code-area" spellcheck="false" placeholder='{"ru":{},"en":{}}'></textarea>
+            <div id="translationsJsonError" class="error" style="display:none"></div>
+          </section>
+
+          <!-- Quick fields -->
+          <aside class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Быстрые поля</div>
+              <div class="panel-actions">
+                <button id="btnSyncFromJson" class="btn ghost small">Из JSON → Поля</button>
+                <button id="btnSyncToJson" class="btn ghost small">Из Полей → JSON</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="form-row">
+                <label for="ru_main_title">Заголовок (RU)</label>
+                <input id="ru_main_title" type="text" />
+              </div>
+              <div class="form-row">
+                <label for="en_main_title">Заголовок (EN)</label>
+                <input id="en_main_title" type="text" />
+              </div>
+              <div class="form-row">
+                <label for="ru_chat_welcome_message">Приветствие в чате (RU)</label>
+                <textarea id="ru_chat_welcome_message" rows="3"></textarea>
+              </div>
+              <div class="form-row">
+                <label for="en_chat_welcome_message">Приветствие в чате (EN)</label>
+                <textarea id="en_chat_welcome_message" rows="3"></textarea>
+              </div>
+              <div class="muted small">Подтягивайте и сохраняйте через верхнюю панель.</div>
+            </div>
+          </aside>
         </div>
       </section>
     </main>
   </div>
 
-  <script src="admin.js?v=38"></script>
+  <script src="admin.js?v=40"></script>
 </body>
 </html>
