@@ -5,7 +5,7 @@ const CONTENT_ROOT = ''; // сайт публикуется из корня ве
 const BRANCH = 'main';
 const TRANSLATIONS_PATH = 'data/translations.json';
 
-console.log('admin.js loaded v39 (Bearer)');
+console.log('admin.js loaded v40 (Bearer + fullscreen)');
 
 // ЭЛЕМЕНТЫ
 const app = document.getElementById('app');
@@ -21,6 +21,14 @@ const togglePwdBtn = document.getElementById('togglePwd');
 // Header
 const logoutBtn = document.getElementById('logoutBtn');
 
+// Tabs
+const tabs = Array.from(document.querySelectorAll('.tab'));
+const tabPanels = {
+  files: document.getElementById('tab-files'),
+  images: document.getElementById('tab-images'),
+  translations: document.getElementById('tab-translations')
+};
+
 // Files
 const refreshFilesBtn = document.getElementById('refreshFiles');
 const filesUl = document.getElementById('filesUl');
@@ -34,6 +42,16 @@ const fileContent = document.getElementById('fileContent');
 const fileShaEl = document.getElementById('fileSha');
 const commitMessageEl = document.getElementById('commitMessage');
 const editor = document.getElementById('editor');
+
+// Fullscreen buttons
+const btnEditorFullscreen = document.getElementById('btnEditorFullscreen');
+const btnPreviewFullscreen = document.getElementById('btnPreviewFullscreen');
+const btnTranslationsFullscreen = document.getElementById('btnTranslationsFullscreen');
+
+// Panes for fullscreen
+const editorPane = document.getElementById('editorPane');
+const previewPane = document.getElementById('previewPane');
+const translationsPane = document.getElementById('translationsPane');
 
 // Images
 const imagesDirInput = document.getElementById('imagesDir');
@@ -123,6 +141,43 @@ function showLogin() {
   adminPasswordEl.value = '';
   adminPasswordEl.focus();
   loginError.style.display = 'none';
+}
+
+// ===== Tabs =====
+function initTabs() {
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const key = btn.getAttribute('data-tab');
+      Object.entries(tabPanels).forEach(([k, el]) => {
+        if (!el) return;
+        el.classList.toggle('active', k === key);
+      });
+    });
+  });
+}
+
+// ===== Fullscreen helpers =====
+function toggleFullscreen(el) {
+  if (!el) return;
+  const on = el.classList.toggle('fullscreen');
+  // блокировка прокрутки страницы, когда открыт фуллскрин
+  document.body.style.overflow = on ? 'hidden' : '';
+}
+
+function initFullscreenControls() {
+  btnEditorFullscreen?.addEventListener('click', () => toggleFullscreen(editorPane));
+  btnPreviewFullscreen?.addEventListener('click', () => toggleFullscreen(previewPane));
+  btnTranslationsFullscreen?.addEventListener('click', () => toggleFullscreen(translationsPane));
+
+  // Выход из фуллскрина по Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      [editorPane, previewPane, translationsPane].forEach(p => p?.classList.remove('fullscreen'));
+      document.body.style.overflow = '';
+    }
+  });
 }
 
 // ===== Аутентификация (Bearer) =====
@@ -230,7 +285,7 @@ async function loadImages() {
   imagesGrid.innerHTML = '';
 
   if (!list.length) {
-    imagesGrid.innerHTML = `<div class="muted">Нет файлов в ${dir}</div>`;
+    imagesGrid.innerHTML = `<div class="muted" style="padding:12px">Нет файлов в ${dir}</div>`;
     return;
   }
 
@@ -248,7 +303,7 @@ async function loadImages() {
     name.textContent = it.name;
 
     const delBtn = document.createElement('button');
-    delBtn.className = 'danger';
+    delBtn.className = 'btn danger small';
     delBtn.textContent = 'Удалить';
     delBtn.addEventListener('click', async () => {
       if (!confirm(`Удалить ${it.name}?`)) return;
@@ -420,7 +475,7 @@ function syncFromQuickFieldsToJson() {
     if (ru_main_title) j.ru.main_title = ru_main_title.value;
     if (en_main_title) j.en.main_title = en_main_title.value;
     if (ru_chat_welcome_message) j.ru.chat_welcome_message = ru_chat_welcome_message.value;
-    if (en_chat_welcome_message) j.en.chat_welcome_message = en_chat_welcome_message.value;
+    if (en_chat_welcome_message) j.en_chat_welcome_message = en_chat_welcome_message.value;
     setTRJson(j);
     setTRError('');
   } catch (e) { setTRError(e.message); }
@@ -428,6 +483,10 @@ function syncFromQuickFieldsToJson() {
 
 // ===== Инициализация =====
 async function initAfterLogin() {
+  // Tabs + fullscreen
+  initTabs();
+  initFullscreenControls();
+
   await loadFilesList().catch(console.error);
   await loadImages().catch(console.error);
 
