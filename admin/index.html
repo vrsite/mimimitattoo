@@ -9,19 +9,22 @@
     * { box-sizing: border-box; }
     body { margin:0; font-family: Inter, system-ui, Arial, sans-serif; background:#0f1117; color:#e6e8eb; }
     a { color:#8ab4f8; text-decoration:none; }
-    header { padding:12px 16px; border-bottom:1px solid #2a2f3a; display:flex; align-items:center; gap:12px; flex-wrap:wrap; backdrop-filter:saturate(120%) blur(6px); position:sticky; top:0; background:#0f1117cc; }
+    header { padding:12px 16px; border-bottom:1px solid #2a2f3a; display:flex; align-items:center; gap:12px; flex-wrap:wrap; backdrop-filter:saturate(120%) blur(6px); position:sticky; top:0; background:#0f1117cc; z-index:10; }
     header .spacer { flex:1; }
-    input, select, button, textarea { background:#151a22; color:#e6e8eb; border:1px solid #2a2f3a; border-radius:8px; padding:8px 10px; }
-    input:focus, select:focus, textarea:focus { outline:none; border-color:#3b82f6; }
+    input, select, button, textarea { background:#151a22; color:#e6e8eb; border:1px solid #2a2f3a; border-radius:10px; padding:10px 12px; }
+    input:focus, select:focus, textarea:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 3px #1d4ed83a; }
     button { cursor:pointer; transition:.15s ease; }
     button:hover { transform: translateY(-1px); }
     .primary { background:#2563eb; border-color:#1d4ed8; }
     .danger { background:#b91c1c; border-color:#7f1d1d; }
+    .success { background:#16a34a; border-color:#15803d; }
     .muted { color:#aab1bd; font-size:12px; }
     .layout { display:grid; grid-template-columns:300px 1fr; height:calc(100vh - 64px); }
     aside { border-right:1px solid #202632; overflow:auto; background:#0c0e13; }
-    main { overflow:auto; padding:16px; display:grid; gap:16px; background:radial-gradient(1200px 600px at 10% -10%, rgba(37,99,235,.08), transparent), radial-gradient(900px 400px at 90% -10%, rgba(220,38,38,.08), transparent); }
-    section { border:1px solid #202632; border-radius:12px; padding:14px; background:#0b0e13; box-shadow:0 8px 20px rgba(0,0,0,.25); }
+    main { overflow:auto; padding:16px; display:grid; gap:16px; background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(37,99,235,.08), transparent),
+      radial-gradient(900px 400px at 90% -10%, rgba(220,38,38,.08), transparent); }
+    section { border:1px solid #202632; border-radius:14px; padding:14px; background:#0b0e13; box-shadow:0 8px 20px rgba(0,0,0,.25); }
     h3 { margin:0 0 10px 0; font-size:16px; }
     .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
     .file-list { list-style:none; padding:0; margin:0; }
@@ -40,6 +43,29 @@
     .login-card h2 { margin:0 0 10px; font-size:18px; }
     .field { display:flex; flex-direction:column; gap:6px; margin:10px 0; }
     .field-row { display:flex; gap:8px; align-items:center; }
+
+    /* Небольшое меню быстрых ссылок по секциям */
+    .subnav { display:flex; gap:8px; flex-wrap:wrap; }
+    .subnav a { padding:8px 10px; border:1px solid #202632; border-radius:999px; background:#0f1218; color:#cfd5df; font-size:12px; }
+    .subnav a:hover { border-color:#3b82f6; color:#fff; }
+
+    /* Тексты (RU/EN) */
+    .two-col { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+    .panel { flex:1 1 380px; min-width:300px; }
+    .quick { flex:1 1 320px; min-width:280px; }
+    .quick h4 { margin:0 0 8px; font-size:15px; }
+    .quick p { margin:0 0 8px; opacity:.7; font-size:12px; }
+    .quick label { display:block; margin-top:10px; font-size:12px; color:#aab1bd; }
+    .quick input { width:100%; margin-top:6px; }
+    .status { margin-top:10px; color:#9acd32; font-size:12px; }
+    .error { color:#ff6767; margin-top:8px; font-size:12px; display:none; }
+
+    /* Мобильные правки */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { height:auto; max-height:40vh; }
+      #editor { height:40vh; }
+    }
   </style>
 </head>
 <body>
@@ -64,7 +90,7 @@
 
   <header>
     <strong>Админка Mimimi Tattoo</strong>
-    <span class="muted">Версия admin v37. Правки идут в ветку main и публикуются сразу на сайт. Обновление занимает 10–60 сек.</span>
+    <span class="muted">Версия admin v38. Правки идут в ветку main и публикуются сразу на сайт. Обновление 10–60 сек.</span>
     <div class="spacer"></div>
     <button id="logoutBtn">Выйти</button>
   </header>
@@ -83,8 +109,16 @@
 
     <main>
       <section>
-        <h3>Редактор файла</h3>
-        <div class="row">
+        <div class="row" style="justify-content:space-between; align-items:center;">
+          <h3 style="margin:0;">Редактор файла</h3>
+          <nav class="subnav">
+            <a href="#editorSection">Редактор</a>
+            <a href="#previewSection">Предпросмотр</a>
+            <a href="#portfolioSection">Портфолио</a>
+            <a href="#translationsSection">Тексты (RU/EN)</a>
+          </nav>
+        </div>
+        <div class="row" style="margin-top:8px;">
           <input id="editPath" placeholder="Путь к файлу" style="min-width:320px" readonly>
           <button id="loadFileBtn">Загрузить</button>
           <button id="saveFileBtn" class="primary">Сохранить</button>
@@ -97,12 +131,12 @@
         </div>
       </section>
 
-      <section>
+      <section id="previewSection">
         <h3>Предпросмотр выбранного файла (без скриптов)</h3>
         <iframe id="editor" sandbox=""></iframe>
       </section>
 
-      <section>
+      <section id="portfolioSection">
         <h3>Портфолио — изображения</h3>
         <div class="row">
           <label>Папка:
@@ -114,9 +148,52 @@
         </div>
         <div id="imagesGrid" class="grid"></div>
       </section>
+
+      <!-- Новая панель: Тексты (RU/EN) -->
+      <section id="translationsSection">
+        <h3>Тексты (RU/EN)</h3>
+        <div class="two-col">
+          <div class="panel">
+            <label for="translationsJson" class="muted">Редактор JSON (data/translations.json)</label>
+            <textarea id="translationsJson" style="width:100%; height:360px; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px;"></textarea>
+            <div id="translationsJsonError" class="error"></div>
+            <div class="row" style="margin-top:12px;">
+              <button id="btnLoadTranslations">Загрузить текущие</button>
+              <button id="btnPrettyTranslations">Форматировать</button>
+              <button id="btnValidateTranslations">Проверить JSON</button>
+              <button id="btnSaveTranslations" class="primary">Сохранить</button>
+              <button id="btnResetTranslations" class="danger">Сбросить изменения</button>
+            </div>
+            <div id="translationsStatus" class="status"></div>
+          </div>
+
+          <div class="quick">
+            <h4>Быстрые поля</h4>
+            <p>Для частых правок. Эти поля синхронизируются с JSON.</p>
+
+            <label>RU: Заголовок (main_title)</label>
+            <input id="ru_main_title" type="text">
+
+            <label>EN: Заголовок (main_title)</label>
+            <input id="en_main_title" type="text">
+
+            <label>RU: Приветствие в чате (chat_welcome_message)</label>
+            <input id="ru_chat_welcome_message" type="text">
+
+            <label>EN: Приветствие в чате (chat_welcome_message)</label>
+            <input id="en_chat_welcome_message" type="text">
+
+            <div class="row" style="margin-top:10px;">
+              <button id="btnSyncToJson" class="success">Записать в JSON сверху</button>
+              <button id="btnSyncFromJson">Подтянуть из JSON</button>
+            </div>
+            <div class="muted" style="margin-top:8px;">Подсказка: после сохранения обновите главную — новые тексты подтянутся автоматически.</div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
-  <script src="admin.js?v=37"></script>
+  <script src="admin.js?v=38"></script>
 </body>
 </html>
