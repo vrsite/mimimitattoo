@@ -2,6 +2,10 @@
 const API_URL = 'https://mimimi-admin-proxy.vadimrobertovich96.workers.dev';
 const AUTH_KEY = 'mimimiAdminOK';
 const CONTENT_ROOT = ''; // сайт публикуется из корня ветки main
+const BRANCH = 'main';
+const TRANSLATIONS_PATH = 'data/translations.json';
+
+console.log('admin.js loaded v38');
 
 // ЭЛЕМЕНТЫ
 const app = document.getElementById('app');
@@ -38,7 +42,22 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadBtn = document.getElementById('uploadBtn');
 const imagesGrid = document.getElementById('imagesGrid');
 
-console.log('admin.js loaded v37');
+// Translations panel
+const translationsJsonTA = document.getElementById('translationsJson');
+const translationsJsonError = document.getElementById('translationsJsonError');
+const translationsStatus = document.getElementById('translationsStatus');
+const btnLoadTranslations = document.getElementById('btnLoadTranslations');
+const btnPrettyTranslations = document.getElementById('btnPrettyTranslations');
+const btnValidateTranslations = document.getElementById('btnValidateTranslations');
+const btnSaveTranslations = document.getElementById('btnSaveTranslations');
+const btnResetTranslations = document.getElementById('btnResetTranslations');
+
+const ru_main_title = document.getElementById('ru_main_title');
+const en_main_title = document.getElementById('en_main_title');
+const ru_chat_welcome_message = document.getElementById('ru_chat_welcome_message');
+const en_chat_welcome_message = document.getElementById('en_chat_welcome_message');
+const btnSyncToJson = document.getElementById('btnSyncToJson');
+const btnSyncFromJson = document.getElementById('btnSyncFromJson');
 
 // ===== API =====
 async function api(path, opts = {}) {
@@ -131,7 +150,7 @@ function doLogout() {
 let currentSha = null;
 
 async function loadFilesList() {
-  const data = await api(`/list-files?branch=${encodeURIComponent('main')}`);
+  const data = await api(`/list-files?branch=${encodeURIComponent(BRANCH)}`);
   const prefix = CONTENT_ROOT ? `${CONTENT_ROOT}/` : '';
   const allow = /\.(html?|css|js)$/i;
   const files = (data.files || [])
@@ -169,7 +188,7 @@ async function loadFileForEdit() {
   const displayPath = (editPath?.value || '').trim();
   if (!displayPath) return;
   const fullPath = joinPath(CONTENT_ROOT, displayPath);
-  const resp = await api(`/file?path=${encodeURIComponent(fullPath)}&branch=${encodeURIComponent('main')}`);
+  const resp = await api(`/file?path=${encodeURIComponent(fullPath)}&branch=${encodeURIComponent(BRANCH)}`);
   currentSha = resp.sha || null;
   fileContent.value = resp.content || '';
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
@@ -187,7 +206,7 @@ async function saveFile() {
 
   const resp = await api(`/file`, {
     method: 'PUT',
-    body: { path: fullPath, branch: 'main', content, message, ...(currentSha ? { sha: currentSha } : {}) }
+    body: { path: fullPath, branch: BRANCH, content, message, ...(currentSha ? { sha: currentSha } : {}) }
   });
   currentSha = resp.content?.sha || resp.sha || null;
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
@@ -198,7 +217,7 @@ async function saveFile() {
 // ===== Изображения =====
 async function loadImages() {
   const dir = (imagesDirInput?.value || 'images/portfolio').trim();
-  const resp = await api(`/list-images?dir=${encodeURIComponent(dir)}&branch=${encodeURIComponent('main')}`);
+  const resp = await api(`/list-images?dir=${encodeURIComponent(dir)}&branch=${encodeURIComponent(BRANCH)}`);
   const list = resp.images || [];
   imagesGrid.innerHTML = '';
 
@@ -228,7 +247,7 @@ async function loadImages() {
       try {
         await api(`/delete-image`, {
           method: 'DELETE',
-          body: { path: it.path, branch: 'main', sha: it.sha, message: `Delete ${it.path}` }
+          body: { path: it.path, branch: BRANCH, sha: it.sha, message: `Delete ${it.path}` }
         });
         await loadImages();
       } catch (e) {
@@ -263,11 +282,144 @@ async function uploadSelectedFiles() {
     });
     await api(`/upload-image`, {
       method: 'POST',
-      body: { dir, branch: 'main', name: file.name, contentBase64: b64, message: `Add ${dir}/${file.name}` }
+      body: { dir, branch: BRANCH, name: file.name, contentBase64: b64, message: `Add ${dir}/${file.name}` }
     });
   }
   uploadInput.value = '';
   await loadImages().catch(console.error);
+}
+
+// ===== Translations (Тексты RU/EN) =====
+let translationsSha = null;
+let originalTranslationsText = '';
+
+function setTRStatus(msg, isError = false) {
+  if (!translationsStatus) return;
+  translationsStatus.textContent = msg || '';
+  translationsStatus.style.color = isError ? '#ff6767' : '#9acd32';
+}
+function setTRError(msg) {
+  if (!translationsJsonError) return;
+  if (msg) {
+    translationsJsonError.style.display = 'block';
+    translationsJsonError.textContent = msg;
+  } else {
+    translationsJsonError.style.display = 'none';
+    translationsJsonError.textContent = '';
+  }
+}
+function getTRJson() {
+  const txt = (translationsJsonTA?.value || '').trim();
+  if (!txt) throw new Error('JSON пуст');
+  let obj;
+  try { obj = JSON.parse(txt); } catch (e) { throw new Error('Невалидный JSON: ' + e.message); }
+  if (!obj.ru || !obj.en || typeof obj.ru !== 'object' || typeof obj.en !== 'object') {
+    throw new Error('JSON должен содержать корни "ru" и "en" (объекты).');
+  }
+  return obj;
+}
+function setTRJson(obj) {
+  if (!translationsJsonTA) return;
+  translationsJsonTA.value = JSON.stringify(obj, null, 2);
+}
+
+async function loadTranslationsJsonPanel() {
+  if (!translationsJsonTA) return;
+  setTRError('');
+  setTRStatus('Загрузка...');
+  translationsSha = null;
+  try {
+    const resp = await api(`/file?path=${encodeURIComponent(TRANSLATIONS_PATH)}&branch=${encodeURIComponent(BRANCH)}`);
+    translationsSha = resp.sha || null;
+    const content = resp.content || '';
+    originalTranslationsText = content;
+    translationsJsonTA.value = content;
+    // Попытка авто-форматирования, если сырая строка:
+    try {
+      const parsed = JSON.parse(content);
+      translationsJsonTA.value = JSON.stringify(parsed, null, 2);
+    } catch {}
+    // Автозаполнение быстрых полей
+    syncFromJsonToQuickFields();
+    setTRStatus('Загружено.');
+  } catch (e) {
+    // Если файла нет — подготовим шаблон
+    const fallback = { ru: {}, en: {} };
+    translationsSha = null;
+    originalTranslationsText = JSON.stringify(fallback, null, 2);
+    setTRJson(fallback);
+    setTRError('Внимание: файл не найден. Будет создан при сохранении.');
+    setTRStatus('');
+  }
+}
+
+async function saveTranslationsJsonPanel() {
+  if (!translationsJsonTA) return;
+  setTRError('');
+  setTRStatus('Сохранение...');
+  try {
+    const obj = getTRJson();
+    const content = JSON.stringify(obj, null, 2);
+    const message = 'Update data/translations.json via admin';
+    const body = {
+      path: TRANSLATIONS_PATH,
+      branch: BRANCH,
+      content,
+      message,
+      ...(translationsSha ? { sha: translationsSha } : {})
+    };
+    const resp = await api(`/file`, { method: 'PUT', body });
+    translationsSha = resp.content?.sha || resp.sha || null;
+    originalTranslationsText = content;
+    setTRStatus('Сохранено. Перейдите на сайт и обновите страницу — новые тексты подтянутся автоматически.');
+  } catch (e) {
+    setTRStatus('');
+    setTRError('Ошибка сохранения: ' + e.message);
+  }
+}
+
+function prettyTranslationsJson() {
+  try {
+    const j = getTRJson();
+    setTRJson(j);
+    setTRError('');
+  } catch (e) {
+    setTRError(e.message);
+  }
+}
+function validateTranslationsJson() {
+  try { getTRJson(); setTRError('JSON корректный'); } catch (e) { setTRError(e.message); }
+}
+function resetTranslationsChanges() {
+  if (!translationsJsonTA) return;
+  translationsJsonTA.value = originalTranslationsText || '';
+  setTRError('');
+  setTRStatus('');
+  // вернуть быстрые поля к состоянию файла
+  try { syncFromJsonToQuickFields(); } catch {}
+}
+
+// Быстрые поля
+function syncFromJsonToQuickFields() {
+  try {
+    const j = getTRJson();
+    if (ru_main_title) ru_main_title.value = j.ru.main_title || '';
+    if (en_main_title) en_main_title.value = j.en.main_title || '';
+    if (ru_chat_welcome_message) ru_chat_welcome_message.value = j.ru.chat_welcome_message || '';
+    if (en_chat_welcome_message) en_chat_welcome_message.value = j.en.chat_welcome_message || '';
+    setTRError('');
+  } catch (e) { setTRError(e.message); }
+}
+function syncFromQuickFieldsToJson() {
+  try {
+    const j = getTRJson();
+    if (ru_main_title) j.ru.main_title = ru_main_title.value;
+    if (en_main_title) j.en.main_title = en_main_title.value;
+    if (ru_chat_welcome_message) j.ru.chat_welcome_message = ru_chat_welcome_message.value;
+    if (en_chat_welcome_message) j.en.chat_welcome_message = en_chat_welcome_message.value;
+    setTRJson(j);
+    setTRError('');
+  } catch (e) { setTRError(e.message); }
 }
 
 // ===== Инициализация =====
@@ -281,6 +433,21 @@ async function initAfterLogin() {
   refreshImagesBtn?.addEventListener('click', () => loadImages().catch(console.error));
   uploadBtn?.addEventListener('click', () => uploadSelectedFiles().catch(console.error));
   logoutBtn?.addEventListener('click', doLogout);
+
+  // Привязка кнопок панели переводов
+  btnLoadTranslations?.addEventListener('click', () => loadTranslationsJsonPanel().catch(console.error));
+  btnPrettyTranslations?.addEventListener('click', () => prettyTranslationsJson());
+  btnValidateTranslations?.addEventListener('click', () => validateTranslationsJson());
+  btnSaveTranslations?.addEventListener('click', () => saveTranslationsJsonPanel().catch(console.error));
+  btnResetTranslations?.addEventListener('click', () => resetTranslationsChanges());
+  btnSyncFromJson?.addEventListener('click', () => syncFromJsonToQuickFields());
+  btnSyncToJson?.addEventListener('click', () => syncFromQuickFieldsToJson());
+
+  // Автозагрузка translations при первом заходе в панель (ленивая)
+  // Если textarea пустая — подтянем файл
+  if (translationsJsonTA && !translationsJsonTA.value.trim()) {
+    await loadTranslationsJsonPanel().catch(console.error);
+  }
 }
 
 function initLoginUI() {
