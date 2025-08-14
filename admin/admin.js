@@ -29,6 +29,10 @@ const tabPanels = {
   translations: document.getElementById('tab-translations')
 };
 
+// Hamburger menu
+const menuBtn = document.getElementById('menuBtn');
+const topMenu = document.getElementById('topMenu');
+
 // Files
 const refreshFilesBtn = document.getElementById('refreshFiles');
 const filesUl = document.getElementById('filesUl');
@@ -158,44 +162,54 @@ function initTabs() {
   });
 }
 
-// ===== Hamburger menu routing =====
-const menuToggle = document.getElementById('menuToggle');
-const menuPanel = document.getElementById('menuPanel');
-const menuClose = document.getElementById('menuClose');
-const navFiles = document.getElementById('navFiles');
-const navImages = document.getElementById('navImages');
-const navTranslations = document.getElementById('navTranslations');
-
-function openMenu() {
-  menuPanel?.classList.add('open');
-  menuToggle?.classList.add('active');
-  menuToggle?.setAttribute('aria-expanded', 'true');
-}
-function closeMenu() {
-  menuPanel?.classList.remove('open');
-  menuToggle?.classList.remove('active');
-  menuToggle?.setAttribute('aria-expanded', 'false');
-}
-function toggleMenu() {
-  if (!menuPanel) return;
-  const isOpen = menuPanel.classList.contains('open');
-  isOpen ? closeMenu() : openMenu();
-}
-
-function showTab(key){
+// ===== Навигация (гамбургер) =====
+function setActiveTab(key) {
   Object.entries(tabPanels).forEach(([k, el]) => {
-    el?.classList.toggle('active', k === key);
+    if (!el) return;
+    el.classList.toggle('active', k === key);
   });
+  if (key === 'images') {
+    loadImages().catch(console.error);
+  }
+  if (key === 'translations') {
+    if (translationsJsonTA && !translationsJsonTA.value.trim()) {
+      loadTranslationsJsonPanel().catch(console.error);
+    }
+  }
 }
 
-function initMenu() {
-  menuToggle?.addEventListener('click', toggleMenu);
-  menuClose?.addEventListener('click', closeMenu);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
-  // навигация
-  navFiles?.addEventListener('click', () => { showTab('files'); closeMenu(); });
-  navImages?.addEventListener('click', () => { showTab('images'); closeMenu(); });
-  navTranslations?.addEventListener('click', () => { showTab('translations'); closeMenu(); });
+function toggleMenu(open) {
+  if (!topMenu || !menuBtn) return;
+  const willOpen = typeof open === 'boolean' ? open : !topMenu.classList.contains('open');
+  topMenu.classList.toggle('open', willOpen);
+  topMenu.setAttribute('aria-hidden', willOpen ? 'false' : 'true');
+  menuBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+}
+
+function initMenuNav() {
+  if (menuBtn) {
+    menuBtn.addEventListener('click', () => toggleMenu());
+  }
+  if (topMenu) {
+    topMenu.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-nav]');
+      if (!btn) return;
+      const key = btn.getAttribute('data-nav');
+      if (key === 'logout') {
+        toggleMenu(false);
+        doLogout();
+        return;
+      }
+      if (['files','images','translations'].includes(key)) {
+        setActiveTab(key);
+        toggleMenu(false);
+      }
+    });
+  }
+  // Закрытие меню по ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') toggleMenu(false);
+  });
 }
 
 // ===== Fullscreen helpers =====
@@ -483,9 +497,6 @@ function prettyTranslationsJson() {
     const j = getTRJson();
     setTRJson(j);
     setTRError('');
-  // Инициализация меню
-  initMenu();
-
   } catch (e) {
     setTRError(e.message);
   }
@@ -526,9 +537,10 @@ function syncFromQuickFieldsToJson() {
 
 // ===== Инициализация =====
 async function initAfterLogin() {
-  // Tabs + fullscreen
-  initTabs();
+  // Fullscreen + hamburger menu
+  // initTabs(); // вкладки больше не используются
   initFullscreenControls();
+  initMenuNav();
 
   await loadFilesList().catch(console.error);
   await loadImages().catch(console.error);
@@ -553,6 +565,9 @@ async function initAfterLogin() {
   if (translationsJsonTA && !translationsJsonTA.value.trim()) {
     await loadTranslationsJsonPanel().catch(console.error);
   }
+
+  // Стартовый раздел
+  setActiveTab('files');
 }
 
 function initLoginUI() {
