@@ -2,205 +2,198 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>MIMIMI Admin</title>
-  <link rel="stylesheet" href="style.css?v=3" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mimimi Admin</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <!-- Login View -->
-  <div id="loginView" class="login-view">
+  <div id="loginView" class="login-view" style="display:none">
     <div class="login-card">
-      <h1 class="app-title">MIMIMI Admin</h1>
+      <h2 class="app-title">Вход в админку</h2>
+
       <div class="login-field">
         <label for="adminPassword">Пароль</label>
         <div class="pwd-wrap">
-          <input id="adminPassword" type="password" placeholder="Введите пароль" autocomplete="current-password" />
-          <button id="togglePwd" class="btn ghost" type="button">Показать</button>
+          <input type="password" id="adminPassword" placeholder="Введите пароль" />
+          <button class="btn" id="togglePwd" type="button">Показать</button>
         </div>
       </div>
+
       <div id="loginError" class="error" style="display:none"></div>
+
       <div class="login-actions">
-        <button id="loginBtn" class="btn primary">Войти</button>
-        <button id="loginReset" class="btn ghost">Сбросить</button>
+        <button class="btn primary" id="loginBtn" type="button">Войти</button>
+        <button class="btn ghost" id="loginReset" type="button">Сбросить</button>
       </div>
-      <div class="muted small">Совет: после изменения механизма входа — перелогиниться.</div>
     </div>
   </div>
 
   <!-- App -->
-  <div id="app" class="app">
+  <div id="app" class="app" style="visibility:hidden">
+
     <!-- Header -->
     <header class="header">
       <div class="brand">
         <div class="logo">✦</div>
         <div class="brand-text">
-          <div class="brand-title">MIMIMI Admin</div>
-          <div class="brand-sub">Панель управления</div>
+          <div class="brand-title">Mimimi Admin</div>
+          <div class="brand-sub">Управление сайтом</div>
         </div>
       </div>
-      <button id="menuBtn" class="hamburger" aria-label="Меню" aria-expanded="false">
+
+      <div class="tabs" aria-hidden="true"></div>
+
+      <!-- Hamburger -->
+      <button id="menuBtn" class="hamburger" type="button" aria-label="Открыть меню" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <div class="header-actions">
-        <button id="logoutBtn" class="btn danger">Выйти</button>
-      </div>
     </header>
 
-    <!-- Top menu panel -->
-    <div id="topMenu" class="menu-panel" role="dialog" aria-modal="true" aria-hidden="true">
+    <!-- Top Menu Panel -->
+    <div id="topMenu" class="menu-panel" aria-hidden="true">
       <div class="menu-inner">
-        <div class="menu-grid">
-          <button class="menu-btn" data-nav="files">Файлы</button>
-          <button class="menu-btn" data-nav="images">Изображения</button>
-          <button class="menu-btn" data-nav="translations">Тексты (RU/EN)</button>
-          <button class="menu-btn" data-nav="logout">Выйти</button>
+        <div class="menu-header">
+          <div class="spacer"></div>
+          <button id="menuClose" class="btn ghost small" type="button" aria-label="Закрыть меню">✕</button>
+        </div>
+
+        <div class="menu-grid" role="menu">
+          <button class="menu-btn" data-nav="files" type="button" role="menuitem">Файлы</button>
+          <button class="menu-btn" data-nav="images" type="button" role="menuitem">Изображения</button>
+          <button class="menu-btn" data-nav="translations" type="button" role="menuitem">Переводы</button>
+          <button class="menu-btn" data-nav="logout" type="button" role="menuitem">Выйти</button>
         </div>
       </div>
     </div>
 
     <!-- Main -->
     <main class="main">
-      <!-- Tab: Files -->
-      <section class="tab-panel active" id="tab-files" role="tabpanel" aria-labelledby="tab-files">
-        <div class="split-3">
-          <!-- Column A: Files List -->
-          <aside class="panel">
-            <div class="panel-header">
-              <div class="panel-title">Файлы <span class="tag" id="filesCount">0</span></div>
-              <div class="panel-actions">
-                <button id="refreshFiles" class="btn ghost small">Обновить</button>
-              </div>
-            </div>
-            <ul id="filesUl" class="list"></ul>
-          </aside>
 
-          <!-- Column B: Editor -->
-          <section class="panel" id="editorPane">
-            <div class="panel-header">
-              <div class="panel-title">Редактор</div>
-              <div class="panel-actions">
-                <button id="btnEditorFullscreen" class="btn ghost small" title="Во весь экран">⤢</button>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <label for="editPath">Путь к файлу</label>
-              <div class="inline">
-                <input id="editPath" type="text" placeholder="index.html" />
-                <button id="loadFileBtn" class="btn">Открыть</button>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <label for="commitMessage">Комментарий к коммиту</label>
-              <input id="commitMessage" type="text" placeholder="Update index.html" />
-            </div>
-
-            <div class="form-row">
-              <label for="fileContent">Содержимое файла</label>
-              <textarea id="fileContent" class="code-area" spellcheck="false" placeholder="Здесь будет содержимое файла..."></textarea>
-            </div>
-
-            <div class="panel-footer">
-              <div id="fileSha" class="muted"></div>
-              <div class="spacer"></div>
-              <button id="saveFileBtn" class="btn primary">Сохранить</button>
-            </div>
-          </section>
-
-          <!-- Column C: Preview -->
-          <section class="panel" id="previewPane">
-            <div class="panel-header">
-              <div class="panel-title">Предпросмотр</div>
-              <div class="panel-actions">
-                <button id="btnPreviewFullscreen" class="btn ghost small" title="Во весь экран">⤢</button>
-              </div>
-            </div>
-            <iframe id="editor" class="preview-frame" title="Предпросмотр"></iframe>
-          </section>
-        </div>
-      </section>
-
-      <!-- Tab: Images -->
-      <section class="tab-panel" id="tab-images" role="tabpanel" aria-labelledby="tab-images">
+      <!-- Files Tab -->
+      <section id="tab-files" class="split-3 active" aria-label="Файлы">
+        <!-- Files list panel -->
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">Изображения</div>
-            <div class="panel-actions">
-              <label class="muted small" for="imagesDir">Папка</label>
-              <input id="imagesDir" type="text" value="images/portfolio" class="mono small" />
-              <button id="refreshImages" class="btn ghost small">Обновить</button>
-            </div>
+            <div class="panel-title">Файлы</div>
+            <div class="spacer"></div>
+            <button id="refreshFiles" class="btn small" type="button">Обновить</button>
           </div>
-
           <div class="panel-body">
-            <div class="upload-row">
-              <input id="uploadInput" type="file" accept="image/*" multiple />
-              <button id="uploadBtn" class="btn">Загрузить</button>
+            <div class="muted small">Всего: <span id="filesCount">0</span></div>
+            <ul id="filesUl" class="list" role="listbox" aria-label="Список файлов"></ul>
+          </div>
+        </div>
+
+        <!-- Editor panel -->
+        <div id="editorPane" class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Редактор</div>
+            <div class="panel-actions">
+              <button id="btnEditorFullscreen" class="btn ghost small" type="button">На весь экран</button>
             </div>
-            <div id="imagesGrid" class="grid-images"></div>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label for="editPath">Путь</label>
+              <div class="inline">
+                <input id="editPath" type="text" class="mono" placeholder="например, index.html" />
+                <button id="loadFileBtn" class="btn" type="button">Загрузить</button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="fileContent">Содержимое</label>
+              <textarea id="fileContent" class="code-area mono" placeholder="Здесь будет содержимое файла"></textarea>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <div id="fileSha" class="small muted"></div>
+            <div class="spacer"></div>
+            <input id="commitMessage" type="text" placeholder="Комментарий к коммиту (опционально)" />
+            <button id="saveFileBtn" class="btn primary" type="button">Сохранить</button>
+          </div>
+        </div>
+
+        <!-- Preview panel -->
+        <div id="previewPane" class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Предпросмотр</div>
+            <div class="panel-actions">
+              <button id="btnPreviewFullscreen" class="btn ghost small" type="button">На весь экран</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <iframe id="editor" class="preview-frame" title="Предпросмотр"></iframe>
           </div>
         </div>
       </section>
 
-      <!-- Tab: Translations -->
-      <section class="tab-panel" id="tab-translations" role="tabpanel" aria-labelledby="tab-translations">
-        <div class="split-2">
-          <!-- JSON editor -->
-          <section class="panel" id="translationsPane">
-            <div class="panel-header">
-              <div class="panel-title">Файл переводов</div>
-              <div class="panel-actions">
-                <button id="btnTranslationsFullscreen" class="btn ghost small" title="Во весь экран">⤢</button>
-              </div>
-            </div>
-            <div class="panel-toolbar">
-              <button id="btnLoadTranslations" class="btn ghost small">Загрузить файл</button>
-              <button id="btnPrettyTranslations" class="btn ghost small">Форматировать</button>
-              <button id="btnValidateTranslations" class="btn ghost small">Проверить</button>
-              <button id="btnSaveTranslations" class="btn primary small">Сохранить</button>
-              <button id="btnResetTranslations" class="btn ghost small">Отменить изменения</button>
-              <div class="spacer"></div>
-              <span id="translationsStatus" class="status"></span>
-            </div>
-            <textarea id="translationsJson" class="code-area" spellcheck="false" placeholder='{"ru":{},"en":{}}'></textarea>
-            <div id="translationsJsonError" class="error" style="display:none"></div>
-          </section>
-
-          <!-- Quick fields -->
-          <aside class="panel">
-            <div class="panel-header">
-              <div class="panel-title">Быстрые поля</div>
-              <div class="panel-actions">
-                <button id="btnSyncFromJson" class="btn ghost small">Из JSON → Поля</button>
-                <button id="btnSyncToJson" class="btn ghost small">Из Полей → JSON</button>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div class="form-row">
-                <label for="ru_main_title">Заголовок (RU)</label>
-                <input id="ru_main_title" type="text" />
-              </div>
-              <div class="form-row">
-                <label for="en_main_title">Заголовок (EN)</label>
-                <input id="en_main_title" type="text" />
-              </div>
-              <div class="form-row">
-                <label for="ru_chat_welcome_message">Приветствие в чате (RU)</label>
-                <textarea id="ru_chat_welcome_message" rows="3"></textarea>
-              </div>
-              <div class="form-row">
-                <label for="en_chat_welcome_message">Приветствие в чате (EN)</label>
-                <textarea id="en_chat_welcome_message" rows="3"></textarea>
-              </div>
-              <div class="muted small">Подтягивайте и сохраняйте через верхнюю панель.</div>
-            </div>
-          </aside>
+      <!-- Images Tab -->
+      <section id="tab-images" class="panel" aria-label="Изображения" style="display:none">
+        <div class="panel-header">
+          <div class="panel-title">Изображения</div>
+        </div>
+        <div class="panel-body">
+          <div class="upload-row">
+            <input id="imagesDir" type="text" placeholder="Каталог, например images/portfolio" value="images/portfolio" />
+            <button id="refreshImages" class="btn" type="button">Показать</button>
+            <input id="uploadInput" type="file" multiple />
+            <button id="uploadBtn" class="btn primary" type="button">Загрузить</button>
+          </div>
+          <div id="imagesGrid" class="grid-images"></div>
         </div>
       </section>
+
+      <!-- Translations Tab -->
+      <section id="tab-translations" class="panel" aria-label="Переводы" style="display:none">
+        <div class="panel-header">
+          <div class="panel-title">Переводы (data/translations.json)</div>
+          <div class="panel-actions">
+            <button id="btnTranslationsFullscreen" class="btn ghost small" type="button">На весь экран</button>
+          </div>
+        </div>
+        <div id="translationsPane" class="panel-body">
+          <div class="form-row">
+            <div class="inline" style="flex-wrap:wrap; gap:12px">
+              <button id="btnLoadTranslations" class="btn" type="button">Загрузить JSON</button>
+              <button id="btnPrettyTranslations" class="btn" type="button">Форматировать</button>
+              <button id="btnValidateTranslations" class="btn" type="button">Проверить</button>
+              <button id="btnSaveTranslations" class="btn primary" type="button">Сохранить</button>
+              <button id="btnResetTranslations" class="btn ghost" type="button">Сбросить</button>
+              <span id="translationsStatus" class="status small"></span>
+            </div>
+          </div>
+
+          <div id="translationsJsonError" class="error" style="display:none"></div>
+
+          <div class="form-row">
+            <label for="translationsJson">JSON</label>
+            <textarea id="translationsJson" class="code-area mono" placeholder='{"ru": {...}, "en": {...}}'></textarea>
+          </div>
+
+          <div class="form-row">
+            <label>Быстрые поля</label>
+            <div class="inline">
+              <input id="ru_main_title" type="text" placeholder="ru.main_title" />
+              <input id="en_main_title" type="text" placeholder="en.main_title" />
+            </div>
+            <div class="inline" style="margin-top:8px">
+              <input id="ru_chat_welcome_message" type="text" placeholder="ru.chat_welcome_message" />
+              <input id="en_chat_welcome_message" type="text" placeholder="en.chat_welcome_message" />
+            </div>
+            <div class="inline" style="margin-top:8px">
+              <button id="btnSyncFromJson" class="btn small" type="button">Заполнить поля из JSON</button>
+              <button id="btnSyncToJson" class="btn small" type="button">Перенести поля в JSON</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
-  <script src="admin.js?v=40"></script>
+  <script src="script.js"></script>
 </body>
 </html>
