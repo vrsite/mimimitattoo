@@ -46,6 +46,7 @@ body{
 .brand-sub{font-size:12px; color:var(--muted)}
 
 .tabs{display:flex; gap:8px; flex: 1 1 auto; padding-left:16px}
+
 /* Hamburger */
 .hamburger{width:40px; height:34px; border-radius:8px; border:1px solid var(--border); background:transparent; display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; cursor:pointer}
 .hamburger span{display:block; width:20px; height:2px; background:#cfe6ff; border-radius:2px; transition:.2s}
@@ -57,13 +58,15 @@ body{
 .menu-panel{position:fixed; left:0; right:0; top:0; background:#0d1117f2; backdrop-filter: blur(8px); border-bottom:1px solid var(--border); transform:translateY(-110%); transition:transform .22s ease; z-index:100; box-shadow:0 20px 40px rgba(0,0,0,.4)}
 .menu-panel.open{transform:translateY(0)}
 .menu-inner{max-width:1000px; margin:0 auto; padding:16px}
+.menu-header{display:flex; align-items:center; gap:8px; padding:4px 0 12px 0}
 .menu-grid{display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:10px}
 .menu-btn{padding:12px; border-radius:10px; border:1px solid var(--border); background:linear-gradient(180deg,#0f141b,#0b0f15); color:var(--text); cursor:pointer; text-align:center}
 .menu-btn:hover{border-color:#2b3240; background:#111824}
 @media (max-width: 700px){ .menu-grid{grid-template-columns: repeat(2, minmax(0,1fr));} }
 
-.tab{background:transparent; border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:999px; cursor:pointer}
-.tab.active{background:#18202b; border-color:#2a3344}
+/* hidden legacy tabs style kept for reference */
+/* .tab{background:transparent; border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:999px; cursor:pointer}
+.tab.active{background:#18202b; border-color:#2a3344} */
 
 .main{padding:16px; display:block}
 
