@@ -158,6 +158,46 @@ function initTabs() {
   });
 }
 
+// ===== Hamburger menu routing =====
+const menuToggle = document.getElementById('menuToggle');
+const menuPanel = document.getElementById('menuPanel');
+const menuClose = document.getElementById('menuClose');
+const navFiles = document.getElementById('navFiles');
+const navImages = document.getElementById('navImages');
+const navTranslations = document.getElementById('navTranslations');
+
+function openMenu() {
+  menuPanel?.classList.add('open');
+  menuToggle?.classList.add('active');
+  menuToggle?.setAttribute('aria-expanded', 'true');
+}
+function closeMenu() {
+  menuPanel?.classList.remove('open');
+  menuToggle?.classList.remove('active');
+  menuToggle?.setAttribute('aria-expanded', 'false');
+}
+function toggleMenu() {
+  if (!menuPanel) return;
+  const isOpen = menuPanel.classList.contains('open');
+  isOpen ? closeMenu() : openMenu();
+}
+
+function showTab(key){
+  Object.entries(tabPanels).forEach(([k, el]) => {
+    el?.classList.toggle('active', k === key);
+  });
+}
+
+function initMenu() {
+  menuToggle?.addEventListener('click', toggleMenu);
+  menuClose?.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+  // навигация
+  navFiles?.addEventListener('click', () => { showTab('files'); closeMenu(); });
+  navImages?.addEventListener('click', () => { showTab('images'); closeMenu(); });
+  navTranslations?.addEventListener('click', () => { showTab('translations'); closeMenu(); });
+}
+
 // ===== Fullscreen helpers =====
 function toggleFullscreen(el) {
   if (!el) return;
@@ -443,6 +483,9 @@ function prettyTranslationsJson() {
     const j = getTRJson();
     setTRJson(j);
     setTRError('');
+  // Инициализация меню
+  initMenu();
+
   } catch (e) {
     setTRError(e.message);
   }
