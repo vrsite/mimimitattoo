@@ -38,25 +38,25 @@
           <div class="brand-sub">Панель управления</div>
         </div>
       </div>
-      <button id="menuToggle" class="hamburger" aria-label="Меню" aria-expanded="false" aria-controls="menuPanel">
-        <span class="bar"></span>
-        <span class="bar"></span>
+      <button id="menuBtn" class="hamburger" aria-label="Меню" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
-      <div id="menuPanel" class="menu-panel" role="menu">
-        <div class="menu-header">
-          <div class="logo">✦</div>
-          <div class="menu-title">MIMIMI Admin — панель управления</div>
-          <button id="menuClose" class="menu-close" aria-label="Закрыть">✕</button>
-        </div>
-        <div class="menu-body">
-          <button id="navFiles" class="menu-item" role="menuitem">Файлы</button>
-          <button id="navImages" class="menu-item" role="menuitem">Изображения</button>
-          <button id="navTranslations" class="menu-item" role="menuitem">Тексты (RU/EN)</button>
-          <hr class="menu-sep" />
-          <button id="logoutBtn" class="menu-item danger" role="menuitem">Выйти</button>
-        </div>
+      <div class="header-actions">
+        <button id="logoutBtn" class="btn danger">Выйти</button>
       </div>
     </header>
+
+    <!-- Top menu panel -->
+    <div id="topMenu" class="menu-panel" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="menu-inner">
+        <div class="menu-grid">
+          <button class="menu-btn" data-nav="files">Файлы</button>
+          <button class="menu-btn" data-nav="images">Изображения</button>
+          <button class="menu-btn" data-nav="translations">Тексты (RU/EN)</button>
+          <button class="menu-btn" data-nav="logout">Выйти</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Main -->
     <main class="main">
