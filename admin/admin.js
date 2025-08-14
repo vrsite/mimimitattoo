@@ -33,6 +33,7 @@ const tabPanels = {
 const menuBtn = document.getElementById('menuBtn');
 const topMenu = document.getElementById('topMenu');
 
+
 // Files
 const refreshFilesBtn = document.getElementById('refreshFiles');
 const filesUl = document.getElementById('filesUl');
@@ -157,10 +158,6 @@ function initTabs() {
       Object.entries(tabPanels).forEach(([k, el]) => {
         if (!el) return;
         el.classList.toggle('active', k === key);
-      });
-    });
-  });
-}
 
 // ===== Навигация (гамбургер) =====
 function setActiveTab(key) {
@@ -206,9 +203,13 @@ function initMenuNav() {
       }
     });
   }
-  // Закрытие меню по ESC
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') toggleMenu(false);
+  });
+}
+
+      });
+    });
   });
 }
 
@@ -565,9 +566,6 @@ async function initAfterLogin() {
   if (translationsJsonTA && !translationsJsonTA.value.trim()) {
     await loadTranslationsJsonPanel().catch(console.error);
   }
-
-  // Стартовый раздел
-  setActiveTab('files');
 }
 
 function initLoginUI() {
