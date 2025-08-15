@@ -1,16 +1,13 @@
-// ===== КОНФИГ =====
 const API_URL = 'https://mimimi-admin-proxy.vadimrobertovich96.workers.dev';
 const AUTH_KEY = 'mimimiAdminOK';
-const CONTENT_ROOT = ''; // сайт публикуется из корня ветки main
+const CONTENT_ROOT = '';
 const BRANCH = 'main';
 const TRANSLATIONS_PATH = 'data/translations.json';
 
-console.log('admin.js loaded v41 (menu close + robust nav)');
+console.log('admin.js v50 (nav visible + autosave + outside click + fs exit + progress)');
 
-// ЭЛЕМЕНТЫ
 const app = document.getElementById('app');
 
-// Login UI
 const loginView = document.getElementById('loginView');
 const loginBtn = document.getElementById('loginBtn');
 const loginResetBtn = document.getElementById('loginReset');
@@ -18,27 +15,20 @@ const adminPasswordEl = document.getElementById('adminPassword');
 const loginError = document.getElementById('loginError');
 const togglePwdBtn = document.getElementById('togglePwd');
 
-// Header
-const logoutBtn = document.getElementById('logoutBtn'); // может отсутствовать (в меню есть «Выйти»)
-
-// Tabs (визуальные не используем, но оставим объект панелей)
 const tabPanels = {
   files: document.getElementById('tab-files'),
   images: document.getElementById('tab-images'),
   translations: document.getElementById('tab-translations')
 };
 
-// Hamburger menu
 const menuBtn = document.getElementById('menuBtn');
 const topMenu = document.getElementById('topMenu');
 const menuCloseBtn = document.getElementById('menuClose');
 
-// Files
 const refreshFilesBtn = document.getElementById('refreshFiles');
 const filesUl = document.getElementById('filesUl');
 const filesCount = document.getElementById('filesCount');
 
-// Editor
 const editPath = document.getElementById('editPath');
 const loadFileBtn = document.getElementById('loadFileBtn');
 const saveFileBtn = document.getElementById('saveFileBtn');
@@ -46,25 +36,27 @@ const fileContent = document.getElementById('fileContent');
 const fileShaEl = document.getElementById('fileSha');
 const commitMessageEl = document.getElementById('commitMessage');
 const editor = document.getElementById('editor');
+const saveStatus = document.getElementById('saveStatus');
+const autoSaveToggle = document.getElementById('autoSaveToggle');
 
-// Fullscreen buttons
 const btnEditorFullscreen = document.getElementById('btnEditorFullscreen');
 const btnPreviewFullscreen = document.getElementById('btnPreviewFullscreen');
 const btnTranslationsFullscreen = document.getElementById('btnTranslationsFullscreen');
+const exitFsBtn = document.getElementById('exitFsBtn');
 
-// Panes for fullscreen
 const editorPane = document.getElementById('editorPane');
 const previewPane = document.getElementById('previewPane');
 const translationsPane = document.getElementById('translationsPane');
 
-// Images
 const imagesDirInput = document.getElementById('imagesDir');
 const refreshImagesBtn = document.getElementById('refreshImages');
 const uploadInput = document.getElementById('uploadInput');
 const uploadBtn = document.getElementById('uploadBtn');
 const imagesGrid = document.getElementById('imagesGrid');
+const uploadProgress = document.getElementById('uploadProgress');
+const uploadProgressBar = document.getElementById('uploadProgressBar');
+const uploadProgressText = document.getElementById('uploadProgressText');
 
-// Translations panel
 const translationsJsonTA = document.getElementById('translationsJson');
 const translationsJsonError = document.getElementById('translationsJsonError');
 const translationsStatus = document.getElementById('translationsStatus');
@@ -81,7 +73,6 @@ const en_chat_welcome_message = document.getElementById('en_chat_welcome_message
 const btnSyncToJson = document.getElementById('btnSyncToJson');
 const btnSyncFromJson = document.getElementById('btnSyncFromJson');
 
-// ===== API (Bearer) =====
 async function api(path, opts = {}) {
   const url = `${API_URL}${path}`;
   const token = sessionStorage.getItem('authToken') || '';
@@ -106,12 +97,10 @@ async function api(path, opts = {}) {
   return data;
 }
 
-// ===== Утилиты =====
 function joinPath(...parts) {
   return parts.filter(Boolean).join('/').replace(/\/{2,}/g, '/');
 }
 
-// Базовый URL сайта для корректного предпросмотра (автоматически убираем /admin/…)
 const SITE_BASE = (() => {
   try {
     const u = new URL(document.baseURI);
@@ -147,24 +136,21 @@ function showLogin() {
   loginError.style.display = 'none';
 }
 
-// ===== Навигация (гамбургер) =====
 function setActiveTab(key) {
-  // показать нужный раздел
   Object.entries(tabPanels).forEach(([k, el]) => {
     if (!el) return;
     el.style.display = k === key ? (k === 'files' ? '' : 'block') : 'none';
     el.classList.toggle('active', k === key);
   });
-
-  // ленивые загрузки
-  if (key === 'images') {
-    loadImages().catch(console.error);
+  if (key === 'images') loadImages().catch(console.error);
+  if (key === 'translations' && translationsJsonTA && !translationsJsonTA.value.trim()) {
+    loadTranslationsJsonPanel().catch(console.error);
   }
-  if (key === 'translations') {
-    if (translationsJsonTA && !translationsJsonTA.value.trim()) {
-      loadTranslationsJsonPanel().catch(console.error);
-    }
-  }
+  document.querySelectorAll('[data-nav]').forEach(btn => {
+    const k = btn.getAttribute('data-nav');
+    if (!k || k === 'logout') return;
+    btn.classList.toggle('active', k === key);
+  });
 }
 
 function toggleMenu(open) {
@@ -176,56 +162,57 @@ function toggleMenu(open) {
 }
 
 function initMenuNav() {
-  // Кнопка открытия
   menuBtn?.addEventListener('click', () => toggleMenu());
-
-  // Крестик закрытия
   menuCloseBtn?.addEventListener('click', () => toggleMenu(false));
-
-  // Делегирование кликов по пунктам меню
   topMenu?.addEventListener('click', (e) => {
+    if (e.target === topMenu) { toggleMenu(false); return; }
     const btn = e.target.closest('[data-nav]');
     if (!btn) return;
     const key = btn.getAttribute('data-nav');
-    if (key === 'logout') {
-      toggleMenu(false);
-      doLogout();
-      return;
-    }
-    if (['files','images','translations'].includes(key)) {
-      setActiveTab(key);
-      toggleMenu(false);
-    }
+    if (key === 'logout') { toggleMenu(false); doLogout(); return; }
+    if (['files','images','translations'].includes(key)) { setActiveTab(key); toggleMenu(false); }
   });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleMenu(false); });
 
-  // Закрытие меню по ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') toggleMenu(false);
+  document.querySelector('.primary-nav')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-nav]');
+    if (!btn) return;
+    const key = btn.getAttribute('data-nav');
+    if (key === 'logout') { doLogout(); return; }
+    if (['files','images','translations'].includes(key)) setActiveTab(key);
   });
 }
 
-// ===== Fullscreen helpers =====
+function anyFullscreenOn() {
+  return [editorPane, previewPane, translationsPane].some(p => p?.classList.contains('fullscreen'));
+}
+function updateExitFsBtn() {
+  exitFsBtn.style.display = anyFullscreenOn() ? 'block' : 'none';
+}
 function toggleFullscreen(el) {
   if (!el) return;
-  const on = el.classList.toggle('fullscreen');
-  document.body.style.overflow = on ? 'hidden' : '';
+  el.classList.toggle('fullscreen');
+  document.body.style.overflow = anyFullscreenOn() ? 'hidden' : '';
+  updateExitFsBtn();
 }
-
 function initFullscreenControls() {
   btnEditorFullscreen?.addEventListener('click', () => toggleFullscreen(editorPane));
   btnPreviewFullscreen?.addEventListener('click', () => toggleFullscreen(previewPane));
   btnTranslationsFullscreen?.addEventListener('click', () => toggleFullscreen(translationsPane));
-
-  // Выход из фуллскрина по Esc
+  exitFsBtn?.addEventListener('click', () => {
+    [editorPane, previewPane, translationsPane].forEach(p => p?.classList.remove('fullscreen'));
+    document.body.style.overflow = '';
+    updateExitFsBtn();
+  });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       [editorPane, previewPane, translationsPane].forEach(p => p?.classList.remove('fullscreen'));
       document.body.style.overflow = '';
+      updateExitFsBtn();
     }
   });
 }
 
-// ===== Аутентификация (Bearer) =====
 async function doLogin() {
   const pwd = (adminPasswordEl.value || '').trim();
   if (!pwd) return;
@@ -254,7 +241,6 @@ function doLogout() {
     .finally(() => showLogin());
 }
 
-// ===== Файлы =====
 let currentSha = null;
 
 async function loadFilesList() {
@@ -289,7 +275,6 @@ async function loadFilesList() {
     filesUl.appendChild(li);
   }
 
-  // По умолчанию открываем index.html, если есть
   const idx = Array.from(filesUl.children).find(li => li.textContent.trim().startsWith('index.html'));
   if (idx) idx.click();
 }
@@ -302,29 +287,44 @@ async function loadFileForEdit() {
   currentSha = resp.sha || null;
   fileContent.value = resp.content || '';
   fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
-
   const html = injectBaseAndStripScripts(resp.content || '', SITE_BASE);
   editor.srcdoc = html;
+  saveStatus.textContent = '';
 }
 
 async function saveFile() {
   const displayPath = (editPath?.value || '').trim();
-  if (!displayPath) return alert('Выберите файл слева');
+  if (!displayPath) { alert('Выберите файл слева'); return; }
   const fullPath = joinPath(CONTENT_ROOT, displayPath);
   const content = fileContent.value ?? '';
   const message = (commitMessageEl?.value || '').trim() || `Update ${fullPath}`;
-
-  const resp = await api(`/file`, {
-    method: 'PUT',
-    body: { path: fullPath, branch: BRANCH, content, message, ...(currentSha ? { sha: currentSha } : {}) }
-  });
-  currentSha = resp.content?.sha || resp.sha || null;
-  fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
-  alert('Сохранено. Обновление сайта займёт 10–60 секунд (кеш GitHub Pages).');
-  await loadFileForEdit().catch(console.error);
+  saveStatus.textContent = 'Сохранение...';
+  try {
+    const resp = await api(`/file`, {
+      method: 'PUT',
+      body: { path: fullPath, branch: BRANCH, content, message, ...(currentSha ? { sha: currentSha } : {}) }
+    });
+    currentSha = resp.content?.sha || resp.sha || null;
+    fileShaEl.textContent = currentSha ? `sha: ${currentSha.slice(0,7)}…` : '';
+    saveStatus.textContent = 'Сохранено';
+    setTimeout(() => { if (saveStatus.textContent === 'Сохранено') saveStatus.textContent = ''; }, 1500);
+  } catch (e) {
+    saveStatus.textContent = 'Ошибка сохранения';
+    alert('Не удалось сохранить: ' + e.message);
+  }
 }
 
-// ===== Изображения =====
+function debounce(fn, ms) {
+  let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+const debouncedPreview = debounce(() => {
+  const html = injectBaseAndStripScripts(fileContent.value || '', SITE_BASE);
+  editor.srcdoc = html;
+}, 400);
+const debouncedAutoSave = debounce(() => {
+  if (autoSaveToggle?.checked) saveFile().catch(console.error);
+}, 1500);
+
 async function loadImages() {
   const dir = (imagesDirInput?.value || 'images/portfolio').trim();
   const resp = await api(`/list-images?dir=${encodeURIComponent(dir)}&branch=${encodeURIComponent(BRANCH)}`);
@@ -381,8 +381,13 @@ function dataUrlToBase64(u) {
 async function uploadSelectedFiles() {
   const dir = (imagesDirInput?.value || 'images/portfolio').trim();
   const files = Array.from(uploadInput.files || []);
-  if (!files.length) return alert('Выберите файлы');
+  if (!files.length) { alert('Выберите файлы'); return; }
 
+  uploadProgress.style.display = 'block';
+  uploadProgressBar.style.width = '0%';
+  uploadProgressText.textContent = `0/${files.length}`;
+
+  let done = 0;
   for (const file of files) {
     const b64 = await new Promise((resolve, reject) => {
       const r = new FileReader();
@@ -394,12 +399,17 @@ async function uploadSelectedFiles() {
       method: 'POST',
       body: { dir, branch: BRANCH, name: file.name, contentBase64: b64, message: `Add ${dir}/${file.name}` }
     });
+    done++;
+    const pct = Math.round((done / files.length) * 100);
+    uploadProgressBar.style.width = `${pct}%`;
+    uploadProgressText.textContent = `${done}/${files.length}`;
   }
+
   uploadInput.value = '';
+  setTimeout(() => { uploadProgress.style.display = 'none'; }, 600);
   await loadImages().catch(console.error);
 }
 
-// ===== Translations (Тексты RU/EN) =====
 let translationsSha = null;
 let originalTranslationsText = '';
 
@@ -432,7 +442,6 @@ function setTRJson(obj) {
   if (!translationsJsonTA) return;
   translationsJsonTA.value = JSON.stringify(obj, null, 2);
 }
-
 async function loadTranslationsJsonPanel() {
   if (!translationsJsonTA) return;
   setTRError('');
@@ -459,7 +468,6 @@ async function loadTranslationsJsonPanel() {
     setTRStatus('');
   }
 }
-
 async function saveTranslationsJsonPanel() {
   if (!translationsJsonTA) return;
   setTRError('');
@@ -478,25 +486,14 @@ async function saveTranslationsJsonPanel() {
     const resp = await api(`/file`, { method: 'PUT', body });
     translationsSha = resp.content?.sha || resp.sha || null;
     originalTranslationsText = content;
-    setTRStatus('Сохранено. Перейдите на сайт и обновите страницу — новые тексты подтянутся автоматически.');
+    setTRStatus('Сохранено. Перезагрузите сайт, чтобы увидеть изменения.');
   } catch (e) {
     setTRStatus('');
     setTRError('Ошибка сохранения: ' + e.message);
   }
 }
-
-function prettyTranslationsJson() {
-  try {
-    const j = getTRJson();
-    setTRJson(j);
-    setTRError('');
-  } catch (e) {
-    setTRError(e.message);
-  }
-}
-function validateTranslationsJson() {
-  try { getTRJson(); setTRError('JSON корректный'); } catch (e) { setTRError(e.message); }
-}
+function prettyTranslationsJson() { try { const j = getTRJson(); setTRJson(j); setTRError(''); } catch (e) { setTRError(e.message); } }
+function validateTranslationsJson() { try { getTRJson(); setTRError('JSON корректный'); } catch (e) { setTRError(e.message); } }
 function resetTranslationsChanges() {
   if (!translationsJsonTA) return;
   translationsJsonTA.value = originalTranslationsText || '';
@@ -504,8 +501,6 @@ function resetTranslationsChanges() {
   setTRStatus('');
   try { syncFromJsonToQuickFields(); } catch {}
 }
-
-// Быстрые поля
 function syncFromJsonToQuickFields() {
   try {
     const j = getTRJson();
@@ -528,29 +523,24 @@ function syncFromQuickFieldsToJson() {
   } catch (e) { setTRError(e.message); }
 }
 
-// ===== Инициализация =====
 async function initAfterLogin() {
-  // UI helpers
   initFullscreenControls();
   initMenuNav();
 
-  // Первичная загрузка
   await loadFilesList().catch(console.error);
   await loadImages().catch(console.error);
 
-  // Файлы
   refreshFilesBtn?.addEventListener('click', () => loadFilesList().catch(console.error));
   loadFileBtn?.addEventListener('click', () => loadFileForEdit().catch(console.error));
   saveFileBtn?.addEventListener('click', () => saveFile().catch(console.error));
 
-  // Изображения
+  fileContent?.addEventListener('input', () => { debouncedPreview(); debouncedAutoSave(); });
+
   refreshImagesBtn?.addEventListener('click', () => loadImages().catch(console.error));
   uploadBtn?.addEventListener('click', () => uploadSelectedFiles().catch(console.error));
 
-  // Выйти (если есть в шапке)
-  logoutBtn?.addEventListener('click', doLogout);
+  document.querySelectorAll('[data-nav="logout"]').forEach(btn => btn.addEventListener('click', doLogout));
 
-  // Переводы
   btnLoadTranslations?.addEventListener('click', () => loadTranslationsJsonPanel().catch(console.error));
   btnPrettyTranslations?.addEventListener('click', () => prettyTranslationsJson());
   btnValidateTranslations?.addEventListener('click', () => validateTranslationsJson());
@@ -559,12 +549,10 @@ async function initAfterLogin() {
   btnSyncFromJson?.addEventListener('click', () => syncFromJsonToQuickFields());
   btnSyncToJson?.addEventListener('click', () => syncFromQuickFieldsToJson());
 
-  // Автозагрузка translations при первом заходе (если пусто)
   if (translationsJsonTA && !translationsJsonTA.value.trim()) {
     await loadTranslationsJsonPanel().catch(console.error);
   }
 
-  // Стартовый раздел
   setActiveTab('files');
 }
 
