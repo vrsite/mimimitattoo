@@ -8,11 +8,9 @@
 </head>
 <body>
 
-  <!-- Login View -->
   <div id="loginView" class="login-view" style="display:none">
     <div class="login-card">
       <h2 class="app-title">Вход в админку</h2>
-
       <div class="login-field">
         <label for="adminPassword">Пароль</label>
         <div class="pwd-wrap">
@@ -20,9 +18,7 @@
           <button class="btn" id="togglePwd" type="button">Показать</button>
         </div>
       </div>
-
       <div id="loginError" class="error" style="display:none"></div>
-
       <div class="login-actions">
         <button class="btn primary" id="loginBtn" type="button">Войти</button>
         <button class="btn ghost" id="loginReset" type="button">Сбросить</button>
@@ -30,10 +26,8 @@
     </div>
   </div>
 
-  <!-- App -->
   <div id="app" class="app" style="visibility:hidden">
 
-    <!-- Header -->
     <header class="header">
       <div class="brand">
         <div class="logo">✦</div>
@@ -43,37 +37,38 @@
         </div>
       </div>
 
-      <div class="tabs" aria-hidden="true"></div>
+      <nav class="primary-nav" aria-label="Навигация">
+        <button class="nav-btn" data-nav="files" type="button">Файлы</button>
+        <button class="nav-btn" data-nav="images" type="button">Изображения</button>
+        <button class="nav-btn" data-nav="translations" type="button">Переводы</button>
+        <a class="nav-btn ghost" href="/" target="_blank" rel="noopener">Главная</a>
+        <button class="nav-btn danger" data-nav="logout" type="button">Выйти</button>
+      </nav>
 
-      <!-- Hamburger -->
       <button id="menuBtn" class="hamburger" type="button" aria-label="Открыть меню" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </header>
 
-    <!-- Top Menu Panel -->
     <div id="topMenu" class="menu-panel" aria-hidden="true">
       <div class="menu-inner">
         <div class="menu-header">
           <div class="spacer"></div>
           <button id="menuClose" class="btn ghost small" type="button" aria-label="Закрыть меню">✕</button>
         </div>
-
         <div class="menu-grid" role="menu">
           <button class="menu-btn" data-nav="files" type="button" role="menuitem">Файлы</button>
           <button class="menu-btn" data-nav="images" type="button" role="menuitem">Изображения</button>
           <button class="menu-btn" data-nav="translations" type="button" role="menuitem">Переводы</button>
-          <button class="menu-btn" data-nav="logout" type="button" role="menuitem">Выйти</button>
+          <a class="menu-btn" href="/" target="_blank" rel="noopener" role="menuitem">Главная</a>
+          <button class="menu-btn danger" data-nav="logout" type="button" role="menuitem">Выйти</button>
         </div>
       </div>
     </div>
 
-    <!-- Main -->
     <main class="main">
 
-      <!-- Files Tab -->
       <section id="tab-files" class="split-3 active" aria-label="Файлы">
-        <!-- Files list panel -->
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title">Файлы</div>
@@ -86,11 +81,14 @@
           </div>
         </div>
 
-        <!-- Editor panel -->
         <div id="editorPane" class="panel">
           <div class="panel-header">
             <div class="panel-title">Редактор</div>
             <div class="panel-actions">
+              <label class="auto-save">
+                <input type="checkbox" id="autoSaveToggle" />
+                Автосохранение
+              </label>
               <button id="btnEditorFullscreen" class="btn ghost small" type="button">На весь экран</button>
             </div>
           </div>
@@ -106,6 +104,7 @@
             <div class="form-row">
               <label for="fileContent">Содержимое</label>
               <textarea id="fileContent" class="code-area mono" placeholder="Здесь будет содержимое файла"></textarea>
+              <div id="saveStatus" class="small muted" style="margin-top:6px"></div>
             </div>
           </div>
           <div class="panel-footer">
@@ -116,7 +115,6 @@
           </div>
         </div>
 
-        <!-- Preview panel -->
         <div id="previewPane" class="panel">
           <div class="panel-header">
             <div class="panel-title">Предпросмотр</div>
@@ -130,7 +128,6 @@
         </div>
       </section>
 
-      <!-- Images Tab -->
       <section id="tab-images" class="panel" aria-label="Изображения" style="display:none">
         <div class="panel-header">
           <div class="panel-title">Изображения</div>
@@ -142,11 +139,14 @@
             <input id="uploadInput" type="file" multiple />
             <button id="uploadBtn" class="btn primary" type="button">Загрузить</button>
           </div>
+          <div id="uploadProgress" class="progress" style="display:none">
+            <div class="progress-bar" id="uploadProgressBar" style="width:0%"></div>
+            <div class="progress-text" id="uploadProgressText">0/0</div>
+          </div>
           <div id="imagesGrid" class="grid-images"></div>
         </div>
       </section>
 
-      <!-- Translations Tab -->
       <section id="tab-translations" class="panel" aria-label="Переводы" style="display:none">
         <div class="panel-header">
           <div class="panel-title">Переводы (data/translations.json)</div>
@@ -193,6 +193,8 @@
 
     </main>
   </div>
+
+  <button id="exitFsBtn" class="exit-fs-btn" type="button" style="display:none">Выйти из полноэкрана</button>
 
   <script src="script.js"></script>
 </body>
