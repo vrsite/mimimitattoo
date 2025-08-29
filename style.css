@@ -28,7 +28,7 @@ html, body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('images/fonsite.JPG');
+  background-image: url('images/fonsite.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -91,6 +91,15 @@ html, body {
   line-height: 1.08;
   text-shadow: 0 2px 12px rgba(0,0,0,0.22);
   color: #fff;
+}
+.hero__content .seo-title {
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.15);
 }
 .hero__content p {
   font-size: 2rem;
@@ -719,11 +728,11 @@ html, body {
   border: 1.2px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  padding: 1.5rem; /* Уменьшил padding */
-  max-width: 350px; /* Уменьшил максимальную ширину для десктопов */
-  max-height: 80vh; /* Ограничение высоты */
-  width: 90%; /* Относительная ширина */
-  overflow-y: auto; /* Добавил скролл, если контент не помещается */
+  padding: 1.5rem;
+  max-width: 350px;
+  max-height: 90vh;
+  width: 90%;
+  overflow-y: auto;
   text-align: center;
   position: relative;
   transform: translateY(20px);
@@ -741,22 +750,22 @@ html, body {
 }
 
 .service-modal-image {
-  max-width: 90%; /* Уменьшил максимальную ширину изображения в модалке */
+  max-width: 90%;
   height: auto;
   border-radius: 15px;
-  margin-bottom: 1rem; /* Уменьшил отступ */
+  margin-bottom: 1rem;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .service-modal-title {
-  font-size: 1.3rem; /* Уменьшил размер шрифта заголовка */
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
   color: var(--accent);
 }
 
 .service-modal-description {
-  font-size: 0.95rem; /* Уменьшил размер шрифта описания */
+  font-size: 0.95rem;
   line-height: 1.5;
   color: #fff;
   opacity: 0.9;
@@ -1262,7 +1271,7 @@ html, body {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    gap: 10px;
+    gap: 10px; /* Увеличил отступ между элементами, чтобы они не сливались */
     flex-wrap: wrap;
     align-items: center;
     flex-direction: column;
@@ -1282,7 +1291,7 @@ html, body {
     }
     .faq-tabs-nav {
         flex-direction: column;
-        gap: 5px;
+        gap: 10px; /* Отступ между кнопками на десктопе */
         align-items: center;
     }
     .faq-tabs-nav .tab-button {
