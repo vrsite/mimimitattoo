@@ -497,11 +497,11 @@ const serviceCards = document.querySelectorAll('.service-card');
 const serviceModalsContainer = document.getElementById('serviceModalsContainer');
 
 const serviceImages = {
-  aqua: 'akva.PNG',
-  coverup: 'coverup.PNG',
-  line: 'line.JPG',
+  aqua: 'akva.jpg',
+  coverup: 'coverup.jpg',
+  line: 'line.jpg',
   mini: 'mini.jpg',
-  permanent: 'permanent.png',
+  permanent: 'permanent.jpg',
   piercing: 'PIERCING.jpg'
 };
 
