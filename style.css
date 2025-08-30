@@ -719,11 +719,11 @@ html, body {
   border: 1.2px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  padding: 1.5rem; /* Уменьшил padding */
-  max-width: 350px; /* Уменьшил максимальную ширину для десктопов */
-  max-height: 80vh; /* Ограничение высоты */
-  width: 90%; /* Относительная ширина */
-  overflow-y: auto; /* Добавил скролл, если контент не помещается */
+  padding: 1.5rem;
+  max-width: 350px;
+  max-height: 90vh;
+  width: 90%;
+  overflow-y: auto;
   text-align: center;
   position: relative;
   transform: translateY(20px);
@@ -741,22 +741,22 @@ html, body {
 }
 
 .service-modal-image {
-  max-width: 90%; /* Уменьшил максимальную ширину изображения в модалке */
+  max-width: 90%;
   height: auto;
   border-radius: 15px;
-  margin-bottom: 1rem; /* Уменьшил отступ */
+  margin-bottom: 1rem;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .service-modal-title {
-  font-size: 1.3rem; /* Уменьшил размер шрифта заголовка */
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
   color: var(--accent);
 }
 
 .service-modal-description {
-  font-size: 0.95rem; /* Уменьшил размер шрифта описания */
+  font-size: 0.95rem;
   line-height: 1.5;
   color: #fff;
   opacity: 0.9;
@@ -1282,7 +1282,7 @@ html, body {
     }
     .faq-tabs-nav {
         flex-direction: column;
-        gap: 5px;
+        gap: 10px;
         align-items: center;
     }
     .faq-tabs-nav .tab-button {
